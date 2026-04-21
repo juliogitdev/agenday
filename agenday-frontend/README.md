@@ -16,7 +16,7 @@ components/   → Componentes reutilizáveis (Button, Card, Sidebar...)
 pages/        → Uma página por rota da aplicação
 layouts/      → Componentes únicos (header, footer, main-viewer )
 hooks/        → Custom React Hooks (useAuth, useAppointments...)
-routes/      → Todas as rotas da aplicação
+routes/       → Todas as rotas da aplicação
 services/     → Chamadas à API via Axios
 store/        → Estado global com Zustand (apenas auth + UI)
 types/        → Tipos TypeScript compartilhados
