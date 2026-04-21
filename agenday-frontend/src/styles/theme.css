@@ -1,0 +1,16 @@
+
+:root {
+    --background: #fafafa;
+    --foreground: #111111;
+
+    --card-background: #64635e;
+    --card-foreground: #f0efeb;
+}
+
+[data-theme="dark"] {
+    --background: #1a0202;
+    --foreground: #faf5f5;
+
+    --card-background: #ebe9e4;
+    --card-foreground: #0a0800;
+}
