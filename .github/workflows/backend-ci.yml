@@ -35,3 +35,4 @@ jobs:
 
       - name: Build with Maven and Run Tests
         run: mvn clean verify
+        working-directory: ./agenday-backend
