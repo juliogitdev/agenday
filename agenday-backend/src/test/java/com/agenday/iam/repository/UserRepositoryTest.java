@@ -1,14 +1,15 @@
 package com.agenday.iam.repository;
 
 import com.agenday.iam.domain.model.Role;
-import com.agenday.iam.domain.model.RoleType;
 import com.agenday.iam.domain.model.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +20,10 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
 
     @Test
     @DisplayName("Deve salvar um usuário com sucesso e gerar o UUID")
@@ -61,17 +66,37 @@ class UserRepositoryTest {
     @DisplayName("Deve salvar um usuário associado a múltiplas Roles")
     void shouldSaveUserWithMultipleRoles() {
         // Arrange
+
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN")
+                .orElseThrow();
+
+        Role clientRole = roleRepository.findByName("ROLE_CLIENT")
+                .orElseThrow();
+
         User user = new User();
         user.setEmail("admin@agenday.com");
         user.setPasswordHash("hash");
         user.setAuthProvider("LOCAL");
-        user.setRoles(Set.of(RoleType.ROLE_ADMIN, RoleType.ROLE_CLIENT));
+        user.setRoles(Set.of(adminRole, clientRole));
 
         // Act
         User savedUser = userRepository.save(user);
 
         // Assert
         assertThat(savedUser.getRoles()).hasSize(2);
-        assertThat(savedUser.getRoles()).contains(RoleType.ROLE_ADMIN, RoleType.ROLE_CLIENT);
+        assertThat(savedUser.getRoles())
+                .extracting(Role::getName)
+                .contains("ROLE_ADMIN", "ROLE_CLIENT");
+    }
+
+    @BeforeEach
+    void setup() {
+        Role admin = new Role();
+        admin.setName("ROLE_ADMIN");
+
+        Role client = new Role();
+        client.setName("ROLE_CLIENT");
+
+        roleRepository.saveAll(List.of(admin, client));
     }
 }
