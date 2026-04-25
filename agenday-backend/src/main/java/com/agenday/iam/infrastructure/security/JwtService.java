@@ -21,10 +21,13 @@ public class JwtService {
     private long accessTokenExpiration;
 
     public String generateToken(String email) {
+        return generateToken(email, accessTokenExpiration);
+    }
+    public String generateToken(String email, long expirationMillis) {
         return Jwts.builder()
                 .subject(email)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
+                .expiration(new Date(System.currentTimeMillis() + expirationMillis))
                 .signWith(getSignInKey())
                 .compact();
     }
@@ -50,6 +53,23 @@ public class JwtService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            return !isTokenExpired(token)
+                    && extractUsername(token) != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }
