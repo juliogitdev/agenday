@@ -3,8 +3,15 @@ name: Backend CI
 on:
   push:
     branches: [ main, develop ]
+     paths:
+      - 'agenday-backend/**'
+      - '.github/workflows/backend-ci.yml'
+
   pull_request:
     branches: [ main, develop ]
+    paths:
+      - 'agenday-backend/**'
+      - '.github/workflows/backend-ci.yml'
 
 jobs:
   test-and-build:
@@ -35,4 +42,4 @@ jobs:
 
       - name: Build with Maven and Run Tests
         run: mvn clean verify
-        working-directory: ./agenday-backend
+        working-directory: agenday-backend
