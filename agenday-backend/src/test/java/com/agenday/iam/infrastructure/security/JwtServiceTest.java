@@ -50,4 +50,51 @@ class JwtServiceTest {
         // Assert
         assertThat(extractedEmail).isEqualTo(email);
     }
+
+    @Test
+    @DisplayName("Deve retornar falso quando o token estiver expirado")
+    void shouldReturnFalseWhenTokenIsExpired() throws InterruptedException {
+        // Arrange
+        String email = "admin@agenday.com";
+
+        // Act
+        String token = jwtService.generateToken(email, 1);
+
+        Thread.sleep(10);
+
+        boolean isValid = jwtService.isTokenValid(token);
+
+        // Assert
+        assertThat(isValid).isFalse();
+    }
+
+    @Test
+    @DisplayName("Deve retornar verdadeiro quando o token for válido")
+    void shouldReturnTrueWhenTokenIsValid() {
+        // Arrange
+        String email = "admin@agenday.com";
+
+        // Act
+        String token = jwtService.generateToken(email);
+        boolean isValid = jwtService.isTokenValid(token);
+
+        // Assert
+        assertThat(isValid).isTrue();
+    }
+
+    @Test
+    @DisplayName("Deve retornar falso quando o token for adulterado")
+    void shouldReturnFalseWhenTokenIsTampered() {
+        // Arrange
+        String email = "admin@agenday.com";
+        String token = jwtService.generateToken(email);
+
+        String tamperedToken = token.substring(0, token.length() - 2) + "xx";
+
+        // Act
+        boolean isValid = jwtService.isTokenValid(tamperedToken);
+
+        // Assert
+        assertThat(isValid).isFalse();
+    }
 }
