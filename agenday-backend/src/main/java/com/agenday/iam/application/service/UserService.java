@@ -5,6 +5,7 @@ import com.agenday.iam.application.exception.InvalidCredentialsException;
 import com.agenday.iam.application.exception.UserAlreadyExistsException;
 import com.agenday.iam.domain.model.User;
 import com.agenday.iam.repository.UserRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -68,8 +69,11 @@ public class UserService {
                     return userRepository.save(user);
                 });
     }
+    public UserResponse getCurrentUser(String email){
 
-    public UserResponse toResponse(User user){
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         return new UserResponse(
                 user.getId(),
                 user.getEmail(),

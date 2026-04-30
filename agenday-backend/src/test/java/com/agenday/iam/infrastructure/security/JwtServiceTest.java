@@ -1,11 +1,14 @@
 package com.agenday.iam.infrastructure.security;
 
+import com.agenday.iam.domain.model.Role;
+import com.agenday.iam.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Base64;
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
@@ -16,12 +19,25 @@ class JwtServiceTest {
     @Autowired
     private JwtService jwtService;
 
+    private User createTestUser() {
+        var user = new User();
+        user.setEmail("admin@agenday.com");
+
+        var role = new Role();
+        role.setName("ROLE_CLIENT");
+
+        user.setRoles(Set.of(role));
+
+        return user;
+    }
+
     @Test
     @DisplayName("Deve gerar um token JWT válido")
     void shouldGenerateValidJwtToken() {
-        String email = "admin@agenday.com";
+        // Arrange
+        User user = createTestUser();
 
-        String token = jwtService.generateToken(email);
+        String token = jwtService.generateToken(user);
 
         assertThat(token).isNotBlank();
 
@@ -41,28 +57,28 @@ class JwtServiceTest {
     @DisplayName("Deve extrair corretamente o email do token")
     void shouldExtractCorrectUsernameFromToken() {
         // Arrange
-        String email = "admin@agenday.com";
+        User user = createTestUser();
 
         // Act
-        String token = jwtService.generateToken(email);
+        String token = jwtService.generateToken(user);
         String extractedEmail = jwtService.extractUsername(token);
 
         // Assert
-        assertThat(extractedEmail).isEqualTo(email);
+        assertThat(extractedEmail).isEqualTo(user);
     }
 
     @Test
     @DisplayName("Deve retornar falso quando o token estiver expirado")
     void shouldReturnFalseWhenTokenIsExpired() throws InterruptedException {
         // Arrange
-        String email = "admin@agenday.com";
+        User user = createTestUser();
 
         // Act
-        String token = jwtService.generateToken(email, 1);
+        String token = jwtService.generateToken(user, 1);
 
         Thread.sleep(10);
 
-        boolean isValid = jwtService.isTokenValid(token);
+        boolean isValid = jwtService.isTokenValid(token, user);
 
         // Assert
         assertThat(isValid).isFalse();
@@ -72,11 +88,11 @@ class JwtServiceTest {
     @DisplayName("Deve retornar verdadeiro quando o token for válido")
     void shouldReturnTrueWhenTokenIsValid() {
         // Arrange
-        String email = "admin@agenday.com";
+        User user = createTestUser();
 
         // Act
-        String token = jwtService.generateToken(email);
-        boolean isValid = jwtService.isTokenValid(token);
+        String token = jwtService.generateToken(user);
+        boolean isValid = jwtService.isTokenValid(token, user);
 
         // Assert
         assertThat(isValid).isTrue();
@@ -86,13 +102,13 @@ class JwtServiceTest {
     @DisplayName("Deve retornar falso quando o token for adulterado")
     void shouldReturnFalseWhenTokenIsTampered() {
         // Arrange
-        String email = "admin@agenday.com";
-        String token = jwtService.generateToken(email);
+        User user = createTestUser();
+        String token = jwtService.generateToken(user);
 
         String tamperedToken = token.substring(0, token.length() - 2) + "xx";
 
         // Act
-        boolean isValid = jwtService.isTokenValid(tamperedToken);
+        boolean isValid = jwtService.isTokenValid(tamperedToken, user);
 
         // Assert
         assertThat(isValid).isFalse();

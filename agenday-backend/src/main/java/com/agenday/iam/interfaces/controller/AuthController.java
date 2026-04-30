@@ -7,6 +7,7 @@ import com.agenday.iam.infrastructure.security.GoogleTokenVerifier;
 import com.agenday.iam.infrastructure.security.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +46,7 @@ public class AuthController {
 
         var user = userService.login(request.email(), request.password());
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user);
 
         return ResponseEntity.ok(token);
     }
@@ -62,15 +63,18 @@ public class AuthController {
                 googleUser.name()
         );
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user);
 
         return ResponseEntity.ok(token);
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<UserResponse> me(Authentication authentication){
-        var user = (User) authentication.getPrincipal();
 
-        return ResponseEntity.ok(userService.toResponse(user));
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<UserResponse> me(Authentication authentication){
+
+        String email = authentication.getPrincipal().toString();
+
+        return ResponseEntity.ok(userService.getCurrentUser(email));
     }
 }
