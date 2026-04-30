@@ -2,10 +2,12 @@ package com.agenday.iam.interfaces.controller;
 
 import com.agenday.iam.application.dto.*;
 import com.agenday.iam.application.service.UserService;
+import com.agenday.iam.domain.model.User;
 import com.agenday.iam.infrastructure.security.GoogleTokenVerifier;
 import com.agenday.iam.infrastructure.security.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -63,5 +65,12 @@ public class AuthController {
         String token = jwtService.generateToken(user.getEmail());
 
         return ResponseEntity.ok(token);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> me(Authentication authentication){
+        var user = (User) authentication.getPrincipal();
+
+        return ResponseEntity.ok(userService.toResponse(user));
     }
 }

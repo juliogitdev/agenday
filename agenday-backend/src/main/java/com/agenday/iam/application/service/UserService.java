@@ -1,5 +1,6 @@
 package com.agenday.iam.application.service;
 
+import com.agenday.iam.application.dto.UserResponse;
 import com.agenday.iam.application.exception.InvalidCredentialsException;
 import com.agenday.iam.application.exception.UserAlreadyExistsException;
 import com.agenday.iam.domain.model.User;
@@ -66,5 +67,13 @@ public class UserService {
 
                     return userRepository.save(user);
                 });
+    }
+
+    public UserResponse toResponse(User user){
+        return new UserResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getFullName()
+        );
     }
 }
