@@ -1,5 +1,6 @@
 package com.agenday.iam.infrastructure.security;
 
+import com.agenday.iam.domain.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -63,10 +64,11 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    public boolean isTokenValid(String token) {
+    public boolean isTokenValid(String token, User user) {
         try {
-            return !isTokenExpired(token)
-                    && extractUsername(token) != null;
+            final String username = extractUsername(token);
+            return username.equals(user.getEmail()) && !isTokenExpired(token);
+
         } catch (Exception e) {
             return false;
         }
