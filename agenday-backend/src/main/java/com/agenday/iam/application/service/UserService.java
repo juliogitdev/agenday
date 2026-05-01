@@ -6,7 +6,6 @@ import com.agenday.iam.application.exception.InvalidCredentialsException;
 import com.agenday.iam.application.exception.UserAlreadyExistsException;
 import com.agenday.iam.domain.model.User;
 import com.agenday.iam.repository.UserRepository;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Registro normal
     public User register(String email, String password, String fullName) {
 
         if (userRepository.existsByEmail(email)) {
@@ -38,7 +36,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // Login com email/senha
     public User login(String email, String password) {
 
         User user = userRepository.findByEmail(email)
@@ -55,7 +52,6 @@ public class UserService {
         return user;
     }
 
-    // Login / Registro com Google
     public User loginWithGoogle(String email, String providerId, String fullName) {
 
         return userRepository.findByEmail(email)
@@ -70,6 +66,7 @@ public class UserService {
                     return userRepository.save(user);
                 });
     }
+
     public UserResponse getCurrentUser(String email){
 
         var user = userRepository.findByEmail(email)

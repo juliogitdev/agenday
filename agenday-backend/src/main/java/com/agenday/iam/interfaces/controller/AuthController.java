@@ -2,7 +2,6 @@ package com.agenday.iam.interfaces.controller;
 
 import com.agenday.iam.application.dto.*;
 import com.agenday.iam.application.service.UserService;
-import com.agenday.iam.domain.model.User;
 import com.agenday.iam.infrastructure.security.GoogleTokenVerifier;
 import com.agenday.iam.infrastructure.security.JwtService;
 import jakarta.validation.Valid;
@@ -19,7 +18,6 @@ public class AuthController {
     private final JwtService jwtService;
     private final GoogleTokenVerifier googleVerifier;
 
-
     public AuthController(UserService userService,
                           JwtService jwtService,
                           GoogleTokenVerifier googleVerifier) {
@@ -28,7 +26,6 @@ public class AuthController {
         this.googleVerifier = googleVerifier;
     }
 
-    // REGISTER NORMAL
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequest request) {
 
@@ -41,7 +38,6 @@ public class AuthController {
         return ResponseEntity.status(201).build();
     }
 
-    // LOGIN NORMAL
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
 
@@ -52,7 +48,6 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token, "Bearer"));
     }
 
-    // LOGIN GOOGLE
     @PostMapping("/google")
     public ResponseEntity<AuthResponse> googleLogin(@RequestBody @Valid GoogleLoginRequest request) {
 
@@ -68,7 +63,6 @@ public class AuthController {
 
         return ResponseEntity.ok(new AuthResponse(token, "Bearer"));
     }
-
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('CLIENT')")
