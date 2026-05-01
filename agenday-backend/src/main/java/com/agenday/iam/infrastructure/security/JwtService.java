@@ -22,6 +22,9 @@ public class JwtService {
     @Value("${jwt.access-token-expiration}")
     private long accessTokenExpiration;
 
+    @Value("${jwt.refresh-token-expiration}")
+    private long refreshTokenExpiration;
+
     public String generateToken(User user) {
         return generateToken(user, accessTokenExpiration);
     }
@@ -83,5 +86,9 @@ public class JwtService {
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
+    }
+
+    public String generateRefreshToken(User user) {
+        return generateToken(user, refreshTokenExpiration);
     }
 }
