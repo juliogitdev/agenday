@@ -19,6 +19,7 @@ public class AuthController {
     private final JwtService jwtService;
     private final GoogleTokenVerifier googleVerifier;
 
+
     public AuthController(UserService userService,
                           JwtService jwtService,
                           GoogleTokenVerifier googleVerifier) {
@@ -42,18 +43,18 @@ public class AuthController {
 
     // LOGIN NORMAL
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
 
-        var user = userService.login(request.email(), request.password());
+        var user = userService.authenticate(request);
 
         String token = jwtService.generateToken(user);
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new AuthResponse(token, "Bearer"));
     }
 
     // LOGIN GOOGLE
     @PostMapping("/google")
-    public ResponseEntity<String> googleLogin(@RequestBody @Valid GoogleLoginRequest request) {
+    public ResponseEntity<AuthResponse> googleLogin(@RequestBody @Valid GoogleLoginRequest request) {
 
         var googleUser = googleVerifier.verify(request.idToken());
 
@@ -65,7 +66,7 @@ public class AuthController {
 
         String token = jwtService.generateToken(user);
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new AuthResponse(token, "Bearer"));
     }
 
 

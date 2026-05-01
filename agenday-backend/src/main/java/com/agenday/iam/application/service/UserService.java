@@ -1,5 +1,6 @@
 package com.agenday.iam.application.service;
 
+import com.agenday.iam.application.dto.LoginRequest;
 import com.agenday.iam.application.dto.UserResponse;
 import com.agenday.iam.application.exception.InvalidCredentialsException;
 import com.agenday.iam.application.exception.UserAlreadyExistsException;
@@ -79,5 +80,17 @@ public class UserService {
                 user.getEmail(),
                 user.getFullName()
         );
+    }
+
+    public User authenticate(LoginRequest request) {
+
+        var user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+
+        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        return user;
     }
 }
