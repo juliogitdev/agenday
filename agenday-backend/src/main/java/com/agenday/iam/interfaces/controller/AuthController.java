@@ -6,6 +6,8 @@ import com.agenday.iam.infrastructure.security.GoogleTokenVerifier;
 import com.agenday.iam.infrastructure.security.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +26,6 @@ public class AuthController {
         this.googleVerifier = googleVerifier;
     }
 
-    // REGISTER NORMAL
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequest request) {
 
@@ -37,20 +38,18 @@ public class AuthController {
         return ResponseEntity.status(201).build();
     }
 
-    // LOGIN NORMAL
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
 
-        var user = userService.login(request.email(), request.password());
+        var user = userService.authenticate(request);
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user);
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new AuthResponse(token, "Bearer"));
     }
 
-    // LOGIN GOOGLE
     @PostMapping("/google")
-    public ResponseEntity<String> googleLogin(@RequestBody @Valid GoogleLoginRequest request) {
+    public ResponseEntity<AuthResponse> googleLogin(@RequestBody @Valid GoogleLoginRequest request) {
 
         var googleUser = googleVerifier.verify(request.idToken());
 
@@ -60,8 +59,17 @@ public class AuthController {
                 googleUser.name()
         );
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user);
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new AuthResponse(token, "Bearer"));
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<UserResponse> me(Authentication authentication){
+
+        String email = authentication.getPrincipal().toString();
+
+        return ResponseEntity.ok(userService.getCurrentUser(email));
     }
 }
