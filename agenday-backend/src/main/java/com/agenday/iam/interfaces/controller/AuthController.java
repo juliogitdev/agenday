@@ -43,9 +43,13 @@ public class AuthController {
 
         var user = userService.authenticate(request);
 
-        String token = jwtService.generateToken(user);
+        String accessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
-        return ResponseEntity.ok(new AuthResponse(token, "Bearer"));
+        return ResponseEntity.ok(
+                new AuthResponse(accessToken, refreshToken, "Bearer")
+        );
+
     }
 
     @PostMapping("/google")
@@ -59,9 +63,42 @@ public class AuthController {
                 googleUser.name()
         );
 
-        String token = jwtService.generateToken(user);
+        String accessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
-        return ResponseEntity.ok(new AuthResponse(token, "Bearer"));
+
+        return ResponseEntity.ok(
+                new AuthResponse(accessToken, refreshToken, "Bearer")
+        );
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<UserResponse> me(Authentication authentication){
+
+        String email = authentication.getPrincipal().toString();
+
+        return ResponseEntity.ok(userService.getCurrentUser(email));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest request) {
+
+        String refreshToken = request.refreshToken();
+
+        String email = jwtService.extractUsername(refreshToken);
+
+        var user = userService.getUserByEmail(email); // cria esse método
+
+        if (!jwtService.isTokenValid(refreshToken, user)) {
+            return ResponseEntity.status(401).build();
+        }
+
+        String newAccessToken = jwtService.generateToken(user);
+
+        return ResponseEntity.ok(
+                new AuthResponse(newAccessToken, refreshToken, "Bearer")
+        );
     }
 
     @GetMapping("/me")
