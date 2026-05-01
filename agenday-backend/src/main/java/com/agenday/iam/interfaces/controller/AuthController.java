@@ -49,6 +49,7 @@ public class AuthController {
         return ResponseEntity.ok(
                 new AuthResponse(accessToken, refreshToken, "Bearer")
         );
+
     }
 
     @PostMapping("/google")
@@ -98,5 +99,14 @@ public class AuthController {
         return ResponseEntity.ok(
                 new AuthResponse(newAccessToken, refreshToken, "Bearer")
         );
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<UserResponse> me(Authentication authentication){
+
+        String email = authentication.getPrincipal().toString();
+
+        return ResponseEntity.ok(userService.getCurrentUser(email));
     }
 }
