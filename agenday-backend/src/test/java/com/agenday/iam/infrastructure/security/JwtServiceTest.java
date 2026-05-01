@@ -1,14 +1,16 @@
 package com.agenday.iam.infrastructure.security;
 
+import com.agenday.iam.domain.model.Role;
+import com.agenday.iam.domain.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Base64;
+import java.util.Set;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class JwtServiceTest {
@@ -16,85 +18,69 @@ class JwtServiceTest {
     @Autowired
     private JwtService jwtService;
 
+    private User createTestUser() {
+        var user = new User();
+        user.setEmail("admin@agenday.com");
+
+        var role = new Role();
+        role.setName("ROLE_CLIENT");
+
+        user.setRoles(Set.of(role));
+
+        return user;
+    }
+
     @Test
     @DisplayName("Deve gerar um token JWT válido")
     void shouldGenerateValidJwtToken() {
-        String email = "admin@agenday.com";
-
-        String token = jwtService.generateToken(email);
+        var user = createTestUser();
+        var token = jwtService.generateToken(user);
 
         assertThat(token).isNotBlank();
 
         String[] parts = token.split("\\.");
         assertThat(parts).hasSize(3);
 
-        assertThatCode(() -> Base64.getUrlDecoder().decode(parts[0]))
-                .doesNotThrowAnyException();
-
-        assertThatCode(() -> Base64.getUrlDecoder().decode(parts[1]))
-                .doesNotThrowAnyException();
-
+        assertThatCode(() -> Base64.getUrlDecoder().decode(parts[0])).doesNotThrowAnyException();
+        assertThatCode(() -> Base64.getUrlDecoder().decode(parts[1])).doesNotThrowAnyException();
         assertThat(parts[2]).isNotBlank();
     }
 
     @Test
-    @DisplayName("Deve extrair corretamente o email do token")
     void shouldExtractCorrectUsernameFromToken() {
-        // Arrange
-        String email = "admin@agenday.com";
+        var user = createTestUser();
+        var token = jwtService.generateToken(user);
 
-        // Act
-        String token = jwtService.generateToken(email);
-        String extractedEmail = jwtService.extractUsername(token);
+        var extracted = jwtService.extractUsername(token);
 
-        // Assert
-        assertThat(extractedEmail).isEqualTo(email);
+        assertThat(extracted).isEqualTo(user.getEmail());
     }
 
     @Test
-    @DisplayName("Deve retornar falso quando o token estiver expirado")
     void shouldReturnFalseWhenTokenIsExpired() throws InterruptedException {
-        // Arrange
-        String email = "admin@agenday.com";
-
-        // Act
-        String token = jwtService.generateToken(email, 1);
+        var user = createTestUser();
+        var token = jwtService.generateToken(user, 1);
 
         Thread.sleep(10);
 
-        boolean isValid = jwtService.isTokenValid(token);
-
-        // Assert
-        assertThat(isValid).isFalse();
+        assertThat(jwtService.isTokenValid(token, user)).isFalse();
     }
 
     @Test
-    @DisplayName("Deve retornar verdadeiro quando o token for válido")
     void shouldReturnTrueWhenTokenIsValid() {
-        // Arrange
-        String email = "admin@agenday.com";
+        var user = createTestUser();
+        var token = jwtService.generateToken(user);
 
-        // Act
-        String token = jwtService.generateToken(email);
-        boolean isValid = jwtService.isTokenValid(token);
-
-        // Assert
-        assertThat(isValid).isTrue();
+        assertThat(jwtService.isTokenValid(token, user)).isTrue();
     }
 
     @Test
-    @DisplayName("Deve retornar falso quando o token for adulterado")
     void shouldReturnFalseWhenTokenIsTampered() {
-        // Arrange
-        String email = "admin@agenday.com";
-        String token = jwtService.generateToken(email);
+        var user = createTestUser();
+        var token = jwtService.generateToken(user);
 
-        String tamperedToken = token.substring(0, token.length() - 2) + "xx";
+        var tampered = token.substring(0, token.length() - 2) + "xx";
 
-        // Act
-        boolean isValid = jwtService.isTokenValid(tamperedToken);
-
-        // Assert
-        assertThat(isValid).isFalse();
+        assertThat(jwtService.isTokenValid(tampered, user)).isFalse();
     }
 }
