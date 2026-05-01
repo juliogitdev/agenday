@@ -8,12 +8,15 @@ import com.agenday.iam.domain.model.User;
 import com.agenday.iam.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepository,
                        BCryptPasswordEncoder passwordEncoder) {
@@ -81,12 +84,20 @@ public class UserService {
 
     public User authenticate(LoginRequest request) {
 
+        log.info("Login attempt for email: {}", request.email());
+
         var user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+                .orElseThrow(() -> {
+                    log.warn("User not found: {}", request.email());
+                    throw new InvalidCredentialsException();
+                });
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+            log.warn("Invalid password for user: {}", request.email());
             throw new InvalidCredentialsException();
         }
+
+        log.info("User authenticated successfully: {}", request.email());
 
         return user;
     }
