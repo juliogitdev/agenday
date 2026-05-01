@@ -92,9 +92,10 @@ public class UserService {
                     throw new InvalidCredentialsException();
                 });
 
-        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) 
             log.warn("Invalid password for user: {}", request.email());
             throw new InvalidCredentialsException();
+
         }
 
         log.info("User authenticated successfully: {}", request.email());
@@ -106,4 +107,5 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
 }
