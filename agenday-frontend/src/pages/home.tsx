@@ -1,4 +1,3 @@
-
-export const  Home  = function() {
-    return ( <h1>Olá, mundo</h1>);
+export const Home = function () {
+    return <h1>Olá, mundo</h1>
 }

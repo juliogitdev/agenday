@@ -1,4 +1,3 @@
-
 :root {
     --background: #fafafa;
     --foreground: #111111;
@@ -7,7 +6,7 @@
     --card-foreground: #f0efeb;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
     --background: #1a0202;
     --foreground: #faf5f5;
 
