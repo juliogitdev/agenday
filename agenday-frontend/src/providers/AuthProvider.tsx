@@ -2,7 +2,7 @@
 import React from "react";
 import type { User, UserLogin } from "../types/User";
 import AuthContext from "../context/AuthContext";
-import { Login } from "../pages/SignIn";
+import { SignIn } from "../pages/SignIn";
 
 
 export function AuthProvider({children}: {children: React.ReactNode}) {
@@ -24,7 +24,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 	
 	return (
 		<AuthContext.Provider value={{ user, login, logout }}>
-			{ user ? children : <Login/> }
+			{ user ? children : <SignIn/> }
 		</AuthContext.Provider>
 	);
 }
