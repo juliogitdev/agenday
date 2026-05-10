@@ -7,12 +7,14 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint --format table",
-	"format": "prettier --write src/",
-  	"format:check": "prettier --check src/",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.13.5",
     "dayjs": "^1.11.20",
+    "lucide-react": "^1.14.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.14.2",
