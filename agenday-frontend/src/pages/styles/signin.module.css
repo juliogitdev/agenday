@@ -45,6 +45,9 @@
 			}
 
 		.registerLink {
+			border: none;
+			outline: none;
+			background: none;
 			display: block;	
 			font-family: "Poppins", sans-serif;
 			color: var(--login-subtitle);
@@ -52,6 +55,8 @@
 			text-decoration: none;
 			transition: color 0.3s ease;
 			text-align: right;
+			width: 100%;
+			cursor: pointer;
 		}
 			.registerLink:hover { color: var(--login-title);}
 			.registerText {	
