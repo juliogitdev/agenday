@@ -1,16 +1,18 @@
 
 import React from "react";
 // import AuthContext from "../context/AuthContext";
-import styles from './styles/login.module.css';
+import styles from './styles/signin.module.css';
 import { EmailInput } from "../components/inputs/EmailInput";
 import { PasswordInput } from "../components/inputs/PasswordInput";
 import { SolidButton } from "../components/buttons/SolidButton";
 import { GoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 
-export function Login() {
+export function SignIn() {
 	// const {login} = React.useContext(AuthContext);
 	const [email, setEmail] = React.useState<string>("");
 	const [passw, setPassw] = React.useState<string>("");
+	const navigate = useNavigate();
 
 	const loginWithEmail = () => {
 		if (email && passw) {
@@ -48,9 +50,9 @@ export function Login() {
 					<GoogleLogin onSuccess={loginWithGoogle} onError={() => {}} />
 					
 					<div className={styles.spacer} ></div>
-					<a href="/register" className={styles.registerLink}>
+					<button className={styles.registerLink} onClick={() => navigate('/signup')}>
 						Não tem uma conta? <span className={styles.registerText}>Registre-se</span>
-					</a>
+					</button>
 				</div>
 
 				<div className={styles.leftSide}>
