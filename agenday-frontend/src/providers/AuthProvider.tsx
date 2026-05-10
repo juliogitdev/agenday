@@ -2,7 +2,7 @@
 import React from "react";
 import type { User, UserLogin } from "../types/User";
 import AuthContext from "../context/AuthContext";
-import { Login } from "../pages/Login";
+import { Login } from "../pages/SignIn";
 
 
 export function AuthProvider({children}: {children: React.ReactNode}) {
