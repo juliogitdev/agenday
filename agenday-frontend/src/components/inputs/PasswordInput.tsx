@@ -9,7 +9,7 @@ type PasswordProps = {
 };
 
 export function PasswordInput({password, onChange}: PasswordProps) {
-	let [eyeIsOpen, setEyeIsOpen] = useState(false);
+	const [eyeIsOpen, setEyeIsOpen] = useState(false);
 
 	const showpassword = () => { setEyeIsOpen(prev => !prev);}
 

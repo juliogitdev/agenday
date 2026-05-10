@@ -1,6 +1,6 @@
 
 import React from "react";
-import AuthContext from "../context/AuthContext";
+// import AuthContext from "../context/AuthContext";
 import styles from './styles/login.module.css';
 import { EmailInput } from "../components/inputs/EmailInput";
 import { PasswordInput } from "../components/inputs/PasswordInput";
@@ -8,18 +8,21 @@ import { SolidButton } from "../components/buttons/SolidButton";
 import { GoogleLogin } from "@react-oauth/google";
 
 export function Login() {
-	const {login} = React.useContext(AuthContext);
+	// const {login} = React.useContext(AuthContext);
 	const [email, setEmail] = React.useState<string>("");
 	const [passw, setPassw] = React.useState<string>("");
 
 	const loginWithEmail = () => {
 		if (email && passw) {
-			console.log("Logging in with email:", email);
+			// enviar as crendencias para o backend e receber o token de autenticação
 		}
 	}
 
+	//eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const loginWithGoogle = (credentialResponse: any) => {
-		console.log(credentialResponse);
+		if (credentialResponse.credential) {
+			// enviar o token do Google para o backend e receber o token de autenticação do Agenday
+		}
 	}
 
 	return (
@@ -42,7 +45,7 @@ export function Login() {
 					<SolidButton text="Entrar na plataforma" isActive={!!email && !!passw} onClick={loginWithEmail} />
 					
 					<div className={styles.spacer} ></div>
-					<GoogleLogin onSuccess={loginWithGoogle} onError={() => console.log('Login Failed')} />
+					<GoogleLogin onSuccess={loginWithGoogle} onError={() => {}} />
 					
 					<div className={styles.spacer} ></div>
 					<a href="/register" className={styles.registerLink}>
