@@ -92,10 +92,8 @@ public class UserService {
                     throw new InvalidCredentialsException();
                 });
 
-        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) 
-            log.warn("Invalid password for user: {}", request.email());
+        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
             throw new InvalidCredentialsException();
-
         }
 
         log.info("User authenticated successfully: {}", request.email());
