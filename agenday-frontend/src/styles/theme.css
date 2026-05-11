@@ -20,6 +20,32 @@
     --email-input-placeholder: #999999;
     --email-error: #e74c3c;
 
+	/* ===== NAME INPUT ===== */
+    --name-label: #333333;
+    --name-input-border: #cccccc;
+    --name-input-background: #ffffff;
+    --name-input-foreground: #333333;
+    --name-input-placeholder: #999999;
+    --name-error: #e74c3c;
+
+
+	/* ===== PHONE INPUT ===== */
+    --phone-label: #333333;
+    --phone-input-border: #cccccc;
+    --phone-input-background: #ffffff;
+    --phone-input-foreground: #333333;
+    --phone-input-placeholder: #999999;
+    --phone-error: #e74c3c;
+
+	/* ===== LOCATION INPUT ===== */
+    --location-label: #135184;
+	--location-label-background: #EDEDED;
+	--location-input-label: #333333;
+    --location-select-border: #cccccc;
+    --location-select-background: #ffffff;
+    --location-select-foreground: #333333;
+    --location-select-placeholder: #999999;
+
     /* ===== PASSWORD INPUT ===== */
     --password-label: #333333;
     --password-input-border: #cccccc;
@@ -39,6 +65,22 @@
     --login-left-side-title: #ffffff;
     --login-left-side-subtitle: #135184;
     --login-left-side-text: #ffffff;
+
+
+	/* ===== SIGNUP PAGE ===== */
+    --signup-background: #f5f5f5;
+    --signup-container-background: #ffffff;
+    --signup-title: #135184;
+    --signup-subtitle: #666666;
+    --signup-left-side-gradient: rgba(15, 55, 107, 0.877);
+    --signup-left-side-gradient-transparent: transparent;
+    --signup-left-side-title: #ffffff;
+    --signup-left-side-subtitle: #135184;
+    --signup-left-side-text: #ffffff;
+	--signup-input-group-border: #cccccc;
+	--signup-terms-link: #135184;
+	--signup-terms-link-hover: #3979ad;
+	--signup-terms-label: #666666;
 }
 
 
