@@ -72,15 +72,6 @@ public class AuthController {
         );
     }
 
-    @GetMapping("/me")
-    @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<UserResponse> me(Authentication authentication){
-
-        String email = authentication.getPrincipal().toString();
-
-        return ResponseEntity.ok(userService.getCurrentUser(email));
-    }
-
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest request) {
 
