@@ -71,17 +71,32 @@ public class UserService {
 
     public User loginWithGoogle(String email, String providerId, String fullName) {
 
-        return userRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    User user = new User();
-                    user.setEmail(email);
-                    user.setAuthProvider("GOOGLE");
-                    user.setAuthProviderId(providerId);
-                    user.setFullName(fullName);
-                    user.setPasswordHash(null);
+        Role roleClient = roleRepository.findByName("ROLE_CLIENT")
+                    .orElseThrow(()-> new RuntimeException("Erro ao buscar pela role 'ROLE_CLIENT'"));
 
-                    return userRepository.save(user);
+        User user = userRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    User userDB = new User();
+                    userDB.setEmail(email);
+                    userDB.setAuthProvider("GOOGLE");
+                    userDB.setAuthProviderId(providerId);
+                    userDB.setFullName(fullName);
+                    userDB.setPasswordHash(null);
+
+
+                    userDB.getRoles().add(roleClient);
+
+
+                    return userRepository.save(userDB);
                 });
+
+
+        if(user.getRoles().isEmpty()){
+            user.getRoles().add(roleClient);
+            userRepository.save(user);
+        }
+
+        return user;
     }
 
     public UserResponse getCurrentUser(String email){

@@ -35,7 +35,7 @@ class AuthControllerTest {
         RegisterRequest request = new RegisterRequest(
 
                 "Teste",
-                "teste@email.com",
+                "email-invalido",
                 "123456",
                 "87-99999-0000",
                 "PE",
@@ -61,7 +61,10 @@ class AuthControllerTest {
                         {
                           "email": "test@email.com",
                           "password": "123456",
-                          "fullName": "Julio"
+                          "fullName": "Julio",
+                          "numberPhone": "87-99999-0000",
+                          "state": "PE",
+                          "city": "Salgueiro"
                         }
                     """))
                 .andExpect(status().isConflict());
