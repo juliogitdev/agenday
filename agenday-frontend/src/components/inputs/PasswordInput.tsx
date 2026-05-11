@@ -5,10 +5,11 @@ import { useState } from "react";
 
 type PasswordProps = {
 	password: string;
+	showRecovery?: boolean;
   	onChange: (value: string) => void;
 };
 
-export function PasswordInput({password, onChange}: PasswordProps) {
+export function PasswordInput({password, onChange, showRecovery=true}: PasswordProps) {
 	const [eyeIsOpen, setEyeIsOpen] = useState(false);
 
 	const showpassword = () => { setEyeIsOpen(prev => !prev);}
@@ -44,7 +45,9 @@ export function PasswordInput({password, onChange}: PasswordProps) {
 						: <Eye className={styles.passwordToggle} size={20} onClick={showpassword}/> }
 			
 			</div>
-			<button className={styles.recoverPassword} type="button"> Esqueceu a Senha?</button>
+			{showRecovery && (
+				<button className={styles.recoverPassword} type="button"> Esqueceu a Senha?</button>
+			)}
 		</div>
 	);
 }
