@@ -1,0 +1,55 @@
+
+.locationInput {
+	display: block;
+	width: 100%;
+}
+	.locationLabel {
+		display: flex;
+		align-items: center;
+		font-family: "Poppins", sans-serif;
+		font-style: bold;
+		font-size: 12px;
+		color: var(--location-label);
+		background-color: var(--location-label-background);
+		padding: 10px 8px;
+		border-radius: 4px;
+		margin-bottom: 15px;
+	}
+		.locationIcon {
+			margin-right: 4px;
+			font-size: 14px;
+		}
+
+	.locationInputContainer {
+		display: grid;
+		grid-template-columns: 40% 60%;
+	}
+		.locationInputLeft { width: 95%; display: block;}
+		.locationInputRight { width: 100%; display: block;}
+
+			.locationInputLabel {
+				display: block;
+				font-family: "Poppins", sans-serif;
+				font-weight: 500;
+				font-size: 13px;
+				color: var(--location-input-label);
+				margin-bottom: 3px;
+			}
+
+
+			.locationSelect {
+				outline: none;
+				width: 100%;
+				font-family: "Poppins", sans-serif;
+				padding: 8px;
+				border: 1px solid var(--location-select-border);
+				border-radius: 4px;
+				background-color: var(--location-select-background);
+				color: var(--location-select-foreground);
+				font-size: 12px;
+			}
+			
+			.locationInputContainer select:disabled {
+				background-color: var(--location-select-background);
+				color: var(--location-select-placeholder);
+			}

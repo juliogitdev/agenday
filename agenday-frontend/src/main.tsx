@@ -1,20 +1,20 @@
+/* eslint-disable react-refresh/only-export-components */
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { AppRoutes  } from './routes/routes.tsx';
-import { Header } from "./layouts/Header.tsx";
-import { Footer } from "./layouts/Footer.tsx";
-import { ThemeProvider } from './context/ThemeContext.tsx';
+import { AppRoutes } from './routes/routes.tsx'
+import { ThemeProvider } from './context/ThemeContext.tsx'
 
-import "./styles/theme.css";
-import "./styles/global.css";
+import './styles/theme.css'
+import './styles/global.css'
 
-createRoot(document.getElementById('root')!).render( 
-  <StrictMode>
-    <ThemeProvider>
-    	<Header/>
-    	<main className="app-main"> <AppRoutes/></main>
-    	<Footer/>
-    </ThemeProvider>
-  </StrictMode>,
-);
+function App() {
+	return (
+		<StrictMode>
+        	<ThemeProvider>
+				<AppRoutes/>
+        	</ThemeProvider>
+    	</StrictMode>
+	);
+}
+createRoot(document.getElementById('root')!).render(<App />)

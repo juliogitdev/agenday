@@ -1,0 +1,109 @@
+
+.loginPage {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	padding: 20px 0;
+	background-color: var(--login-background);
+}
+
+	.loginContainer {
+		display: flex;
+		flex-direction: row;
+		margin-top: auto;
+		width: 900px;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		background-color: var(--login-container-background);
+	}
+
+	.loginForm {
+		display: block;
+		padding: 30px;
+		width: 60%;
+	}
+		.logo {
+			width: 96px;
+			margin-bottom: 20px;
+		}
+
+		.loginTitle {
+			font-family: "Poppins", sans-serif;
+			font-style: bold;
+			font-size: 20px;
+			color: var(--login-title);
+		}
+			.loginSubtitle {
+				color: var(--login-subtitle);
+				display: block;
+				margin-top: 4px;
+				font-size: 14px;
+				font-weight: 300;
+				margin-bottom: 20px;
+			}
+
+		.registerLink {
+			border: none;
+			outline: none;
+			background: none;
+			display: block;	
+			font-family: "Poppins", sans-serif;
+			color: var(--login-subtitle);
+			font-size: 10px;
+			text-decoration: none;
+			transition: color 0.3s ease;
+			text-align: right;
+			width: 100%;
+			cursor: pointer;
+		}
+			.registerLink:hover { color: var(--login-title);}
+			.registerText {	
+				text-align: right;
+				text-decoration: underline;
+				text-align: right;
+			}
+
+		.leftSide {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			padding: 50px 30px;
+			width: 50%;
+			background-image: 
+				linear-gradient(to top, var(--login-left-side-gradient), var(--login-left-side-gradient-transparent)),
+				url('/resource/images/login-cover-background.jpg');
+			background-size: cover;	
+			background-position: center;
+			border-radius: 10px;
+		}
+			.leftSideTitle {
+				font-family: "Poppins", sans-serif;
+				font-size: 44px;
+				color: var(--login-left-side-title);
+				text-transform: uppercase;
+				line-height: 1.2;
+			}
+				.leftSideSpan {
+					display:block;
+					color: var(--login-left-side-subtitle);
+					font-weight: bold;
+				}
+			.leftSideText {
+				font-family: "Poppins", sans-serif;
+				font-size: 14px;
+				color: var(--login-left-side-text);
+				margin-top: 10px;
+			}
+
+	.copyright {
+		font-family: "Poppins", sans-serif;
+		font-size: 10px;
+		color: var(--login-subtitle);
+		margin-top: auto;
+		padding: 10px;
+		text-align: center;
+	}
+	.spacer { height: 20px;}
+	
