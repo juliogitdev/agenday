@@ -50,25 +50,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         }
 
         //Verifica se existe usuário no jwt e se não está authenticado
-        if(username != null & SecurityContextHolder.getContext().getAuthentication() == null){
-            var user = userRepository.findByEmail(username);
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+            var userOpt = userRepository.findByEmail(username);
 
-            if(user != null &&
-            jwtService.isTokenValid(jwt, user.get())){
+            if (userOpt.isPresent() &&
+                    jwtService.isTokenValid(jwt, userOpt.get())) {
+
+                var user = userOpt.get();
 
                 var roles = jwtService.extractRoles(jwt);
-                var authorities = roles.
-                        stream()
+                var authorities = roles.stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList();
 
-                var authToken = new UsernamePasswordAuthenticationToken(
-                        user.get().getEmail(),
-                        null,
+                var userDetails = new org.springframework.security.core.userdetails.User(
+                        user.getEmail(),
+                        user.getPasswordHash() != null ? user.getPasswordHash() : "",
                         authorities
                 );
 
+                var authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+
             }
         }
 

@@ -7,10 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -25,7 +24,7 @@ class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private UserService userService;
 
     @Autowired
@@ -34,9 +33,13 @@ class AuthControllerTest {
     @Test
     void shouldReturn400WhenEmailIsInvalid() throws Exception {
         RegisterRequest request = new RegisterRequest(
-                "email-invalido",
+
+                "Teste",
+                "teste@email.com",
                 "123456",
-                "agenday"
+                "87-99999-0000",
+                "PE",
+                "Salgueiro"
         );
 
         mockMvc.perform(post("/api/v1/auth/register")
@@ -50,7 +53,7 @@ class AuthControllerTest {
 
         doThrow(new UserAlreadyExistsException("test@email.com"))
                 .when(userService)
-                .register(any(), any(), any());
+                .register(any());
 
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record RegisterRequest(
         @NotBlank
+        String fullName,
+
+        @NotBlank
         @Email
         String email,
 
@@ -12,6 +15,13 @@ public record RegisterRequest(
         String password,
 
         @NotBlank
-        String fullName
+        String numberPhone,
+
+        @NotBlank
+        String state,
+
+        @NotBlank
+        String city
+
 )
 { }

@@ -7,18 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import java.time.LocalDateTime;
 
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<String> handleConflict(UserAlreadyExistsException ex) {
-        return ResponseEntity.status(409).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<String> handleUnauthorized(InvalidCredentialsException ex) {
-        return ResponseEntity.status(401).body(ex.getMessage());
-    }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleUserExists(UserAlreadyExistsException ex) {
