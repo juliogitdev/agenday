@@ -1,0 +1,39 @@
+
+
+.nameInput {
+	display: flex;
+	flex-direction: column;
+}
+	.nameLabel {
+		font-family: "Poppins", sans-serif;
+		font-weight: 500;
+		font-size: 13px;
+		color: var(--name-label);
+		margin-bottom: 5px;
+	}
+
+	.nameField {
+		border: 1px solid var(--name-input-border);
+		border-radius: 5px;
+		font-size: 14px;
+		padding: 15px 10px;
+		background: var(--name-input-background);
+		outline: var(--name-input-border);
+		color: var(--name-input-foreground);
+	}
+
+	.nameField::placeholder {
+		color: var(--name-input-placeholder);
+		font-family: "Poppins", sans-serif;
+		font-weight: 300;
+		font-size: 12px;
+	}
+
+	.nameError {
+		color: var(--name-error);
+		font-family: "Poppins", sans-serif;
+		font-weight: 500;
+		font-size: 10px;
+		margin-top: 5px;
+		text-align: right;
+	}
