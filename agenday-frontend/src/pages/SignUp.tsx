@@ -78,7 +78,9 @@ export function SignUp() {
 						</p>
 					</div>
 				</div>
-
+				<p className={styles.copyright}>
+					© {new Date().getFullYear()} Agenday Platform. Todos os direitos reservados.
+				</p>
 			</div>
 		</GoogleOAuthProvider>
 	);
