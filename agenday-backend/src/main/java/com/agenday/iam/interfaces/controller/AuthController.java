@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -89,10 +90,12 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public ResponseEntity<UserResponse> me(Authentication authentication){
 
-        String email = authentication.getPrincipal().toString();
+        var userDetails = (UserDetails) authentication.getPrincipal();
+
+        String email = userDetails.getUsername();
 
         return ResponseEntity.ok(userService.getCurrentUser(email));
     }

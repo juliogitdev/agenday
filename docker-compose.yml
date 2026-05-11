@@ -19,21 +19,22 @@ services:
     ports:
       - "6379:6379"
 
-  #backend:
-  #  build: ./agenday-backend
-  #  container_name: agenday-api
-  #  restart: always
-  #  ports:
-  #    - "8080:8080"
-  #  depends_on:
-  #    - db
-  #    - redis
-  #  environment:
-  #    - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/agenday
-  #    - SPRING_DATASOURCE_USERNAME=${DB_USER}
-  #    - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-  #    - SPRING_REDIS_HOST=redis
-  #    - JWT_SECRET=${JWT_SECRET}
+  backend:
+    build: ./agenday-backend
+    container_name: agenday-api
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/agenday
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_REDIS_HOST=redis
+      - JWT_SECRET=${JWT_SECRET}
+  
   #frontend:
   #  build: ./agenday-frontend
   #  container_name: agenday-web

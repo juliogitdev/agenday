@@ -2,12 +2,12 @@ spring:
   application:
     name: agenday-backend
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/agenday}
-    username: ${DATABASE_USERNAME:agenday}
-    password: ${DATABASE_PASSWORD:agenday_password}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/agenday}
+    username: ${SPRING_DATASOURCE_USERNAME:agenday}
+    password: ${SPRING_DATASOURCE_PASSWORD:agenday_password}
   data:
     redis:
-      host: ${REDIS_HOST:localhost}
+      host: ${SPRING_REDIS_HOST:localhost}
       port: 6379
   jpa:
     hibernate:
