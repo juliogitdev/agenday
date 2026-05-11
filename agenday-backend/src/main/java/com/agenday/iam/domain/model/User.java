@@ -37,6 +37,12 @@ public class User extends BaseEntity {
     @Column(name="phone")
     private String numberPhone;
 
+    @Column(name="state")
+    private String state;
+
+    @Column(name="city")
+    private String city;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",
