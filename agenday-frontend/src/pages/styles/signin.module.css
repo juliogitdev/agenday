@@ -5,15 +5,15 @@
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
+	padding: 20px 0;
 	background-color: var(--login-background);
 }
 
 	.loginContainer {
-		overflow: hidden;
 		display: flex;
 		flex-direction: row;
+		margin-top: auto;
 		width: 900px;
-		
 		border-radius: 10px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 		background-color: var(--login-container-background);
@@ -76,8 +76,7 @@
 				url('/resource/images/login-cover-background.jpg');
 			background-size: cover;	
 			background-position: center;
-			border-top-left-radius: 10px;
-			border-bottom-left-radius: 10px;
+			border-radius: 10px;
 		}
 			.leftSideTitle {
 				font-family: "Poppins", sans-serif;
@@ -100,9 +99,10 @@
 
 	.copyright {
 		font-family: "Poppins", sans-serif;
-		font-size: 12px;
+		font-size: 10px;
 		color: var(--login-subtitle);
-		margin-top: 10vh;
+		margin-top: auto;
+		padding: 10px;
 		text-align: center;
 	}
 	.spacer { height: 20px;}

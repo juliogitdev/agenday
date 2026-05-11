@@ -1,0 +1,40 @@
+
+
+
+.phoneInput {
+	display: flex;
+	flex-direction: column;
+}
+	.phoneLabel {
+		font-family: "Poppins", sans-serif;
+		font-weight: 500;
+		font-size: 13px;
+		color: var(--phone-label);
+		margin-bottom: 5px;
+	}
+
+	.phoneField {
+		border: 1px solid var(--phone-input-border);
+		border-radius: 5px;
+		font-size: 14px;
+		padding: 15px 10px;
+		background: var(--phone-input-background);
+		outline: var(--phone-input-border);
+		color: var(--phone-input-foreground);
+	}
+
+	.phoneField::placeholder {
+		color: var(--phone-input-placeholder);
+		font-family: "Poppins", sans-serif;
+		font-weight: 300;
+		font-size: 12px;
+	}
+
+	.phoneError {
+		color: var(--phone-error);
+		font-family: "Poppins", sans-serif;
+		font-weight: 500;
+		font-size: 10px;
+		margin-top: 5px;
+		text-align: right;
+	}
