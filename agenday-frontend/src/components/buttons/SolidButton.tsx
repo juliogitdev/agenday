@@ -1,12 +1,12 @@
 
 import styles from './styles/solidButton.module.css';
 
-export function SolidButton({text, isActive, onClick}: {text: string, isActive: boolean, onClick: () => void}) {
+export function SolidButton({text, isActive, onClick, isLoading}: {text: string, isActive: boolean, onClick: () => void, isLoading: boolean}) {
 	return (
 		<button 
-			disabled={!isActive}
+			disabled={!isActive || isLoading}
 			className={ styles.solidButton } 
-			onClick={onClick}> {text}
+			onClick={onClick}> {isLoading ? "Carregando..." : text}
 		</button>
 	);
 }

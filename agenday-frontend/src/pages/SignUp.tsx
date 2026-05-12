@@ -1,5 +1,5 @@
 
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import styles from './styles/signup.module.css';
@@ -12,50 +12,150 @@ import { LocationInput } from "../components/inputs/LocationInput";
 import { SolidButton } from "../components/buttons/SolidButton";
 import { TermsOfUserCheckbox } from "../components/checkbox/TermsOfUseCheckbox";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { validateEmail, validateName, validatePhone } from "../utils/Validations";
+import { ErrorAlert } from "../components/Alerts/ErrorAlert";
+import { MESSAGES } from "../constants/messages";
+import type { UserSignup } from "../types/User";
+import { SuccessAlert } from "../components/Alerts/SuccessAlert";
+
 
 export function SignUp() {
 	const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-	const {user} = useContext(AuthContext);
+	const {user, signup} = useContext(AuthContext);
+	const timerRef = useRef<number | null>(null);
+	
+	const [alertMessage, setAlertMessage] = React.useState<string>("");
+	const [showAlert, setShowAlert] = React.useState<boolean>(false);
+	const [showSuccessAlert, setShowSuccessAlert] = React.useState<boolean>(false);
+
+	const [alertTitle, setAlertTitle] = React.useState<string>("error");
+	const [bntIsloading, setBtnIsLoading] = React.useState<boolean>(false);
+
 	const [email, setEmail] = React.useState<string>("");
 	const [passw, setPassw] = React.useState<string>("");
 	const [name, setName] = React.useState<string>("");
 	const [phone, setPhone] = React.useState<string>("");
+	const [termsAccepted, setTermsAccepted] = React.useState<boolean>(false);
 	const [location, setLocation] = React.useState<{uf: string; city: string} | null>(null);
 
-	const navigate = useNavigate();
+	const statusMap: Record<number, keyof typeof MESSAGES> = {
+		500: "serverError",
+		401: "invalidCredentials",
+		400: "invalidCredentials",
+		403: "invalidCredentials",
+		409: "duplicateEmail"
+	};
 
-	// If the user is already authenticated, redirect to the main app page
-	if (user) {  navigate('/agenday');}
+	const navigate = useNavigate();
+	if (user) {  navigate('/home');}
+
+	function validateForm() {
+		const emailV = validateEmail(email);
+		const nameV = validateName(name);
+		const phoneV = validatePhone(phone);
+
+		const isValid =
+			emailV.isValid &&
+			nameV.isValid &&
+			phoneV.isValid &&
+			passw.trim() !== "" && passw.trim().length >= 6 &&
+			location !== null &&
+			termsAccepted;
+
+		return {
+			isValid,
+			fields: { 
+				email: emailV, name: nameV, phone: phoneV,
+			}
+		};
+	}
+	const form = validateForm();
+	
+
+
+	const signUpWithEmail = async () => {
+		if ( form.isValid ) {
+			setBtnIsLoading(true);
+			const user:UserSignup = {
+				fullName: name, email: email,
+				password: passw, numberPhone: phone,
+				state: location?.uf ?? '', city: location?.city ?? '',
+			}
+
+			const status = await signup(user, 'email');
+
+			if (status === 201 || status === 200 ) {
+				setBtnIsLoading(false);
+				setShowSuccessAlert(true);
+				setShowAlert(false);
+				setTimeout(() => {	
+						navigate('/login')
+				}, 3000);
+				return;
+			}
+
+			const key = statusMap[status] ?? "unknownError";
+			const msg = MESSAGES[key];
+			showAlertWithMessage(msg.title, msg.message);
+		}
+	}
+
 	const loginWithGoogle = (credentialResponse: any) => {
 		if (credentialResponse.credential) {
 			// enviar o token do Google para o backend e receber o token de autenticação do Agenday
 		}
 	}
 
+
+	const showAlertWithMessage = (title: string, message: string) => {
+		const signupContainer = document.querySelector(`.${styles.signupContainer}`) as HTMLElement | null;
+		if (!signupContainer) return;
+
+		signupContainer.classList.remove(styles.shake);
+		void signupContainer.offsetWidth;
+		signupContainer.classList.add(styles.shake);
+
+		setAlertTitle(title);
+		setAlertMessage(message);
+		setShowAlert(true);
+
+		if (timerRef.current) clearTimeout(timerRef.current);
+
+		timerRef.current = setTimeout(() => {
+			setShowAlert(false);
+			setBtnIsLoading(false);
+			signupContainer.classList.remove(styles.shake);
+		}, 3000);
+	};
+
 	return (
 		<GoogleOAuthProvider clientId={googleClientId}> 
+			{ showAlert && <ErrorAlert title={alertTitle} message={alertMessage}/>}
+			{ showSuccessAlert && <SuccessAlert title="Sucesso!" message="Conta criada com sucesso. redirecionando para o login..." /> }
 			<div className={styles.signupPage}>
 				<div className={styles.signupContainer}>
 					<div className={styles.signupForm}>
-						<img src="/resource/icons/agenday_logo_v1.svg" alt="Agenday Logo" className={styles.logo} />
-						<h2 className={styles.signupTitle}>
-							Crie sua conta
-							<span className={styles.signupSubtitle}>Encontre e agende os melhores serviços perto de você.</span>
-						</h2>
-						
 						<div className={styles.inputGroup}>
-							<NameInput name={name} onChange={setName} />
+							<NameInput  name={name}   onChange={setName} />
 							<PhoneInput phone={phone} onChange={setPhone} />
 							<EmailInput email={email} onChange={setEmail} />
 							<PasswordInput password={passw} onChange={setPassw} showRecovery={false} />
 						</div>
 						
-						<LocationInput onChose={setLocation} />
-						<TermsOfUserCheckbox termsLink="/terms-of-use" onChange={(a) => {alert(a)}} />
+						<LocationInput onChose={(location) => setLocation(location)} />
+						<TermsOfUserCheckbox 
+							termsLink="/terms-of-use" 
+							onChange={(a) => {setTermsAccepted(a)}} 
+						/>
 						<div className={styles.spacer} ></div>
 						<div className={styles.spacer} ></div>
 
-						<SolidButton text="Criar Conta" isActive={!!email && !!passw && !!name && !!phone && !!location} onClick={() => {}} />
+						<SolidButton 
+							text="Criar Conta" 
+							isActive={form.isValid}	  
+							onClick={signUpWithEmail} 
+							isLoading={bntIsloading}
+						/>
 						<div className={styles.spacer}></div>
 						<GoogleLogin 
 							onSuccess={loginWithGoogle} 
@@ -70,11 +170,10 @@ export function SignUp() {
 					</div>
 					<div className={styles.leftSide}>
 						<h2 className={styles.leftSideTitle}>
-							Onde o tempo  <span className={styles.leftSideSpan}>ganha vida.</span>
+							crie sua conta no <span className={styles.leftSideSpan}>agenday.</span>
 						</h2>
 						<p className={styles.leftSideText}>	
-							Agenday é a plataforma que conecta você aos melhores serviços locais,
-							transformando seu tempo em experiências inesquecíveis.
+							Seja você um profissional ou um cliente, o Agenday é a plataforma ideal para gerenciar seus compromissos de forma fácil e eficiente.
 						</p>
 					</div>
 				</div>

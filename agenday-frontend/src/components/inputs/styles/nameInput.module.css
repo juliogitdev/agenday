@@ -7,7 +7,7 @@
 	.nameLabel {
 		font-family: "Poppins", sans-serif;
 		font-weight: 500;
-		font-size: 13px;
+		font-size: 12px;
 		color: var(--name-label);
 		margin-bottom: 5px;
 	}
@@ -15,8 +15,8 @@
 	.nameField {
 		border: 1px solid var(--name-input-border);
 		border-radius: 5px;
-		font-size: 14px;
-		padding: 15px 10px;
+		font-size: 12px;
+		padding: 10px 10px;
 		background: var(--name-input-background);
 		outline: var(--name-input-border);
 		color: var(--name-input-foreground);

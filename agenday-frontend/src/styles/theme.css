@@ -81,6 +81,23 @@
 	--signup-terms-link: #135184;
 	--signup-terms-link-hover: #3979ad;
 	--signup-terms-label: #666666;
+
+
+	/* ===== ALERTS [error]===== */
+	--error-alert-background: #f8d7da;
+	--error-alert-title: #111111;
+	--error-alert-message: #303030;
+	--error-alert-border-color: #f5c6cb;
+	--error-icon-color: #721c24;
+	--error-alert-border: #f5c6cb;
+
+	/* ===== ALERTS [success]===== */
+	--success-alert-background: #d4edda;
+	--success-alert-title: #111111;
+	--success-alert-message: #303030;
+	--success-alert-border-color: #c3e6cb;
+	--success-icon-color: #155724;
+	--success-alert-border: #c3e6cb;
 }
 
 
