@@ -8,7 +8,7 @@
 	.phoneLabel {
 		font-family: "Poppins", sans-serif;
 		font-weight: 500;
-		font-size: 13px;
+		font-size: 12px;
 		color: var(--phone-label);
 		margin-bottom: 5px;
 	}
@@ -16,8 +16,8 @@
 	.phoneField {
 		border: 1px solid var(--phone-input-border);
 		border-radius: 5px;
-		font-size: 14px;
-		padding: 15px 10px;
+		font-size: 12px;
+		padding: 10px 10px;
 		background: var(--phone-input-background);
 		outline: var(--phone-input-border);
 		color: var(--phone-input-foreground);

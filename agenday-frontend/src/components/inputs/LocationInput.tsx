@@ -28,25 +28,20 @@ export function LocationInput({ onChose }: LocationInputProps) {
       		.then((data) => setCitys(data));
   	}, [selectedUf]);
 
-  
-  	useEffect(() => {
-    	if (selectedUf && selectedCity) {
-      		onChose({
-        		uf: selectedUf,
-        		city: selectedCity,
-      		});
-    	}
-  	}, [selectedUf, selectedCity, onChose]);
 
-  	const handleUfChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    	setSelectedUf(e.target.value);
-    	setSelectedCity(""); 
-  	};
+  	useEffect(() => {
+		if (selectedUf && selectedCity) {
+			onChose({
+				uf: selectedUf,
+				city: selectedCity,
+			});
+		}
+	}, [selectedUf, selectedCity]);
 
   	return (
     	<div className={styles.locationInput}>
       		<span className={styles.locationLabel}>
-        		<MapPin className={styles.locationIcon} /> Preencha com sua localização
+        		<MapPin className={styles.locationIcon} /> Sua Localização ou do seu comércio
       		</span>
       		<div className={styles.locationInputContainer}>
 				<div className={styles.locationInputLeft}>
@@ -54,7 +49,7 @@ export function LocationInput({ onChose }: LocationInputProps) {
 					<select 
 						className={styles.locationSelect}
 						value={selectedUf} 
-						onChange={handleUfChange} 
+						onChange={(e) => {setSelectedUf(e.target.value)}}
 						name="uf" id="uf"
 					>
 						<option value="">Selecione um estado</option>
@@ -68,7 +63,7 @@ export function LocationInput({ onChose }: LocationInputProps) {
 					<label className={styles.locationInputLabel} htmlFor="city">Cidade</label>
 					<select
 						value={selectedCity}
-						onChange={(e) => setSelectedCity(e.target.value)}
+						onChange={(e) => {setSelectedCity(e.target.value)}}
 						disabled={!selectedUf}
 						name="city"
 						id="city"

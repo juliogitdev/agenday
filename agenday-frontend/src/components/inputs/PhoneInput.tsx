@@ -1,23 +1,23 @@
 
 import React from 'react';
 import styles from './styles/phoneInput.module.css';
+import { validatePhone } from '../../utils/Validations';
 
 type phoneInputProps = {
 	phone: string;
-	onChange: (newPhone: string) => void;
+	onChange: (newPhone: string, isValid: boolean) => void;
 }
 
 export function PhoneInput({phone, onChange}: phoneInputProps) {
 	const [error, setError] = React.useState<string>("");
+
 	const checkPhoneError = (value: string) => {
-		const phoneRegex = /^\(\d{2}\) \d{4,5}-\d{4}$/;
-		if (value.trim() === "") {
-			setError("O telefone não pode ser vazio.");
-			onChange("");
-		} else if (!phoneRegex.test(value)) {
-			setError("formato inválido (XX) XXXXX-XXXX.");
-			onChange("");
-		} else { setError("");}
+		const validatation = validatePhone(value);
+		const phoneField = document.getElementById("phone") as HTMLInputElement;
+		if (phoneField) 
+			phoneField.style.borderColor = validatation.isValid ? "var(--name-input-border)" : "var(--name-error)";
+		
+		setError(validatation.error || "");
 	};
 
 	return (
@@ -34,7 +34,7 @@ export function PhoneInput({phone, onChange}: phoneInputProps) {
 				onChange={(e) => {
 					const value = e.target.value;
 					checkPhoneError(value);
-          			onChange(value);
+          			onChange(value, validatePhone(value).isValid);
         		}}
 			/>
 			<span className={styles.phoneError}>{error}</span>

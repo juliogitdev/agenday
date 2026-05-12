@@ -1,28 +1,23 @@
 
 import { useState } from 'react';
 import styles from './styles/nameInput.module.css';
+import { validateName } from '../../utils/Validations';
 
 type nameInputProps = {
 	name: string;
-  	onChange: (value: string) => void;
+  	onChange: (value: string, isValid: boolean) => void;
 };
 
 export function NameInput({name, onChange}: nameInputProps) {
 	let [error, setError] = useState<string | null>(null);
 	
-	// mover para Utils ou algo do tipo depois
 	const checkNameError = (value: string) => {
-		if (value.trim() === "") {
-			setError("O nome não pode ser vazio.");
-		} else if (value.trim().length < 3) {
-			setError("O nome deve conter pelo menos 3 caracteres.");
-		} else if (!/^[a-zA-Z\s]+$/.test(value)) {
-			setError("O nome deve conter apenas letras e espaços.");
-		} else if (value.trim().length > 50) {
-			setError("O nome não pode exceder 50 caracteres.");
-		} else {
-			setError(null);
-		}
+		const validation = validateName(value);
+		const nameField = document.getElementById("name") as HTMLInputElement;
+		if (nameField) 
+			nameField.style.borderColor = validation.isValid ? "var(--name-input-border)" : "var(--name-error)";
+	
+		setError(validation.error || "");
 	};
 
 	return (
@@ -37,7 +32,7 @@ export function NameInput({name, onChange}: nameInputProps) {
 				onChange={(e) => {
 					const value = e.target.value;
 					checkNameError(value);
-          			onChange(value);
+          			onChange(value, validateName(value).isValid);
         		}}
 				placeholder="Digite seu nome completo"
 			/>

@@ -30,14 +30,14 @@
 			.signupTitle {
 				font-family: "Poppins", sans-serif;
 				font-style: bold;
-				font-size: 20px;
+				font-size: 17px;
 				color: var(--signup-title);
 			}
 				.signupSubtitle {
 					color: var(--signup-subtitle);
 					display: block;
 					margin-top: 4px;
-					font-size: 14px;
+					font-size: 13px;
 					font-weight: 300;
 					margin-bottom: 15px;
 				}
@@ -89,7 +89,7 @@
 		}
 			.leftSideTitle {
 				font-family: "Poppins", sans-serif;
-				font-size: 44px;
+				font-size: 32px;
 				color: var(--login-left-side-title);
 				text-transform: uppercase;
 				line-height: 1.2;
@@ -101,9 +101,12 @@
 				}
 			.leftSideText {
 				font-family: "Poppins", sans-serif;
-				font-size: 14px;
+				font-size: 12px;
 				color: var(--login-left-side-text);
 				margin-top: 10px;
+				line-height: 1.4;
+				text-align: justify;
+				font-weight: 300;
 			}
 
 	.copyright {
@@ -117,3 +120,17 @@
 
 
 .spacer { height: 20px;}
+
+	.shake {
+		animation: shakeAnimation 0.5s;
+		border: 1px solid red;
+		opacity: 0.4;
+		user-select: none;
+	}	
+	
+
+@keyframes shakeAnimation {
+	0%, 100% { transform: translateX(0); }
+	20%, 60% { transform: translateX(-5px); }
+	40%, 80% { transform: translateX(5px); }
+}
