@@ -54,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             var userOpt = userRepository.findByEmail(username);
 
             if (userOpt.isPresent() &&
-                    jwtService.isTokenValid(jwt, userOpt.get())) {
+                    jwtService.isAccessTokenValid(jwt, userOpt.get())) {
 
                 var user = userOpt.get();
 
