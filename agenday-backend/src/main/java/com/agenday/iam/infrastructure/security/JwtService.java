@@ -16,6 +16,9 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+    private static final String ACCESS_TOKEN_TYPE = "ACCESS";
+    private static final String REFRESH_TOKEN_TYPE = "REFRESH";
+
     @Value("${jwt.secret}")
     private String secret;
 
@@ -27,12 +30,17 @@ public class JwtService {
     private long refreshTokenExpiration;
 
     public String generateToken(User user) {
-        return generateToken(user, accessTokenExpiration);
+        return generateToken(user, accessTokenExpiration, ACCESS_TOKEN_TYPE);
     }
 
     public String generateToken(User user, long expirationMillis) {
+        return generateToken(user, expirationMillis, ACCESS_TOKEN_TYPE);
+    }
+
+    private String generateToken(User user, long expirationMillis, String tokenType) {
         return Jwts.builder()
                 .subject(user.getEmail())
+                .claim("type", tokenType)
                 .claim("roles", user.getRoles()
                         .stream()
                         .map(role -> role.getName())
@@ -58,13 +66,31 @@ public class JwtService {
         return claims.get("roles", List.class);
     }
 
+    public boolean isAccessTokenValid(String token, User user) {
+        return isTokenValid(token, user, ACCESS_TOKEN_TYPE);
+    }
+
+    public boolean isRefreshTokenValid(String token, User user) {
+        return isTokenValid(token, user, REFRESH_TOKEN_TYPE);
+    }
+
     public boolean isTokenValid(String token, User user) {
+        return isAccessTokenValid(token, user);
+    }
+
+    private boolean isTokenValid(String token, User user, String expectedType) {
         try {
             final String username = extractUsername(token);
-            return username.equals(user.getEmail()) && !isTokenExpired(token);
+            return username.equals(user.getEmail())
+                    && expectedType.equals(extractTokenType(token))
+                    && !isTokenExpired(token);
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private String extractTokenType(String token) {
+        return extractClaim(token, claims -> claims.get("type", String.class));
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -90,7 +116,7 @@ public class JwtService {
     }
 
     public String generateRefreshToken(User user) {
-        return generateToken(user, refreshTokenExpiration);
+        return generateToken(user, refreshTokenExpiration, REFRESH_TOKEN_TYPE);
     }
 
 }

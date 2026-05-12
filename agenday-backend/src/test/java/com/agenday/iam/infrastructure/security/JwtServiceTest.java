@@ -75,6 +75,30 @@ class JwtServiceTest {
     }
 
     @Test
+    void shouldReturnTrueWhenRefreshTokenIsValid() {
+        var user = createTestUser();
+        var token = jwtService.generateRefreshToken(user);
+
+        assertThat(jwtService.isRefreshTokenValid(token, user)).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseWhenAccessTokenIsUsedAsRefreshToken() {
+        var user = createTestUser();
+        var token = jwtService.generateToken(user);
+
+        assertThat(jwtService.isRefreshTokenValid(token, user)).isFalse();
+    }
+
+    @Test
+    void shouldReturnFalseWhenRefreshTokenIsUsedAsAccessToken() {
+        var user = createTestUser();
+        var token = jwtService.generateRefreshToken(user);
+
+        assertThat(jwtService.isAccessTokenValid(token, user)).isFalse();
+    }
+
+    @Test
     void shouldReturnFalseWhenTokenIsTampered() {
         var user = createTestUser();
         var token = jwtService.generateToken(user);

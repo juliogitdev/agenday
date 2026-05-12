@@ -28,12 +28,21 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/v1/auth/**").permitAll()
+                    .requestMatchers(
+                            "/api/v1/auth/register",
+                            "/api/v1/auth/login",
+                            "/api/v1/auth/google",
+                            "/api/v1/auth/refresh"
+                    ).permitAll()
+                    .requestMatchers("/api/v1/auth/me").authenticated()
                     .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex
                     .authenticationEntryPoint((request, response, authException) ->
                             response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
+                    )
+                    .accessDeniedHandler((request, response, accessDeniedException) ->
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN)
                     )
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

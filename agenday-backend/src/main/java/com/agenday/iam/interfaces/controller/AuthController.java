@@ -73,12 +73,17 @@ public class AuthController {
     public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest request) {
 
         String refreshToken = request.refreshToken();
+        String email;
 
-        String email = jwtService.extractUsername(refreshToken);
+        try {
+            email = jwtService.extractUsername(refreshToken);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).build();
+        }
 
-        var user = userService.getUserByEmail(email); // cria esse método
+        var user = userService.getUserByEmail(email);
 
-        if (!jwtService.isTokenValid(refreshToken, user)) {
+        if (!jwtService.isRefreshTokenValid(refreshToken, user)) {
             return ResponseEntity.status(401).build();
         }
 
@@ -90,7 +95,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponse> me(Authentication authentication){
 
         var userDetails = (UserDetails) authentication.getPrincipal();
