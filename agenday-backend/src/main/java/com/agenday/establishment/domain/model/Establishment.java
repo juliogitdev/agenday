@@ -20,14 +20,18 @@ public class Establishment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String name;
 
-    private String description;
+    private String slogan;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
+
+    @Column(name = "phone")
+    private String numberPhone;
 
     @Column(name = "image_url")
     private String imageUrl;
