@@ -39,4 +39,18 @@ public class EstablishmentMapper {
         return newEstablishment;
     }
 
+    public static void updateEntity(Establishment establishment, EstablishmentRequest request) {
+        establishment.setName(request.name());
+        establishment.setSlogan(request.slogan());
+        establishment.setNumberPhone(request.numberPhone());
+        establishment.setImageUrl(request.imageUrl());
+
+        if (request.addressRequest() != null) {
+            establishment.getAddress().setCep(request.addressRequest().cep());
+            establishment.getAddress().setState(request.addressRequest().state());
+            establishment.getAddress().setCity(request.addressRequest().city());
+            establishment.getAddress().setStreet(request.addressRequest().street());
+            establishment.getAddress().setNumber(request.addressRequest().number());
+        }
+    }
 }

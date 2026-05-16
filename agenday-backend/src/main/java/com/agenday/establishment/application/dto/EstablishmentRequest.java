@@ -8,9 +8,6 @@ public record EstablishmentRequest(
 
         String slogan,
 
-        @NotBlank
-        String ownerId,
-
         String numberPhone,
 
         String imageUrl,
