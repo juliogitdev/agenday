@@ -8,7 +8,7 @@
 	padding: 20px 0;
 	background-color: var(--login-background);
 }
-
+	.mobileHeader { display: none;}
 	.loginContainer {
 		display: flex;
 		flex-direction: row;
@@ -27,14 +27,14 @@
 		.loginTitle {
 			font-family: "Poppins", sans-serif;
 			font-style: bold;
-			font-size: 17px;
+			font-size: 1.4rem;
 			color: var(--login-title);
 		}
 			.loginSubtitle {
 				color: var(--login-subtitle);
 				display: block;
 				margin-top: 4px;
-				font-size: 13px;
+				font-size: .9rem;
 				font-weight: 300;
 				margin-bottom: 20px;
 			}
@@ -46,11 +46,12 @@
 			display: block;	
 			font-family: "Poppins", sans-serif;
 			color: var(--login-subtitle);
-			font-size: 10px;
+			font-size: .7rem;
 			text-decoration: none;
 			transition: color 0.3s ease;
 			text-align: right;
 			width: 100%;
+			margin-top: 10px;
 			cursor: pointer;
 		}
 			.registerLink:hover { color: var(--login-title);}
@@ -75,7 +76,7 @@
 		}
 			.leftSideTitle {
 				font-family: "Poppins", sans-serif;
-				font-size: 44px;
+				font-size: 1.9rem;
 				color: var(--login-left-side-title);
 				text-transform: uppercase;
 				line-height: 1.2;
@@ -87,7 +88,7 @@
 				}
 			.leftSideText {
 				font-family: "Poppins", sans-serif;
-				font-size: 12px;	
+				font-size: .9rem;	
 				letter-spacing: 0.5px;
 				color: var(--login-left-side-text);
 				margin-top: 10px;
@@ -120,4 +121,43 @@
 	40%, 80% { transform: translateX(5px); }
 }
 
+@media (max-width: 768px) {
+	
+	.mobileHeader { 
+		width: 100%;
+		flex-wrap: wrap;
+		display: flex;
+		justify-content: center;
+		margin-top: 2rem;
+	}
+		.mobileTitle { 
+			display: block; 
+			width: 100%; 
+			text-align: center; 
+			font-family: "Poppins", sans-serif;
+			font-size: .8rem;
+			font-weight: 500;
+			margin-top: 10px;
+			color: var(--login-mobile-title);
+		}
+
+		.mobileLogo { 
+			display: block; 
+			width: 120px;
+		}
+
+	.loginContainer {
+		width: 95%;
+		flex-wrap: wrap;
+		margin-top: 2rem;
+		flex-direction: column;
+	}
+		.loginTitle {font-size: 1rem;}
+		.loginSubtitle {font-size: .8rem; margin-bottom: 20px;}
+		.loginForm {
+			width: 100%;
+			padding: 20px;
+		}
+		.leftSide { display: none;}
+}
 
