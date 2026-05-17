@@ -15,7 +15,7 @@
 		border: 1px solid var(--email-input-border);
 		border-radius: 5px;
 		font-size: 1rem;
-		padding: 10px 10px;
+		padding: 10px;
 		background: var(--email-input-background);
 		outline: var(--email-input-border);
 		color: var(--email-input-foreground);

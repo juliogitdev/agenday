@@ -8,12 +8,13 @@
 		align-items: center;
 		font-family: "Poppins", sans-serif;
 		font-style: bold;
-		font-size: 12px;
+		font-size: .7rem;
+		vertical-align: middle;
 		color: var(--location-label);
 		background-color: var(--location-label-background);
 		padding: 10px 8px;
 		border-radius: 4px;
-		margin-bottom: 15px;
+		margin-bottom: 18px;
 	}
 		.locationIcon {
 			margin-right: 4px;
@@ -31,7 +32,7 @@
 				display: block;
 				font-family: "Poppins", sans-serif;
 				font-weight: 500;
-				font-size: 12px;
+				font-size: .8rem;
 				color: var(--location-input-label);
 				margin-bottom: 3px;
 			}
@@ -41,12 +42,12 @@
 				outline: none;
 				width: 100%;
 				font-family: "Poppins", sans-serif;
-				padding: 8px;
+				padding: 10px;
 				border: 1px solid var(--location-select-border);
 				border-radius: 4px;
 				background-color: var(--location-select-background);
 				color: var(--location-select-foreground);
-				font-size: 12px;
+				font-size: .8rem;
 			}
 			
 			.locationInputContainer select:disabled {
