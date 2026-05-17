@@ -9,21 +9,21 @@ export type User = {
 
 export type UserLogged = {
   	accessToken: string;
-    refreshToken: string;
     type: string;
 };
 
 export type UserLogin = {
-	email: string;
+	email?: string;
 	password?: string;
-	googleToken?: string;
+	googleId?: string;
 };
 
 export type UserSignup = {
-	fullName: string;	
-	email: string;
-	password: string;
-	numberPhone: string;
-	state: string;
-	city: string;
+	fullName?: string;	
+	googleId?: string;
+	email?: string;
+	password?: string;
+	numberPhone?: string;
+	state?: string;
+	city?: string;
 };
