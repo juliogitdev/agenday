@@ -8,7 +8,7 @@
 	padding: 20px 0;
 	background-color: var(--login-background);
 }
-	.mobileHeader { display: none;}
+	.loginMobileHeader { display: none;}
 	.loginContainer {
 		display: flex;
 		flex-direction: row;
@@ -123,14 +123,14 @@
 
 @media (max-width: 768px) {
 	
-	.mobileHeader { 
+	.loginMobileHeader { 
 		width: 100%;
 		flex-wrap: wrap;
 		display: flex;
 		justify-content: center;
 		margin-top: 2rem;
 	}
-		.mobileTitle { 
+		.loginMobileTitle { 
 			display: block; 
 			width: 100%; 
 			text-align: center; 
@@ -141,7 +141,7 @@
 			color: var(--login-mobile-title);
 		}
 
-		.mobileLogo { 
+		.loginMobileLogo { 
 			display: block; 
 			width: 120px;
 		}

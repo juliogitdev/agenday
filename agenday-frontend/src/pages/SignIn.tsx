@@ -33,6 +33,7 @@ export function SignIn() {
    	const validPassword = (value: string, isValid: boolean) => { setPasswValid(isValid); setPassw(value);}
 	
 	const statusMap: Record<number, keyof typeof MESSAGES> = {
+		  1: "invalidFields",
 		500: "serverError",
 		401: "invalidCredentials",
 		400: "invalidCredentials",
@@ -58,13 +59,18 @@ export function SignIn() {
 
 	const loginWithGoogle = async (credentialResponse: any) => {
 		if (credentialResponse.credential) {
-			const status = await login({email: '', googleToken: credentialResponse.credential}, 'google');
-			if (status === 200) return;
-
+			const status = await login({googleId: credentialResponse.clientId}, 'google');
+			if (status === 200) {
+				setBtnIsLoading(true); // mantem o loading para evitar clique duplo
+				setShowSuccessAlert(true);
+				setTimeout(() => navigate('/home'), 2000);
+				return;
+			}
 			const key = statusMap[status] ?? "unknownError";
 			const msg = MESSAGES[key];
 			showAlertWithMessage(msg.title, msg.message);
-		}
+		} 
+		else { onLoginGoogleError();}
 	}
 				
 	const showAlertWithMessage = (title: string, message: string) => {
@@ -88,14 +94,19 @@ export function SignIn() {
 		}, 3000);
 	};
 
+	const onLoginGoogleError = () => {
+		const msg = MESSAGES["googleLoginError"];
+		showAlertWithMessage(msg.title, msg.message);
+	}
+
 	return (
 		<div className={styles.loginPage}>
 			 { showAlert && <ErrorAlert title={alertTitle} message={alertMessage}/>}
 			 { showSuccessAlert && <SuccessAlert title="Sucesso!" message="Login realizado com sucesso. redirecionando..." /> }
 			
-			<div className={styles.mobileHeader}>
-				<img src="/resource/icons/agenday_logo_v1.svg" alt="Agenday" className={styles.mobileLogo} />
-				<span className={styles.mobileTitle}> Seu Tempo, sob controle</span>
+			<div className={styles.loginMobileHeader}>
+				<img src="/resource/icons/agenday_logo_v1.svg" alt="Agenday" className={styles.loginMobileLogo} />
+				<span className={styles.loginMobileTitle}> Seu Tempo, sob controle</span>
 			</div>
 			<div className={styles.loginContainer}>
 				<div className={styles.loginForm}>
@@ -118,7 +129,7 @@ export function SignIn() {
 					/>
 					
 					<div className={styles.spacer} ></div>
-					<GoogleLogin onSuccess={loginWithGoogle} onError={() => {}} />
+					<GoogleLogin onSuccess={loginWithGoogle} onError={onLoginGoogleError} />
 					
 					<div className={styles.spacer} ></div>
 					<button className={styles.registerLink} onClick={() => navigate('/signup')}>
