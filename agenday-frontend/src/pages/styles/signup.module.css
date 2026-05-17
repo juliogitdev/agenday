@@ -8,6 +8,7 @@
 	padding: 20px 0;
 	background-color: var(--signup-background);
 }
+	.signupMobileHeader { display: none;}
 	.signupContainer {
 		display: flex;
 		flex-direction: row;
@@ -133,4 +134,43 @@
 	0%, 100% { transform: translateX(0); }
 	20%, 60% { transform: translateX(-5px); }
 	40%, 80% { transform: translateX(5px); }
+}
+
+@media (max-width: 768px) {
+	.signupMobileHeader { 
+		width: 100%;
+		flex-wrap: wrap;
+		display: flex;
+		justify-content: center;
+		margin-top: 2rem;
+	}
+		.signupMobileTitle { 
+			display: block; 
+			width: 100%; 
+			text-align: center; 
+			font-family: "Poppins", sans-serif;
+			font-size: .8rem;
+			font-weight: 500;
+			margin-top: 10px;
+			color: var(--signup-mobile-title);
+		}
+
+		.signupMobileLogo { 
+			display: block; 
+			width: 120px;
+		}
+
+	.signupContainer {
+		width: 95%;
+		flex-wrap: wrap;
+		margin-top: .5rem;
+		flex-direction: column;
+	}
+		.signupTitle {font-size: 1rem;}
+		.signupSubtitle {font-size: .8rem; margin-bottom: 20px;}
+		.signupForm {
+			width: 100%;
+			padding: 20px;
+		}
+		.leftSide { display: none;}
 }

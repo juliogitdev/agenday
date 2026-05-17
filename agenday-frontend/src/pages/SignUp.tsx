@@ -39,6 +39,7 @@ export function SignUp() {
 	const [location, setLocation] = React.useState<{uf: string; city: string} | null>(null);
 
 	const statusMap: Record<number, keyof typeof MESSAGES> = {
+		  1: "invalidFields",
 		500: "serverError",
 		401: "invalidCredentials",
 		400: "invalidCredentials",
@@ -55,18 +56,12 @@ export function SignUp() {
 		const phoneV = validatePhone(phone);
 
 		const isValid =
-			emailV.isValid &&
-			nameV.isValid &&
-			phoneV.isValid &&
-			passw.trim() !== "" && passw.trim().length >= 6 &&
-			location !== null &&
-			termsAccepted;
+			emailV.isValid && nameV.isValid &&
+			phoneV.isValid && passw.trim() !== "" && passw.trim().length >= 6 &&
+			location !== null && termsAccepted;
 
 		return {
-			isValid,
-			fields: { 
-				email: emailV, name: nameV, phone: phoneV,
-			}
+			isValid, fields: { email: emailV, name: nameV, phone: phoneV,}
 		};
 	}
 	const form = validateForm();
@@ -83,14 +78,11 @@ export function SignUp() {
 			}
 
 			const status = await signup(user, 'email');
-
 			if (status === 201 || status === 200 ) {
 				setBtnIsLoading(false);
 				setShowSuccessAlert(true);
 				setShowAlert(false);
-				setTimeout(() => {	
-						navigate('/login')
-				}, 3000);
+				setTimeout(() => {navigate('/login')}, 3000);
 				return;
 			}
 
@@ -100,10 +92,20 @@ export function SignUp() {
 		}
 	}
 
-	const loginWithGoogle = (credentialResponse: any) => {
-		if (credentialResponse.credential) {
-			// enviar o token do Google para o backend e receber o token de autenticação do Agenday
-		}
+	const loginWithGoogle = async (credentialResponse: any) => {
+		if (credentialResponse.credential && credentialResponse.clientId ) {
+			const status = await signup({googleId: credentialResponse.clientId}, 'google');
+			if (status === 200) {
+				setBtnIsLoading(true); // mantem o loading para evitar clique duplo
+				setShowSuccessAlert(true);
+				setTimeout(() => navigate('/home'), 2000);
+				return;
+			}
+			const key = statusMap[status] ?? "unknownError";
+			const msg = MESSAGES[key];
+			showAlertWithMessage(msg.title, msg.message);
+		} 
+		else {  onLoginGoogleError(); }
 	}
 
 
@@ -128,10 +130,21 @@ export function SignUp() {
 		}, 3000);
 	};
 
+	const onLoginGoogleError = () => {
+		const msg = MESSAGES["googleLoginError"];
+		showAlertWithMessage(msg.title, msg.message);
+	}
+
 	return (
 		<GoogleOAuthProvider clientId={googleClientId}> 
 			{ showAlert && <ErrorAlert title={alertTitle} message={alertMessage}/>}
 			{ showSuccessAlert && <SuccessAlert title="Sucesso!" message="Conta criada com sucesso. redirecionando para o login..." /> }
+
+			<div className={styles.signupMobileHeader}>
+				<img src="/resource/icons/agenday_logo_v1.svg" alt="Agenday" className={styles.signupMobileLogo} />
+				<span className={styles.signupMobileTitle}> Seu Tempo, sob controle</span>
+			</div>
+
 			<div className={styles.signupPage}>
 				<div className={styles.signupContainer}>
 					<div className={styles.signupForm}>
@@ -159,7 +172,7 @@ export function SignUp() {
 						<div className={styles.spacer}></div>
 						<GoogleLogin 
 							onSuccess={loginWithGoogle} 
-							onError={() => {}} 
+							onError={onLoginGoogleError} 
 							text="continue_with"
 						/>
 						
