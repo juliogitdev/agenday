@@ -17,5 +17,14 @@ export const MESSAGES = {
 	"duplicateEmail": {
 		title: "email já cadastrado",
 		message: "O email fornecido já está registrado. Por favor, use outro email ou faça login."
+	},
+
+	"googleLoginError": {
+		title: "erro ao fazer login com google",
+		message: "Parece que algo deu errado ao fazer login com google. Tente novamente."
+	},
+	"invalidFields": {
+		title: "campos inválidos",
+		message: "Preencha todos os campos corretamente e tente novamente."
 	}
 }
