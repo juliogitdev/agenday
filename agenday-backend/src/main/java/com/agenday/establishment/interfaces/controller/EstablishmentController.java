@@ -2,7 +2,10 @@ package com.agenday.establishment.interfaces.controller;
 
 import com.agenday.establishment.application.dto.EstablishmentRequest;
 import com.agenday.establishment.application.dto.EstablishmentResponse;
+import com.agenday.establishment.application.dto.ProfessionalEstablishmentRequest;
+import com.agenday.establishment.application.dto.ProfessionalEstablishmentResponse;
 import com.agenday.establishment.application.service.EstablishmentService;
+import com.agenday.establishment.application.service.ProfessionalEstablishmentService;
 import com.agenday.iam.application.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +26,15 @@ public class EstablishmentController {
 
     private final UserService userService;
     private final EstablishmentService establishmentService;
+    private final ProfessionalEstablishmentService professionalEstablishmentService;
 
-    public EstablishmentController(UserService userService, EstablishmentService establishmentService){
+    public EstablishmentController(
+            UserService userService,
+            EstablishmentService establishmentService,
+            ProfessionalEstablishmentService professionalEstablishmentService){
         this.userService = userService;
         this.establishmentService = establishmentService;
+        this.professionalEstablishmentService = professionalEstablishmentService;
     }
 
     @PostMapping("/register")
@@ -59,6 +67,17 @@ public class EstablishmentController {
         return ResponseEntity.status(200).
                 body(establishmentService.updateEstablishment(id, email, request));
 
+    }
+
+    @PostMapping("/invite")
+    @PreAuthorize("hasRole('PROFESSIONAL')")
+    public ResponseEntity<ProfessionalEstablishmentResponse> invite(
+            Authentication authentication,
+            @Valid @RequestBody ProfessionalEstablishmentRequest request) {
+
+        String email = authentication.getName();
+        return ResponseEntity.status(201)
+                .body(professionalEstablishmentService.inviteProfessional(email, request));
     }
 
 
