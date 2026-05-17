@@ -31,7 +31,6 @@ public class EstablishmentService {
 
     public EstablishmentResponse createEstablishment(String emailUser, EstablishmentRequest establishmentRequest){
         User user = userRepository.findByEmail(emailUser).orElseThrow(() -> new UsernameNotFoundException(("User not found")));
-
         Establishment newEstablishment = EstablishmentMapper.toEntity(establishmentRequest);
 
         newEstablishment.setOwner(user);

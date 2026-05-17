@@ -47,7 +47,7 @@ public class EstablishmentController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasHole('PROFESSIONAL')")
+    @PreAuthorize("hasRole('PROFESSIONAL')")
     public ResponseEntity<EstablishmentResponse> updateEstablishment(
             Authentication authentication,
             @PathVariable UUID id,
