@@ -22,17 +22,18 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 						password: userData.password
 					})
 				});
-				console.log(await response.json());
 			} catch (error) { return 500; /* Internal Server Error */ }
 
 			if (response.ok && response.status == 200 ) {
 				const data = await response.json();
+				console.log(data);
 				setUser({
 					accessToken: data.accessToken,
 					refreshToken: data.refreshToken,
 					type: data.type
 				});
-			} 
+			}
+ 
 			return response.status;
 		} 
 		

@@ -92,6 +92,11 @@ export function SignIn() {
 		<div className={styles.loginPage}>
 			 { showAlert && <ErrorAlert title={alertTitle} message={alertMessage}/>}
 			 { showSuccessAlert && <SuccessAlert title="Sucesso!" message="Login realizado com sucesso. redirecionando..." /> }
+			
+			<div className={styles.mobileHeader}>
+				<img src="/resource/icons/agenday_logo_v1.svg" alt="Agenday" className={styles.mobileLogo} />
+				<span className={styles.mobileTitle}> Seu Tempo, sob controle</span>
+			</div>
 			<div className={styles.loginContainer}>
 				<div className={styles.loginForm}>
 					<h2 className={styles.loginTitle}>
