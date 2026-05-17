@@ -9,6 +9,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
 import { MESSAGES } from "../constants/messages";
+import { SuccessAlert } from "../components/Alerts/SuccessAlert";
 
 export function SignIn() {
 	const {login} = React.useContext(AuthContext);
@@ -17,6 +18,8 @@ export function SignIn() {
 
 	const [alertMessage, setAlertMessage] = React.useState<string>("");
 	const [showAlert, setShowAlert] = React.useState<boolean>(false);
+	const [showSuccessAlert, setShowSuccessAlert] = React.useState<boolean>(false);
+
 	const [alertTitle, setAlertTitle] = React.useState<string>("error");
 	const [bntIsloading, setBtnIsLoading] = React.useState<boolean>(false);
 
@@ -40,7 +43,12 @@ export function SignIn() {
 		if (email && passw) {
 			setBtnIsLoading(true);
 			const status = await login({password: passw, email: email}, 'email');
-			if (status === 200) return;
+			if (status === 200)  {
+				setBtnIsLoading(true); // mantem o loading para evitar clique duplo
+				setShowSuccessAlert(true);
+				setTimeout(() => navigate('/home'), 2000);
+				return;
+			}
 
 			const key = statusMap[status] ?? "unknownError";
 			const msg = MESSAGES[key];
@@ -58,8 +66,6 @@ export function SignIn() {
 			showAlertWithMessage(msg.title, msg.message);
 		}
 	}
-
-
 				
 	const showAlertWithMessage = (title: string, message: string) => {
 		const loginContainer = document.querySelector(`.${styles.loginContainer}`) as HTMLElement | null;
@@ -85,6 +91,7 @@ export function SignIn() {
 	return (
 		<div className={styles.loginPage}>
 			 { showAlert && <ErrorAlert title={alertTitle} message={alertMessage}/>}
+			 { showSuccessAlert && <SuccessAlert title="Sucesso!" message="Login realizado com sucesso. redirecionando..." /> }
 			<div className={styles.loginContainer}>
 				<div className={styles.loginForm}>
 					<h2 className={styles.loginTitle}>
