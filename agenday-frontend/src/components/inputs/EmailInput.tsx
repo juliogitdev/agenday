@@ -1,21 +1,25 @@
 
+
 import styles from './styles/emailInput.module.css';
+import { INPUT_ERRORS } from '../../constants/InputErros';
+import { validateEmail } from '../../utils/Validations';
 
 type EmailProps = {
 	email: string;
-  	onChange: (value: string) => void;
+  	onChange: (value: string, isValid: boolean) => void;
 };
 
 export function EmailInput({email, onChange}: EmailProps) {
+	
 	const checkEmail = (value: string) => {
-    	const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    	const isValid = validateEmail(value).isValid;
     	const errorElement = document.querySelector(`.${styles.emailError}`) as HTMLElement;
 		const emailField = document.querySelector(`.${styles.emailField}`) as HTMLInputElement;
 
     	if ( errorElement ) {
       		errorElement.style.visibility = isValid ? 'hidden' : 'visible';
 			emailField.style.borderColor = isValid ? 'var(--email-input-border)' : 'var(--email-error)';
-		}
+		} 
   	};
 
 	return (
@@ -28,12 +32,12 @@ export function EmailInput({email, onChange}: EmailProps) {
 				value={email} 
 				onChange={(e) => {
           			const value = e.target.value;
-          			onChange(value);
+          			onChange(value, validateEmail(value).isValid);
           			checkEmail(value);
         		}}
 				placeholder="Digite seu e-mail"
 			/>
-			<span className={styles.emailError}>E-mail inválido</span>
+			<span className={styles.emailError}>{INPUT_ERRORS.EMAIL.INVALID}</span>
 		</div>
 	);
 }

@@ -6,24 +6,15 @@ import { useState } from "react";
 type PasswordProps = {
 	password: string;
 	showRecovery?: boolean;
-  	onChange: (value: string) => void;
+  	onChange: (value: string, isValid: boolean) => void;
 };
 
 export function PasswordInput({password, onChange, showRecovery=true}: PasswordProps) {
 	const [eyeIsOpen, setEyeIsOpen] = useState(false);
-
-	const showpassword = () => { setEyeIsOpen(prev => !prev);}
-
-	const checkPassword = (value: string) => {
-		const isValid = value.length >= 6;	
-		const errorElement = document.querySelector(`.password-error`) as HTMLElement;
-		const passwordField = document.querySelector(`.password-field`) as HTMLInputElement;
-
-		if ( errorElement ) {
-			errorElement.style.display = isValid ? 'none' : 'block';
-			passwordField.style.borderColor = isValid ? 'var(--password-input-border)' : 'var(--password-error)';
-		}
-	};
+	
+	const showpassword = () => { 
+			setEyeIsOpen(prev => !prev);
+	}
 
 	return (
 		<div className={styles.passwordInput}>
@@ -35,8 +26,7 @@ export function PasswordInput({password, onChange, showRecovery=true}: PasswordP
 					name="password" 
 					value={password} 
 					onChange={(e) => {
-						onChange(e.target.value);
-						checkPassword(e.target.value);
+						onChange(e.target.value, e.target.value.length >= 6);
 					}}
 					placeholder="Digite sua senha"
 				/>
