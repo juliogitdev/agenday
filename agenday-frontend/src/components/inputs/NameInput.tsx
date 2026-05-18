@@ -9,14 +9,14 @@ type nameInputProps = {
 };
 
 export function NameInput({name, onChange}: nameInputProps) {
-	let [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<string | null>(null);
 	
 	const checkNameError = (value: string) => {
 		const validation = validateName(value);
 		const nameField = document.getElementById("name") as HTMLInputElement;
-		if (nameField) 
+		if (nameField) {
 			nameField.style.borderColor = validation.isValid ? "var(--name-input-border)" : "var(--name-error)";
-	
+		}
 		setError(validation.error || "");
 	};
 

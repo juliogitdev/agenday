@@ -11,7 +11,7 @@ import { PhoneInput } from "../components/inputs/PhoneInput";
 import { LocationInput } from "../components/inputs/LocationInput";
 import { SolidButton } from "../components/buttons/SolidButton";
 import { TermsOfUserCheckbox } from "../components/checkbox/TermsOfUseCheckbox";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { type CredentialResponse, GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { validateEmail, validateName, validatePhone } from "../utils/Validations";
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
 import { MESSAGES } from "../constants/messages";
@@ -72,7 +72,7 @@ export function SignUp() {
 		if ( form.isValid ) {
 			setBtnIsLoading(true);
 			const user:UserSignup = {
-				fullName: name, email: email,
+				fullName: name, email,
 				password: passw, numberPhone: phone,
 				state: location?.uf ?? '', city: location?.city ?? '',
 			}
@@ -92,7 +92,7 @@ export function SignUp() {
 		}
 	}
 
-	const loginWithGoogle = async (credentialResponse: any) => {
+	const loginWithGoogle = async (credentialResponse: CredentialResponse) => {
 		if (credentialResponse.credential && credentialResponse.clientId ) {
 			const status = await signup({googleId: credentialResponse.clientId}, 'google');
 			if (status === 200) {
@@ -111,7 +111,7 @@ export function SignUp() {
 
 	const showAlertWithMessage = (title: string, message: string) => {
 		const signupContainer = document.querySelector(`.${styles.signupContainer}`) as HTMLElement | null;
-		if (!signupContainer) return;
+		if (!signupContainer){ return; }
 
 		signupContainer.classList.remove(styles.shake);
 		void signupContainer.offsetWidth;
@@ -121,7 +121,7 @@ export function SignUp() {
 		setAlertMessage(message);
 		setShowAlert(true);
 
-		if (timerRef.current) clearTimeout(timerRef.current);
+		if (timerRef.current){ clearTimeout(timerRef.current);}
 
 		timerRef.current = setTimeout(() => {
 			setShowAlert(false);

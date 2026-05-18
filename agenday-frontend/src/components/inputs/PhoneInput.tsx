@@ -14,9 +14,9 @@ export function PhoneInput({phone, onChange}: phoneInputProps) {
 	const checkPhoneError = (value: string) => {
 		const validatation = validatePhone(value);
 		const phoneField = document.getElementById("phone") as HTMLInputElement;
-		if (phoneField) 
+		if (phoneField) {
 			phoneField.style.borderColor = validatation.isValid ? "var(--name-input-border)" : "var(--name-error)";
-		
+		}
 		setError(validatation.error || "");
 	};
 

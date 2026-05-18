@@ -8,24 +8,12 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 	const [authReady, setAuthReady] = React.useState(false);
 	const [loginType, setLoginType] = React.useState<string>('email');
 
-	// realiza uma tentativa de refresh automático ao iniciar a aplicação.
-	// authReady evita renderizar rotas protegidas antes da validação da sessão.
-	React.useEffect(() => {
-		const initAuth = async () => {
-			await refreshToken();
-			await new Promise(resolve => setTimeout(resolve, 1000)); // simula delay de carregamento
-			setAuthReady(true);
-		};
-		initAuth();
-	}, []);
-
-
 	const login = async (userData: UserLogin, loginType: string): Promise<number> => {
 		const API_URL = import.meta.env.VITE_API_URL;
 		setLoginType(loginType);
 		
 		// tenta logar com email+senha
-		if (loginType == 'email' && userData.email && userData.password ) {	
+		if (loginType === 'email' && userData.email && userData.password ) {	
 			let response: Response;
 			try {
 				response = await fetch(`${API_URL}auth/login`, {
@@ -37,9 +25,9 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 						password: userData.password
 					})
 				});
-			} catch (error) { return 500;}
+			} catch { return 500;}
 
-			if (response.ok && response.status == 200 ) {
+			if (response.ok && response.status === 200 ) {
 				const data = await response.json();
 				setUser({ accessToken: data.accessToken, type: data.type});
 			}
@@ -48,7 +36,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 		} 
 
 		// tenta logar com google
-		if (loginType == 'google' && userData.googleId) {
+		if (loginType === 'google' && userData.googleId) {
 			let response: Response;
 			try {
 				response = await fetch(`${API_URL}auth/google`, {
@@ -57,9 +45,9 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({idToken: userData.googleId})
 				});
-			} catch (error) { return 500;}
+			} catch { return 500;}
 
-			if (response.ok && response.status == 200 ) {
+			if (response.ok && response.status === 200 ) {
 				const data = await response.json();
 				setUser({ accessToken: data.accessToken, type: data.type});
 			} 
@@ -74,7 +62,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 		const API_URL = import.meta.env.VITE_API_URL;
 
 		// tenta cadastrar com email+senha
-		if (loginType == 'email' 
+		if (loginType === 'email' 
 				&& userData.email 
 				&& userData.password
 				&& userData.fullName
@@ -94,12 +82,12 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 					})
 				});
 			} 
-			catch (error) { return 500; }
+			catch { return 500; }
 			return response.status;
 		} 
 
 		// tenta cadastrar com google
-		else if (loginType == 'google' && userData.googleId) {
+		else if (loginType === 'google' && userData.googleId) {
 			let response: Response;
 			try {
 				response = await fetch(`${API_URL}auth/google`, {
@@ -108,9 +96,9 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({idToken: userData.googleId})
 				});
-			} catch (error) { return 500;}
+			} catch { return 500;}
 
-			if (response.ok && response.status == 200 ) {
+			if (response.ok && response.status === 200 ) {
 				const data = await response.json();
 				setUser({ accessToken: data.accessToken, type: data.type});
 			} 
@@ -129,7 +117,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 				credentials: "include",
 			});
 
-			if (response.ok && response.status == 200) {
+			if (response.ok && response.status === 200) {
 				const data = await response.json();
 				setUser({accessToken: data.accessToken, type: data.type});
 				return true;
@@ -137,7 +125,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
            setUser(null);
 		   return false;
 		}
-		catch (error) { return false; }
+		catch { return false; }
 	};
 
 
@@ -149,14 +137,26 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 				credentials: "include",
 			});
 
-			if (response.ok && response.status == 200) {
+			if (response.ok && response.status === 200) {
 				setUser(null);
 				return 200;
 			}
 		}
-		catch (error) { return 500; }
+		catch { return 500; }
 		return 500;
 	};
+
+
+	// realiza uma tentativa de refresh automático ao iniciar a aplicação.
+	// authReady evita renderizar rotas protegidas antes da validação da sessão.
+	React.useEffect(() => {
+		const initAuth = async () => {
+			await refreshToken();
+			await new Promise(resolve => setTimeout(resolve, 1000)); // simula delay de carregamento
+			setAuthReady(true);
+		};
+		initAuth();
+	}, []);
 	
 	return (
 		<AuthContext.Provider value={{

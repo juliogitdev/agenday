@@ -1,7 +1,7 @@
 
 import { MapPin } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import type { UF, Location, City } from "../../types/Location";
+import { useEffect, useState } from "react";
+import type { City, Location, UF } from "../../types/Location";
 import styles from './styles/locationInput.module.css';
 
 type LocationInputProps = {
@@ -14,6 +14,7 @@ export function LocationInput({ onChose }: LocationInputProps) {
   	const [apiCitys, setCitys] = useState<City[]>([]);
   	const [selectedCity, setSelectedCity] = useState<string>("");
 
+	// carrega os estados
  	useEffect(() => {
     	fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
       		.then((res) => res.json())
@@ -21,22 +22,23 @@ export function LocationInput({ onChose }: LocationInputProps) {
   	}, []);
 
 
+	// atualiza a lista de cidades ao mudar um estado
   	useEffect(() => {
-    	if (!selectedUf) { setCitys([]);return;}
+    	if (!selectedUf) {return;}
     	fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`)
       		.then((res) => res.json())
       		.then((data) => setCitys(data));
   	}, [selectedUf]);
 
 
-  	useEffect(() => {
-		if (selectedUf && selectedCity) {
-			onChose({
-				uf: selectedUf,
-				city: selectedCity,
-			});
-		}
-	}, [selectedUf, selectedCity]);
+  	// useEffect(() => {
+	// 	if (selectedUf && selectedCity) {
+	// 		onChose({
+	// 			uf: selectedUf || "",
+	// 			city: selectedCity || "",
+	// 		});
+	// 	}
+	// }, [selectedUf, selectedCity]);
 
   	return (
     	<div className={styles.locationInput}>
@@ -49,7 +51,10 @@ export function LocationInput({ onChose }: LocationInputProps) {
 					<select 
 						className={styles.locationSelect}
 						value={selectedUf} 
-						onChange={(e) => {setSelectedUf(e.target.value)}}
+						onChange={(e) => {
+							setSelectedUf(e.target.value);
+							onChose({uf: selectedUf, city: selectedCity || ''})}
+						}
 						name="uf" id="uf"
 					>
 						<option value="">Selecione um estado</option>
@@ -63,7 +68,10 @@ export function LocationInput({ onChose }: LocationInputProps) {
 					<label className={styles.locationInputLabel} htmlFor="city">Cidade</label>
 					<select
 						value={selectedCity}
-						onChange={(e) => {setSelectedCity(e.target.value)}}
+						onChange={(e) => {
+							setSelectedCity(e.target.value);
+							onChose({uf:selectedUf, city:selectedCity})}
+						}
 						disabled={!selectedUf}
 						name="city"
 						id="city"

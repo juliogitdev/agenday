@@ -5,7 +5,7 @@ import styles from './styles/signin.module.css';
 import { EmailInput } from "../components/inputs/EmailInput";
 import { PasswordInput } from "../components/inputs/PasswordInput";
 import { SolidButton } from "../components/buttons/SolidButton";
-import { GoogleLogin } from "@react-oauth/google";
+import { type CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
 import { MESSAGES } from "../constants/messages";
@@ -43,7 +43,7 @@ export function SignIn() {
 	const loginWithEmail = async () => {
 		if (email && passw) {
 			setBtnIsLoading(true);
-			const status = await login({password: passw, email: email}, 'email');
+			const status = await login({password: passw, email}, 'email');
 			if (status === 200)  {
 				setBtnIsLoading(true); // mantem o loading para evitar clique duplo
 				setShowSuccessAlert(true);
@@ -57,7 +57,7 @@ export function SignIn() {
 		}
 	}
 
-	const loginWithGoogle = async (credentialResponse: any) => {
+	const loginWithGoogle = async (credentialResponse: CredentialResponse) => {
 		if (credentialResponse.credential) {
 			const status = await login({googleId: credentialResponse.clientId}, 'google');
 			if (status === 200) {
@@ -75,7 +75,7 @@ export function SignIn() {
 				
 	const showAlertWithMessage = (title: string, message: string) => {
 		const loginContainer = document.querySelector(`.${styles.loginContainer}`) as HTMLElement | null;
-		if (!loginContainer) return;
+		if (!loginContainer){ return; }
 
 		loginContainer.classList.remove(styles.shake);
 		void loginContainer.offsetWidth;
@@ -85,7 +85,7 @@ export function SignIn() {
 		setAlertMessage(message);
 		setShowAlert(true);
 
-		if (timerRef.current) clearTimeout(timerRef.current);
+		if (timerRef.current){ clearTimeout(timerRef.current);}
 
 		timerRef.current = setTimeout(() => {
 			setShowAlert(false);
