@@ -100,6 +100,24 @@
 	--success-alert-border-color: #c3e6cb;
 	--success-icon-color: #155724;
 	--success-alert-border: #c3e6cb;
+
+
+	/* ========= panel ========= */
+	--panel-background: #fafafa;
+	--panel-border-color: #d4d4d4;
+	--panel-button-notification-count-background: rgb(188, 40, 40);
+	--panel-button-notification-count-color: #ffffff;
+	--panel-button-toast-hover-text-background: #3e3e3e;
+	--panel-button-toast-hover-text-color: #f4f4f4;
+	--panel-button-active-color: #135184;
+	--panel-button-inactive-color: #7E7E7E;
+	--panel-button-hover-color: #4278a3;
+	--panel-button-disabled-color: #cccccc;
+
+
+	/* ========= breadcrumb ========= */
+	--breadcrumb-color: #afafaf;
+
 }
 
 
