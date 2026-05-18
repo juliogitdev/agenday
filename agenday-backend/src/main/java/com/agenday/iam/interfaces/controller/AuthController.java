@@ -5,7 +5,10 @@ import com.agenday.iam.application.service.UserService;
 import com.agenday.iam.infrastructure.security.GoogleTokenVerifier;
 import com.agenday.iam.infrastructure.security.JwtService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +47,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request, HttpServletResponse response) {
 
         var user = userService.authenticate(request);
 
@@ -51,13 +55,16 @@ public class AuthController {
         String refreshToken = jwtService.generateRefreshToken(user);
 
         addRefreshTokenCookie(response, refreshToken); // adiciona o refresh_token no cookie
+        addRefreshTokenCookie(response, refreshToken); // adiciona o refresh_token no cookie
         return ResponseEntity.ok(
+                new AuthResponse(accessToken, "Bearer")
                 new AuthResponse(accessToken, "Bearer")
         );
 
     }
 
     @PostMapping("/google")
+    public ResponseEntity<AuthResponse> googleLogin(@RequestBody @Valid GoogleLoginRequest request, HttpServletResponse response) {
     public ResponseEntity<AuthResponse> googleLogin(@RequestBody @Valid GoogleLoginRequest request, HttpServletResponse response) {
 
         var googleUser = googleVerifier.verify(request.idToken());
@@ -72,7 +79,10 @@ public class AuthController {
         String refreshToken = jwtService.generateRefreshToken(user);
 
         addRefreshTokenCookie(response, refreshToken); // adiciona o refresh_token no cookie
+        addRefreshTokenCookie(response, refreshToken); // adiciona o refresh_token no cookie
 
+        return ResponseEntity.ok (
+                new AuthResponse(accessToken, "Bearer")
         return ResponseEntity.ok (
                 new AuthResponse(accessToken, "Bearer")
         );
@@ -87,20 +97,36 @@ public class AuthController {
 
     	if (refreshToken == null) { return ResponseEntity.status(401).build();}
     	String email;
+	public ResponseEntity<AuthResponse> refresh (
+			@CookieValue(name = "AGD_RFTK", required = false)
+        	String refreshToken,
+        	HttpServletResponse response
+		) {
 
+    	if (refreshToken == null) { return ResponseEntity.status(401).build();}
+    	String email;
+
+        try { email = jwtService.extractUsername(refreshToken);
+        } catch (Exception e)  {
         try { email = jwtService.extractUsername(refreshToken);
         } catch (Exception e)  {
             return ResponseEntity.status(401).build();
         }
 
 	    var user = userService.getUserByEmail(email);
+	    var user = userService.getUserByEmail(email);
 
+    	if (!jwtService.isRefreshTokenValid(refreshToken, user))  return ResponseEntity.status(401).build();
     	if (!jwtService.isRefreshTokenValid(refreshToken, user))  return ResponseEntity.status(401).build();
 
         String newAccessToken = jwtService.generateToken(user);
         String newRefreshToken = jwtService.generateRefreshToken(user);
         addRefreshTokenCookie(response, newRefreshToken);
+        String newRefreshToken = jwtService.generateRefreshToken(user);
+        addRefreshTokenCookie(response, newRefreshToken);
 
+        return ResponseEntity.ok (
+            new AuthResponse(newAccessToken, "Bearer")
         return ResponseEntity.ok (
             new AuthResponse(newAccessToken, "Bearer")
         );
@@ -115,6 +141,31 @@ public class AuthController {
         String email = userDetails.getUsername();
 
         return ResponseEntity.ok(userService.getCurrentUser(email));
+    }
+
+	@PostMapping("/logout")
+	public ResponseEntity<Void> logout(HttpServletResponse response) {
+    	ResponseCookie cookie = ResponseCookie.from("AGD_RFTK", "")
+            .httpOnly(true)
+            .secure(false) // true em produção HTTPS
+            .path("/")
+            .sameSite("Lax")
+            .maxAge(0)
+            .build();
+
+    	response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    	return ResponseEntity.ok().build();
+    }
+
+    private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+        ResponseCookie cookie = ResponseCookie.from("AGD_RFTK", refreshToken)
+            .httpOnly(true)
+            .secure(false) // true em produção HTTPS
+            .path("/")
+            .sameSite("Strict")
+            .maxAge(7 * 24 * 60 * 60)
+            .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
 	@PostMapping("/logout")

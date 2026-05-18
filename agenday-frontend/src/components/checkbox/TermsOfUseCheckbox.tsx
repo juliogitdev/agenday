@@ -13,10 +13,8 @@ export function TermsOfUserCheckbox({termsLink, onChange}:CheckboxProps) {
 			<input
 				type="checkbox"  
 				id="terms-of-use" 
-				onClick={() => {
-					const checkbox = document.querySelector(`input[name="terms-of-use"]`) as HTMLInputElement;
-					onChange(checkbox.checked);
-				}} />
+				onChange={(e) => {onChange(e.target.checked);}}
+			/>
 			<label className={styles.termsLabel} htmlFor="terms-of-use">  Le e concordo com os </label>
 			<a href={termsLink} className={styles.termsLink}>Termos de uso</a>
 		</div>
