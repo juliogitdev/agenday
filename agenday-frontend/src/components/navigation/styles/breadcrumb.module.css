@@ -1,0 +1,12 @@
+
+.breadcrumb {
+	font-family: "Poppins", sans-serif;
+	font-size: .8rem;
+	font-weight: 300;
+    display: block;
+	width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--breadcrumb-color);
+	user-select: none;
+}
