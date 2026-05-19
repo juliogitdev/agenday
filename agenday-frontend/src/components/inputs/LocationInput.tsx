@@ -10,79 +10,81 @@ type LocationInputProps = {
 
 export function LocationInput({ onChose }: LocationInputProps) {
 	const [apiUfs, setUfs] = useState<UF[]>([]);
-  	const [selectedUf, setSelectedUf] = useState<string>("");
-  	const [apiCitys, setCitys] = useState<City[]>([]);
-  	const [selectedCity, setSelectedCity] = useState<string>("");
+	const [selectedUf, setSelectedUf] = useState<string>("");
+	const [apiCitys, setCitys] = useState<City[]>([]);
+	const [selectedCity, setSelectedCity] = useState<string>("");
 
 	// carrega os estados
- 	useEffect(() => {
-    	fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
-      		.then((res) => res.json())
-      		.then((data) => setUfs(data));
-  	}, []);
+	useEffect(() => {
+		fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
+			.then((res) => res.json())
+			.then((data) => setUfs(data));
+	}, []);
 
 
 	// atualiza a lista de cidades ao mudar um estado
-  	useEffect(() => {
-    	if (!selectedUf) {return;}
-    	fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`)
-      		.then((res) => res.json())
-      		.then((data) => setCitys(data));
-  	}, [selectedUf]);
+	useEffect(() => {
+		if (!selectedUf) { return; }
+		fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`)
+			.then((res) => res.json())
+			.then((data) => setCitys(data));
+	}, [selectedUf]);
 
 
-  	// useEffect(() => {
-	// 	if (selectedUf && selectedCity) {
-	// 		onChose({
-	// 			uf: selectedUf || "",
-	// 			city: selectedCity || "",
-	// 		});
-	// 	}
-	// }, [selectedUf, selectedCity]);
-
-  	return (
-    	<div className={styles.locationInput}>
-      		<span className={styles.locationLabel}>
-        		<MapPin className={styles.locationIcon} /> Sua Localização ou do seu comércio
-      		</span>
-      		<div className={styles.locationInputContainer}>
+	return (
+		<div className={styles.locationInput}>
+			<span className={styles.locationLabel}>
+				<MapPin className={styles.locationIcon} /> Sua Localização ou do seu comércio
+			</span>
+			<div className={styles.locationInputContainer}>
 				<div className={styles.locationInputLeft}>
-					<label className={styles.locationInputLabel} htmlFor="uf">Estado</label>
-					<select 
+					<label className={styles.locationInputLabel} htmlFor="uf"> Estado </label>
+
+					<select
 						className={styles.locationSelect}
-						value={selectedUf} 
+						value={selectedUf}
 						onChange={(e) => {
-							setSelectedUf(e.target.value);
-							onChose({uf: selectedUf, city: selectedCity || ''})}
-						}
-						name="uf" id="uf"
+							const value = e.target.value;
+							setSelectedUf(value);
+							setSelectedCity('');
+							onChose({uf: value, city: ''});
+						}}
+						name="uf"
+						id="uf"
 					>
 						<option value="">Selecione um estado</option>
 						{apiUfs.map((uf) => (
-							<option key={uf.id} value={uf.sigla}>{uf.nome}</option>
+							<option key={uf.id} value={uf.sigla}>
+								{uf.nome}
+							</option>
 						))}
 					</select>
 				</div>
-				
+
 				<div className={styles.locationInputRight}>
-					<label className={styles.locationInputLabel} htmlFor="city">Cidade</label>
+					<label className={styles.locationInputLabel} htmlFor="city"> Cidade</label>
 					<select
 						value={selectedCity}
 						onChange={(e) => {
-							setSelectedCity(e.target.value);
-							onChose({uf:selectedUf, city:selectedCity})}
-						}
+							const value = e.target.value;
+							setSelectedCity(value);
+							onChose({ uf: selectedUf, city: value});
+						}}
+
 						disabled={!selectedUf}
 						name="city"
 						id="city"
 						className={styles.locationSelect}
 					>
 						<option value="">Selecione uma cidade</option>
-							{apiCitys.map((city) => (
-						<option key={city.id} value={city.nome}>{city.nome}</option>))}
+						{apiCitys.map((city) => (
+							<option key={city.id} value={city.nome}>
+								{city.nome}
+							</option>
+						))}
 					</select>
 				</div>
-      		</div>
-    	</div>
-  );
+			</div>
+		</div>
+	);
 }
