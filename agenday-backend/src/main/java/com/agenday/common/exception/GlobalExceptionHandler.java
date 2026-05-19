@@ -34,7 +34,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error");
+         ex.printStackTrace();
+         return buildResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ex.getMessage() // editar em produção para algo mais gênerico
+         );
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message) {

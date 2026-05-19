@@ -14,7 +14,7 @@ import { TermsOfUserCheckbox } from "../components/checkbox/TermsOfUseCheckbox";
 import { type CredentialResponse, GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { validateEmail, validateName, validatePhone } from "../utils/Validations";
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
-import { MESSAGES } from "../constants/messages";
+import { MESSAGES, statusMap } from "../constants/messages";
 import type { UserSignup } from "../types/User";
 import { SuccessAlert } from "../components/Alerts/SuccessAlert";
 
@@ -38,15 +38,6 @@ export function SignUp() {
 	const [termsAccepted, setTermsAccepted] = React.useState<boolean>(false);
 	const [location, setLocation] = React.useState<{uf: string; city: string} | null>(null);
 
-	const statusMap: Record<number, keyof typeof MESSAGES> = {
-		  1: "invalidFields",
-		500: "serverError",
-		401: "invalidCredentials",
-		400: "invalidCredentials",
-		403: "invalidCredentials",
-		409: "duplicateEmail"
-	};
-
 	const navigate = useNavigate();
 	if (user) {  navigate('/home');}
 
@@ -54,20 +45,31 @@ export function SignUp() {
 		const emailV = validateEmail(email);
 		const nameV = validateName(name);
 		const phoneV = validatePhone(phone);
-
+		const locationValid =
+			location !== null &&
+			location.uf?.trim() !== "" &&
+			location.city?.trim() !== "";
 		const isValid =
-			emailV.isValid && nameV.isValid &&
-			phoneV.isValid && passw.trim() !== "" && passw.trim().length >= 6 &&
-			location !== null && termsAccepted;
+			emailV.isValid &&
+			nameV.isValid &&
+			phoneV.isValid &&
+			passw.trim() !== "" &&
+			passw.trim().length >= 6 &&
+			locationValid &&
+			termsAccepted;
 
 		return {
-			isValid, fields: { email: emailV, name: nameV, phone: phoneV,}
+			isValid,
+			fields: {
+				email: emailV,
+				name: nameV,
+				phone: phoneV
+			}
 		};
 	}
+
 	const form = validateForm();
 	
-
-
 	const signUpWithEmail = async () => {
 		if ( form.isValid ) {
 			setBtnIsLoading(true);

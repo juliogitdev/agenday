@@ -25,7 +25,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 						password: userData.password
 					})
 				});
-			} catch { return 500;}
+			} catch {return 0}
 
 			if (response.ok && response.status === 200 ) {
 				const data = await response.json();
@@ -45,7 +45,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({idToken: userData.googleId})
 				});
-			} catch { return 500;}
+			} catch { return 0;}
 
 			if (response.ok && response.status === 200 ) {
 				const data = await response.json();
@@ -82,7 +82,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 					})
 				});
 			} 
-			catch { return 500; }
+			catch { return 0; }
 			return response.status;
 		} 
 
@@ -96,7 +96,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({idToken: userData.googleId})
 				});
-			} catch { return 500;}
+			} catch { return 0;}
 
 			if (response.ok && response.status === 200 ) {
 				const data = await response.json();
@@ -142,7 +142,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 				return 200;
 			}
 		}
-		catch { return 500; }
+		catch { return 0; }
 		return 500;
 	};
 
