@@ -8,7 +8,7 @@ import { SolidButton } from "../components/buttons/SolidButton";
 import { type CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
-import { MESSAGES } from "../constants/messages";
+import { MESSAGES, statusMap } from "../constants/messages";
 import { SuccessAlert } from "../components/Alerts/SuccessAlert";
 
 export function SignIn() {
@@ -32,14 +32,6 @@ export function SignIn() {
 	const validEmail    = (value: string, isValid: boolean) => { setEmailValid(isValid); setEmail(value);}
    	const validPassword = (value: string, isValid: boolean) => { setPasswValid(isValid); setPassw(value);}
 	
-	const statusMap: Record<number, keyof typeof MESSAGES> = {
-		  1: "invalidFields",
-		500: "serverError",
-		401: "invalidCredentials",
-		400: "invalidCredentials",
-		403: "invalidCredentials",
-	};
-
 	const loginWithEmail = async () => {
 		if (email && passw) {
 			setBtnIsLoading(true);
