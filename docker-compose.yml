@@ -5,8 +5,8 @@ services:
     restart: always
     environment:
       POSTGRES_DB: agenday
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER:?DB_USER não definido}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD não definido}
     ports:
       - "5432:5432"
     volumes:
@@ -21,6 +21,8 @@ services:
 
   backend:
     build: ./agenday-backend
+    env_file:
+      - .env
     container_name: agenday-api
     restart: always
     ports:
@@ -33,16 +35,18 @@ services:
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_REDIS_HOST=redis
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET não definido}
   
-  #frontend:
-  #  build: ./agenday-frontend
-  #  container_name: agenday-web
-  #  restart: always
-  #  ports:
-  #    - "3000:80"
-  #  depends_on:
-  #    - backend
-  
+  frontend:
+    build: ./agenday-frontend
+    env_file:
+      - ./agenday-frontend/.env.local
+    container_name: agenday-web
+    restart: always
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+      
 volumes:
   postgres_data:
