@@ -92,7 +92,7 @@ export const statusMap: Record<number, keyof typeof MESSAGES> = {
 
 	// client
 	400: "badRequest",
-	401: "unauthorized",
+	401: "invalidCredentials",
 	403: "forbidden",
 	404: "pageNotFound",
 	405: "methodNotAllowed",
