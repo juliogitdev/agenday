@@ -21,7 +21,9 @@ public class EstablishmentMapper {
                 establishment.getId(),
                 establishment.getName(),
                 establishment.getSlogan(),
-                userOwner.getFullName()
+                userOwner.getFullName(),
+                establishment.getTemplate(),
+                establishment.getPalette()
         );
 
     }
@@ -35,6 +37,8 @@ public class EstablishmentMapper {
         newEstablishment.setAddress(AddressMapper.toEntity(establishmentRequest.addressRequest()));
         newEstablishment.setImageUrl(establishmentRequest.imageUrl());
         newEstablishment.setNumberPhone(establishmentRequest.numberPhone());
+        newEstablishment.setTemplate(establishmentRequest.template());
+        newEstablishment.setPalette(establishmentRequest.palette());
 
         return newEstablishment;
     }
@@ -44,6 +48,8 @@ public class EstablishmentMapper {
         establishment.setSlogan(request.slogan());
         establishment.setNumberPhone(request.numberPhone());
         establishment.setImageUrl(request.imageUrl());
+        establishment.setTemplate(request.template());
+        establishment.setPalette(request.palette());
 
         if (request.addressRequest() != null) {
             establishment.getAddress().setCep(request.addressRequest().cep());

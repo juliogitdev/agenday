@@ -23,6 +23,7 @@ public class Establishment extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
+
     private String slogan;
 
 
@@ -38,4 +39,10 @@ public class Establishment extends BaseEntity {
 
     @Embedded
     private Address address;
+
+    @Column(nullable = false)
+    private Short template = 1;
+
+    @Column(length = 50)
+    private String palette;
 }
