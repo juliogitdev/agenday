@@ -10,6 +10,7 @@ import { Services } from '../pages/Services';
 import { Configurations } from '../pages/Configurations';
 import { Clients } from '../pages/Clients';
 import { PrivateLayout } from '../layouts/PrivateLayout';
+import { LandingPage } from '../pages/LandingPage';
 
 export function AppRoutes() {
 	
@@ -33,6 +34,8 @@ export function AppRoutes() {
 				<Route path="/login"   element={<SignIn />} />
 				<Route path="/signin"  element={<SignIn />} />
 				<Route path="/signup"  element={<SignUp />} />
+
+				<Route path="/" element={<LandingPage />}/>
                 <Route path="*" element={<h1>404 - Não encontrado</h1>} />
             </Routes>
         </BrowserRouter>

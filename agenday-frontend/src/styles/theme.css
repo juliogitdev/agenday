@@ -4,6 +4,36 @@
     --card-background: #64635e;
     --card-foreground: #f0efeb;
 
+
+	/* ===== LANDING PAGE ===== */
+	--landing-background: var(--background);
+	--landing-text-secondary: #666666;
+	--landing-card-background: #ffffff;
+	--landing-card-border: #d4d4d4;
+	--landing-primary: #135184;
+	--landing-glass-background: rgba(255,255,255,0.55);
+	--landing-glass-border: rgba(255,255,255,0.25);
+	--landing-glass-shadow: rgba(31,38,135,0.10);
+	--landing-icon-background: #135184;
+	--landing-icon-color: #f8f8f8;
+	--landing-feature-image-border-color: #135184;
+
+	/* ===== PLAN CARD ===== */
+	--plan-card-background:#ffffff;
+	--plan-card-border:#d4d4d4;
+	--plan-card-shadow:rgba(0,0,0,0.08);
+	--plan-card-highlight-border:#135184;
+	--plan-card-title:#135184;
+	--plan-card-price:#135184;
+	--plan-card-benefict:#444444;
+	--plan-card-check:#2f9e44;
+	--plan-card-badge-background:#135184;
+	--plan-card-badge-text:#ffffff;
+	--plan-card-button-border:#135184;
+	--plan-card-button-text:#135184;
+	--plan-card-button-hover:rgba(19,81,132,0.08);
+
+
     /* ===== SOLID BUTTON ===== */
     --solid-button-background: #135184;
     --solid-button-border-color: #135184;
@@ -67,6 +97,7 @@
     --login-left-side-text: #ffffff;
 	--login-mobile-title: #505253;
 	--login-mobile-title: #505253;
+	
 
 
 	/* ===== SIGNUP PAGE ===== */
