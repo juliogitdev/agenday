@@ -12,6 +12,10 @@ public record EstablishmentRequest(
 
         String imageUrl,
 
+        Short template,
+
+        String palette,
+
         AddressRequest addressRequest
 ) {
 }

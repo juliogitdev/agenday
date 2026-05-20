@@ -6,6 +6,8 @@ public record EstablishmentResponse(
         UUID id,
         String name,
         String slogan,
-        String nameOwner
+        String nameOwner,
+        Short template,
+        String palette
 ) {
 }
