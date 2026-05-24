@@ -1,0 +1,12 @@
+
+.blackWindow {
+    position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    inset: 0;
+	gap: 10px;
+    backdrop-filter: blur(5px);
+    background: rgba(0,0,0,.5);
+    z-index: 10000;
+}
