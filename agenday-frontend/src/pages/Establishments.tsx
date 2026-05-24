@@ -13,14 +13,18 @@ import style from "./styles/estableshments.module.css";
 import { EstablishmentFormVisual } from "../components/Forms/estableshimentForms/EstablishmentFormVisual";
 import { EstablishmentFormAdress } from "../components/Forms/estableshimentForms/EstablishmentFormAdress";
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
-import { validateFields } from "../utils/Validations";
+import { validEstablishmentForm, type EstablishmentFormValidCallBack } from "../utils/ValidEstablishmentForm";
+import { SuccessAlert } from "../components/Alerts/SuccessAlert";
+import { MESSAGES, statusMap } from "../constants/messages";
 
 
 
 export function Establishments() {
 	const handleRowClick = (index: number) => { console.log(index);};
 	const [isBlackWindowOpen, setIsBlackWindowOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [asError, setAsError] = useState(false);
+	const [successMessage, setSuccessMessage] = useState("");
 	const [errorTitle, setErrorTitle] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
 
@@ -31,13 +35,71 @@ export function Establishments() {
 	]
 
 
-	const validationData = (data: any) => {
-		const error = validateFields(data);
-		if (error) { showMessage( error.title, error.description); return;}
-		alert("craindo")
+	const validationData = async (data: any) => {
+		const error: EstablishmentFormValidCallBack | true = validEstablishmentForm(data); 
+		if (error !== true) { showErrorMessage( error.title, error.message);  return;}
+		
+		setIsLoading(true);
+		const API_URL = import.meta.env.VITE_API_URL;
+		let statusCode = 0;
+
+		try {
+			const coresRaw = [
+				data.visual.palette.value.text_color,
+				data.visual.palette.value.back_color,
+				data.visual.palette.value.main_color
+			];
+
+			const resultadoString = coresRaw
+				.map(cor => cor.replace(/[\n\t\r]/g, "").trim())
+				.join(";");
+
+			const request_body = {
+				name: data.basicInfo.name.value,
+				slogan: data.visual.slogan.value,
+				numberPhone: data.basicInfo.numberPhone.value,
+				imageUrl: "default.jpg",
+				template: 1,
+				palette: resultadoString,
+				addressRequest: {
+					cep: data.address.cep.value,
+					state: data.address.state.value,
+					city: data.address.city.value,
+					street: data.address.street.value,
+					number: data.address.number.value,
+					// neighborhood: data.address.neighborhood,					
+				}
+			}
+
+			const response = await fetch(`${API_URL}establishments/register`, {
+				method: 'POST',
+				credentials: "include",
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(request_body)
+			});
+			
+			statusCode = response.status;
+			console.log(statusCode);
+			
+			if (response.ok && (statusCode === 201 || statusCode === 200)) {
+				setSuccessMessage("Estabelecimento criado com sucesso");
+				setTimeout(() => { 
+					setSuccessMessage("");
+					setIsBlackWindowOpen(false);
+					setIsLoading(false);
+				}, 3000);		
+			} else { throw new Error("Failed to create establishment"); }
+
+		} catch {
+			const key = statusMap[statusCode] ?? "unknownError";
+			const msg = MESSAGES[key];
+			console.log(statusCode);
+			setIsLoading(false);
+			showErrorMessage(msg.title, msg.message);
+		}
 	}
 
-	const showMessage = (title: string, message: string) => {
+	const showErrorMessage = (title: string, message: string) => {
 		setErrorTitle(title);
 		setErrorMessage(message);
 		setAsError(true);
@@ -69,6 +131,7 @@ export function Establishments() {
 			<BlackWindow isOpen={isBlackWindowOpen}>
 				<FormStep
 					asError={asError} 
+					isLoading={isLoading}
 					title="estabelecimento"
 					type="edit"
 					forms={forms as any}
@@ -76,13 +139,11 @@ export function Establishments() {
 					onFinished={(data) => {validationData(data)}} />
 				
 				<div className={style.errorsContainer}>
-					{ asError && (
-						<ErrorAlert 
-							title={errorTitle}
-							message={errorMessage}
-						/>
-					)}
+					{ asError && ( <ErrorAlert  title={errorTitle} message={errorMessage}/> )}
+					{ successMessage.length > 0 && ( 
+						<SuccessAlert title="Sucesso" message="Estabelecimento criado com sucesso"/> )}
 				</div>
+
 			</BlackWindow>
 			<footer></footer>
 		</section> 

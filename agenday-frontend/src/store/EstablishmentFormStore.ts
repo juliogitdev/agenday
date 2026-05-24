@@ -31,7 +31,6 @@ const initialBasicData: EstablishmentForm_basic = {
 	name: { ...emptyInput },
 	numberPhone: { ...emptyInput },
 	category: { ...emptyInput },
-	manager: { ...emptyInput }
 };
 
 const initialAdressData: EstablishmentForm_adress = {

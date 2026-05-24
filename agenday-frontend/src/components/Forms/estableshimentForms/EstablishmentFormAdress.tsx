@@ -39,6 +39,7 @@ export function EstablishmentFormAdress({ onFormChange }: FormChildProps<Establi
 			adressData.street.isValid && 
 			adressData.neighborhood.isValid && 
 			adressData.state.isValid && 
+			adressData.number.isValid &&
 			adressData.city.isValid;
 
 		onFormChange?.(adressData, isValid);

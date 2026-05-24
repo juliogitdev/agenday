@@ -5,7 +5,6 @@ import { TextInput } from "../../inputs/TextInput";
 import { PhoneInput } from "../../inputs/PhoneInput";
 import style from "./styles/establishmentformbasic.module.css";
 import { useEffect } from "react";
-import { EmailInput } from "../../inputs/EmailInput";
 import { EstablishmentFormStore } from "../../../store/EstablishmentFormStore";
 
 
@@ -16,8 +15,7 @@ export function BasicEstablishmentDataForm({ onFormChange }: FormChildProps<Esta
 		const isValid = 
 			basicData.name.isValid && 
 			basicData.category.isValid && 
-			basicData.numberPhone.isValid && 
-			basicData.manager.isValid;
+			basicData.numberPhone.isValid;
 
 		onFormChange?.(basicData, isValid);
 	}, [basicData]);
@@ -29,29 +27,22 @@ export function BasicEstablishmentDataForm({ onFormChange }: FormChildProps<Esta
                 <span className={style.establishmentBasicFormHeaderSubtitle}>Informe os dados básicos do estabelecimento</span>
             </header>
 
-            <div className={style.establishmentBasicFormTwoColumns}>
-                <TextInput 
-					initialValue={basicData.name.value} 
-					label="Nome do estabelecimento"  
-					placeholder="Ex: Barbearia São Paulo"  
-					onChangeField={(e)=>setBasicData({name: e})}/>
+            <TextInput 
+				initialValue={basicData.name.value} 
+				label="Nome do estabelecimento"  
+				placeholder="Ex: Barbearia São Paulo"  
+				onChangeField={(e)=>setBasicData({name: e})}/>
 
+            <div className={style.establishmentBasicFormTwoColumns}>
 				<TextInput  
 					initialValue={basicData.category.value}
 					label="Categoria"  
 					placeholder="Ex: Barbearia"  
 					onChangeField={(e)=>setBasicData({category: e})}/>
-            </div>
-            <div className={style.establishmentBasicFormTwoColumns}>
-                <PhoneInput 
+				<PhoneInput 
 					initialValue={basicData.numberPhone.value}
 					label="Telefone" 
 					onChangeField={(e)=>setBasicData({numberPhone: e})} />
-                <EmailInput 
-					initialValue={basicData.manager.value}
-					label="Gerente | Email" 
-					placeholder="Ex. user@exemplo.com" 
-					onChangeField={(e)=>setBasicData({manager: e})}/>
             </div>
         </div>
     );

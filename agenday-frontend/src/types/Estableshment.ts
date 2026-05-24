@@ -58,7 +58,6 @@ export type EstablishmentForm_basic = {
     name: InputCallback;
     numberPhone: InputCallback;
     category: InputCallback;
-    manager: InputCallback;
 }
 
 export type EstablishmentForm_adress = {
