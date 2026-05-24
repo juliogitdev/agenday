@@ -30,13 +30,58 @@ services:
     depends_on:
       - db
       - redis
+      - minio
+      
     environment:
+      - SPRING_MINIO_URL=http://minio:9000
+      - SPRING_MINIO_USER=${MINIO_USER}
+      - SPRING_MINIO_PASSWORD=${MINIO_PASSWORD}
+      - SPRING_MINIO_IMAGE_BUCKET=images
+      - SPRING_MINIO_FILE_BUCKET=files
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/agenday
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_REDIS_HOST=redis
       - JWT_SECRET=${JWT_SECRET:?JWT_SECRET não definido}
   
+  minio:
+    image: minio/minio
+    container_name: agenday-minio
+    restart: unless-stopped
+
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+    environment:
+      - MINIO_ROOT_USER=${MINIO_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_PASSWORD}
+
+    command: server /data --console-address ":9001"
+
+    volumes:
+      - minio_data:/data
+  
+  minio-init:
+    image: minio/mc
+    container_name: agenday-minio-init
+    depends_on:
+      - minio
+
+    environment:
+      - MINIO_USER=${MINIO_USER}
+      - MINIO_PASSWORD=${MINIO_PASSWORD}
+
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        sleep 10
+        mc alias set local http://minio:9000 $MINIO_USER $MINIO_PASSWORD
+        mc mb local/images --ignore-existing
+        mc mb local/files --ignore-existing
+        mc anonymous set download local/images
+
   frontend:
     build: ./agenday-frontend
     env_file:
@@ -50,3 +95,4 @@ services:
       
 volumes:
   postgres_data:
+  minio_data:
