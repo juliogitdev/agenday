@@ -2,6 +2,7 @@ package com.agenday.establishment.interfaces.controller;
 
 import com.agenday.establishment.application.dto.EstablishmentRequest;
 import com.agenday.establishment.application.dto.EstablishmentResponse;
+import com.agenday.establishment.application.dto.ImageUpdateRequest;
 import com.agenday.establishment.application.dto.ProfessionalEstablishmentRequest;
 import com.agenday.establishment.application.dto.ProfessionalEstablishmentResponse;
 import com.agenday.establishment.application.service.EstablishmentService;
@@ -20,9 +21,8 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/establishment")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:5173")
 public class EstablishmentController {
-
 
     private final UserService userService;
     private final EstablishmentService establishmentService;
@@ -45,7 +45,6 @@ public class EstablishmentController {
 
         return ResponseEntity.status(201).body(establishmentService.createEstablishment(email, request));
     }
-
 
 
     @GetMapping("/all")
@@ -80,5 +79,20 @@ public class EstablishmentController {
                 .body(professionalEstablishmentService.inviteProfessional(email, request));
     }
 
+	@DeleteMapping("/{id}/image/delete")
+	@PreAuthorize("hasRole('PROFESSIONAL')")
+	public ResponseEntity<Void> deleteImage( Authentication authentication, @PathVariable UUID id) throws Exception {
+		establishmentService.deleteImage(id,authentication.getName());
+		return ResponseEntity.noContent().build();
+	}
 
+	@PatchMapping("/{id}/image/update")
+	@PreAuthorize("hasRole('PROFESSIONAL')")
+	public ResponseEntity<Void> updateImage(
+		Authentication authentication, 
+		@PathVariable UUID id, 
+		@RequestBody ImageUpdateRequest request) throws Exception {
+    	establishmentService.updateImage(id,authentication.getName(),request.imgUrl());
+    	return ResponseEntity.noContent().build();
+	}
 }
