@@ -121,6 +121,7 @@
 	/* ===== COLOR PICKER ===== */
 	--color-picker-background: #fff;
 	--color-picker-border: #cccccc;
+	--color-picker-ball-border: #212121;
 	--color-picker-legend-color: #3979ad;
 	--color-picker-icon-color: #787a7c;
 	--color-picker-image-border: #cccccc;
@@ -257,6 +258,10 @@
 	--multistep-form-button-primary-color: #ffffff;
 	--multistep-form-button-secondary-background: #ececec;
 	--multistep-form-button-secondary-color: #333333;
+	--multistep-form-loading-background: rgba(0, 0, 0, 0.8);
+	--multistep-form-loading-text-icon-color: #ffffff;
+	--multistep-form-button-disabled-background: #cccccc;
+	--multistep-form-button-disabled-color: #666666;
 
 
 	/* ===== basic establishment data form ===== */
