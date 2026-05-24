@@ -13,7 +13,13 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: false
-
+  minio:
+    url: ${SPRING_MINIO_URL}
+    user: ${SPRING_MINIO_USER}
+    password: ${SPRING_MINIO_PASSWORD}
+    image-bucket: ${SPRING_MINIO_IMAGE_BUCKET}
+    file-bucket: ${SPRING_MINIO_FILE_BUCKET}
+    
 server:
   port: 8080
 
