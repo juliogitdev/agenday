@@ -1,0 +1,138 @@
+
+.multistepForm {
+    max-width: 540px;
+    background: var(--multistep-form-background);
+    border-radius: 4px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px; 
+    box-shadow: var(--multistep-form-shadow);
+}
+
+	.multistepForm.asError { 
+		animation: shakeAnimation 0.5s ease-in-out;
+		border: 1px solid var(--multistep-form-error-border-color);
+	}
+	.multistepFormHeader {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom: 1px solid var(--multistep-form-border-color);
+		padding-bottom: 10px; 
+	}
+
+		.multistepFormTitle {
+			font-family: "Poppins", sans-serif;
+			text-transform: uppercase;
+			font-size: .8rem;
+			color: #1d4f86;
+		}
+
+		.multistepFormCloseButton {
+			background: none;
+			border: none;
+			cursor: pointer;
+			font-size: 1.2rem;
+		}
+
+	.multistepFormSteps {
+		display: flex;
+		justify-content: space-between;
+		position: relative;
+	}
+
+		.multistepFormSteps::before {
+			content: "";
+			position: absolute;
+			top: 15px; 
+			width: 100%;
+			height: 1px;
+			background: var(--multistep-form-line-color);
+			z-index: 0;
+		}
+
+		.step {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 4px; 
+			z-index: 1;
+			background: var(--multistep-form-background);
+			padding-inline: 10px;
+		}
+
+		.circle {
+			width: 30px; 
+			height: 30px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 400;
+			transition: .3s;
+			font-family: "Poppins", sans-serif;
+			font-size: .8rem;
+			background-color: var(--multistep-form-step-circle-background-inactive);
+			color: var(--multistep-form-step-circle-color-inactive);
+		}
+
+		.active {
+			background-color: var(--multistep-form-step-circle-background-active);
+			color: var(--multistep-form-step-circle-color-active);
+		}
+
+		.stepTitle {
+			font-family: "Poppins", sans-serif;
+			font-size: .75rem;
+			color: var(--multistep-form-color);
+		}
+
+	.content {
+		background-color: var(--multistep-form-content-background);
+		border: 1px solid var(--multistep-form-content-border-color);
+		border-radius: 10px;
+	}
+
+	.footer {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 10px; 
+	}
+
+		.primaryButton, .secondaryButton {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-family: "Poppins", sans-serif;
+			border: none;
+			gap: 8px; 
+			padding: 8px 16px; 
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: .75rem;
+			transition: background 0.2s;
+		}
+
+		.primaryButton {
+			background: var(--multistep-form-button-primary-background);
+			color: var(--multistep-form-button-primary-color);
+		}
+
+		.secondaryButton {
+			background: var(--multistep-form-button-secondary-background);
+			color: var(--multistep-form-button-secondary-color);
+		}
+		.secondaryButton:disabled { opacity: .5; cursor: not-allowed;}
+
+			.buttonIcon {
+				width: 16px !important;
+				height: 16px !important;
+				flex-shrink: 0;
+			}
+
+	@keyframes shakeAnimation {
+		0%, 100% { transform: translateX(0); }
+		20%, 60% { transform: translateX(-5px); }
+		40%, 80% { transform: translateX(5px); }
+	}
