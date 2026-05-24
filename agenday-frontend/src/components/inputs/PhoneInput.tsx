@@ -1,41 +1,46 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles/phoneInput.module.css';
-import { validatePhone } from '../../utils/Validations';
+import { formatBRPhone, valid } from '../../utils/Validations';
+import type { InputProps } from '../../types/Inputs';
 
-type phoneInputProps = {
-	phone: string;
-	onChange: (newPhone: string, isValid: boolean) => void;
-}
+export function PhoneInput({label, initialValue, placeholder, onChangeField}:InputProps) {
+	const [error, setError] = useState<string | null>(null);
+	const [value, setValue] = useState(initialValue)
 
-export function PhoneInput({phone, onChange}: phoneInputProps) {
-	const [error, setError] = React.useState<string>("");
 
-	const checkPhoneError = (value: string) => {
-		const validatation = validatePhone(value);
-		const phoneField = document.getElementById("phone") as HTMLInputElement;
-		if (phoneField) {
-			phoneField.style.borderColor = validatation.isValid ? "var(--name-input-border)" : "var(--name-error)";
+	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const nextValue = e.target.value;
+		setValue(formatBRPhone(nextValue));
+		
+		const validationError = valid.phone(formatBRPhone(nextValue));
+		setError(validationError);
+
+		onChangeField?.({
+			value: formatBRPhone(nextValue),
+			errorMessage: validationError,
+			isValid: validationError === null
+		});
+	}
+
+	useEffect(()=>{
+		if(initialValue) {
+			setValue(formatBRPhone(initialValue));
+			const validationError = valid.phone(formatBRPhone(initialValue));
+			setError(validationError);
 		}
-		setError(validatation.error || "");
-	};
+	},[initialValue]);
 
 	return (
 		<div className={styles.phoneInput}>
-			<label className={styles.phoneLabel} htmlFor="phone">Whatsapp / Telegram </label>
+			<label className={styles.phoneLabel} htmlFor="phone">{label}</label>
 			<input
 				className={styles.phoneField}
 				type="tel"
-				id="phone"
-				name="phone"
-				value={phone}
-				placeholder="(XX) XXXXX-XXXX"
+				value={value}
+				placeholder={placeholder || "(XX) XXXXX-XXXX"}
 				pattern="\(\d{2}\) \d{4,5}-\d{4}"
-				onChange={(e) => {
-					const value = e.target.value;
-					checkPhoneError(value);
-          			onChange(value, validatePhone(value).isValid);
-        		}}
+				onChange={onChangeHandler}
 			/>
 			<span className={styles.phoneError}>{error}</span>
 		</div>

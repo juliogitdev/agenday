@@ -23,7 +23,7 @@
 
 	.locationInputContainer {
 		display: grid;
-		grid-template-columns: 40% 60%;
+		grid-template-columns: 50% 50%;
 	}
 		.locationInputLeft { width: 95%; display: block;}
 		.locationInputRight { width: 100%; display: block;}

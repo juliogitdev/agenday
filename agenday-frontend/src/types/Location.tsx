@@ -3,6 +3,9 @@
 export type Location = {
 	uf: string;
 	city: string;
+	neighborhood?: string;
+	street?: string;
+	cep?: string;
 }
 
 export type UF = {
