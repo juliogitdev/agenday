@@ -2,7 +2,7 @@
 export const INPUT_ERRORS = {
 	NAME: {
 		EMPTY: "O nome não pode ser vazio.",
-		TOO_SHORT: "precisar ter pelo menos 5 caracteres.",
+		TOO_SHORT: "precisar ter pelo menos 2 caracteres.",
 		INVALID_CHARACTERS: "deve conter apenas letras e espaços.",
 		TOO_LONG: "excedeu 50 caracteres."
 	},
@@ -24,5 +24,15 @@ export const INPUT_ERRORS = {
 		MISSING_LOWERCASE: "deve conter 1+ letras minúscula.",
 		MISSING_NUMBER: "deve conter pelo menos um número.",
 		MISSING_SPECIAL_CHAR: "deve conter 1+ caractere especial."
+	},
+
+	SLOGAN: {
+		INVALID_CHARACTERS: "deve conter apenas letras e espaços.",
+		EMPTY: "O slogan não pode ser vazio.",
+		TOO_SHORT: "precisar ter pelo menos 5 caracteres.",
+		TOO_LONG: "excedeu 50 caracteres."
+	},
+	CEP: {
+		INVALID_FORMAT: "fomato inválido"
 	}
 };
