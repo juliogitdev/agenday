@@ -13,6 +13,8 @@ public record AddressResponse(
 
         String street,
 
-        String number
+        String number,
+
+		String neighborhood
 ) {
 }
