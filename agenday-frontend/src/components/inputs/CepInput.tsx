@@ -85,7 +85,7 @@ export function CepInput({initialValue,onChangeField}:InputProps<Location>) {
 				</div>
 
 				{ isSearching ? (
-					<button className={styles.cepButtonSearching}> buscando... </button>
+					<button className={styles.cepButtonSearching}> ...... </button>
 				) : (
 					<button 
 						onClick={(e) => { 

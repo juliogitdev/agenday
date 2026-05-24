@@ -31,8 +31,9 @@
 	.colorPickerLabel input[type="color"] {
 		appearance: none;
 		width: 22px;
+		border: 2px solid var(--color-picker-ball-border);
+		border-radius: 50%;
 		height: 22px;
-		border: none;
 		background: none;
 		cursor: pointer;
 		padding: 0;
