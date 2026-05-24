@@ -59,6 +59,16 @@
     --name-error: #e74c3c;
 
 
+	/* ===== COMBO BOX INPUT ===== */
+    --combo-label: #333333;
+    --combo-input-border: #cccccc;
+    --combo-input-background: #ffffff;
+    --combo-input-foreground: #333333;
+    --combo-input-placeholder: #999999;
+    --combo-error: #e74c3c;
+
+
+
 	/* ===== PHONE INPUT ===== */
     --phone-label: #333333;
     --phone-input-border: #cccccc;
@@ -84,6 +94,53 @@
     --password-input-placeholder: #999999;
     --password-error: #e74c3c;
     --password-toggle-foreground: #999999;
+
+
+	/* ===== CEP INPUT ===== */
+    --cep-label-color: #135184;
+    --cep-input-border: #cccccc;
+    --cep-input-background: #ffffff;
+    --cep-input-foreground: #333333;
+    --cep-input-placeholder: #999999;
+    --cep-input-container-background: #f5f5f5;
+	--cep-input-border-color: #cccccc;
+	--cep-input-color: #333333;
+	--cep-input-background-color: #ffffff;
+    --cep-error-color: #e74c3c;
+	--cep-button-background-color: #135184;
+	--cep-button-color: #ffffff;
+	--cep-button-border-color: #135184;
+	--cep-button-background-color-hover: #3979ad;
+	--cep-button-color-hover: #ffffff;
+	--cep-button-border-color-hover: #3979ad;
+	--cep-button-background-color-searching: #cccccc;
+	--cep-button-color-searching: #666666;
+	--cep-button-border-color-searching: #cccccc;
+
+
+	/* ===== COLOR PICKER ===== */
+	--color-picker-background: #fff;
+	--color-picker-border: #cccccc;
+	--color-picker-legend-color: #3979ad;
+	--color-picker-icon-color: #787a7c;
+	--color-picker-image-border: #cccccc;
+	--color-picker-error-color: #f51d05;
+	--color-picker-placeholder: #999999;
+	--color-picker-loading-background: rgba(0, 0, 0, 0.5);
+	--color-picker-loading-icon-color: #fff;
+
+
+
+	/* ==== upload logo ==== */
+	--upload-logo-background: #f5f5f5;
+	--upload-logo-border: #cccccc;
+	--upload-logo-label-color: #333333;
+	--upload-logo-icon-color: #787a7c;
+	--upload-logo-image-border: #cccccc;
+	--upload-logo-error-color: #f51d05;
+	--upload-logo-placeholder: #999999;
+	--upload-logo-loading-background: rgba(0, 0, 0, 0.5);
+	--upload-logo-loading-icon-color: #fff;
 
     /* ===== LOGIN PAGE ===== */
     --login-background: #f5f5f5;
@@ -149,6 +206,98 @@
 
 	/* ========= breadcrumb ========= */
 	--breadcrumb-color: #afafaf;
+
+
+	/* ======= estableshments ======= */
+	--establishment-page-head-background: #ffffff;
+	--establishment-page-head-title-color: #135184;
+	--establishment-page-head-subtitle-color: #666666;
+	--establismente-page-header-button-background: #135184;
+	--establismente-page-header-button-color: #ffffff;
+	--establishment-table-background: #ffffff;
+	--establishment-table-header-background: #ffffff;
+	--establishment-table-header-color: #135184;
+	--establishment-table-header-border-color:#d4d4d4;
+	--establishment-table-row-background: #ffffff;
+	--establishment-table-row-color: #333333;
+	--establishment-table-row-hover-background: #f5f5f5;
+	--establishment-table-row-hover-color: #333333;
+	--establishment-table-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	--establishment-table-action-button-edit-color: #135184;
+	--establishment-table-action-button-delete-color: #dc3545;
+	--establishment-table-action-button-edit-hover-color: #3979ad;
+	--establishment-table-action-button-delete-hover-color: #c82333;
+
+
+	/* ======= establishment dashboard card ======= */
+	--establishment-dashboard-card-background: #ffffff;
+	--establishment-dashboard-card-border-color: #d4d4d4;
+	--establishment-dashboard-card-color: #333333;
+	--establishment-dashboard-card-title-color: #333333;
+	--establishment-dashboard-card-info-background: #f5f5f5;
+	--establishment-dashboard-card-info-item-label-color: #666666;
+	--establishment-dashboard-card-info-item-value-color: #135184;
+
+
+
+	/* ===== multistep form ===== */
+	--multistep-form-background: #ffffff;
+	--multistep-form-shadow: 0 10px 25px rgba(0,0,0,.08);
+	--multistep-form-line-color: #ddd;	
+	--multistep-form-error-border-color: #dc3545;
+	--multistep-form-step-circle-color-active: #ededed;
+	--multistep-form-step-circle-background-active: #135184;
+	--multistep-form-step-circle-color-inactive: #818181;
+	--multistep-form-step-circle-background-inactive: #c0c0c0;
+	--multistep-form-content-background: #ffffff;
+	--multistep-form-content-border-color: #d5d5d5;
+	--multistep-form-border-color: #d4d4d4;
+	--multistep-form-color: #333333;
+	--multistep-form-button-primary-background: #135184;
+	--multistep-form-button-primary-color: #ffffff;
+	--multistep-form-button-secondary-background: #ececec;
+	--multistep-form-button-secondary-color: #333333;
+
+
+	/* ===== basic establishment data form ===== */
+	--basic-establishment-data-form-header-background: #f5f5f5;
+	--basic-establishment-data-form-header-color: #333333;
+	--basic-establishment-data-form-header-title: #135184;
+	--basic-establishment-data-form-header-subtitle: #666666;
+	--basic-establishment-data-form-header-icon-color: #135184;
+	--basic-establishment-data-form-header-border: #d4d4d4;
+
+	/* === adress establishment data form === */
+	--adress-establishment-data-form-header-background: #f5f5f5;
+	--adress-establishment-data-form-header-color: #333333;
+	--adress-establishment-data-form-header-title: #135184;
+	--adress-establishment-data-form-header-subtitle: #666666;
+	--adress-establishment-data-form-header-icon-color: #135184;
+	--adress-establishment-data-form-header-border: #d4d4d4;
+
+
+	/* === visual establishment data form === */
+	--visual-establishment-data-form-header-background: #f5f5f5;
+	--visual-establishment-data-form-header-color: #333333;
+	--visual-establishment-data-form-header-title: #135184;
+	--visual-establishment-data-form-header-subtitle: #666666;
+	--visual-establishment-data-form-header-icon-color: #135184;
+	--visual-establishment-data-form-header-border: #d4d4d4;
+
+
+
+
+	/*  ==== customer since card ==== */
+	--customer-since-card-background: transparent;
+	--customer-since-card-border-color: #135184;
+	--customer-since-card-name-color: #333333;
+	--customer-since-card-date-color: #666666;
+	--customer-since-card-amount-color: #135184;
+	--customer-since-card-color: #333333;
+
+	/* ======= ball name ======= */
+	--ball-name-background: #007bff;
+	--ball-name-color: #ffffff;
 
 }
 
