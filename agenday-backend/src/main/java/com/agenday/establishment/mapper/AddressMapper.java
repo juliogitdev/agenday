@@ -12,7 +12,8 @@ public class AddressMapper {
                 address.getState(),
                 address.getCity(),
                 address.getStreet(),
-                address.getNumber()
+                address.getNumber(),
+				address.getNeighborhood()
         );
     }
 
@@ -24,6 +25,7 @@ public class AddressMapper {
         address.setCity(request.city());
         address.setStreet(request.street());
         address.setNumber(request.number());
+		address.setNeighborhood(request.neighborhood());
 
         return address;
     }

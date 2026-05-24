@@ -6,6 +6,7 @@ import com.agenday.establishment.domain.model.Establishment;
 import com.agenday.establishment.mapper.EstablishmentMapper;
 import com.agenday.establishment.repository.EstablishmentRepository;
 import com.agenday.iam.domain.model.User;
+import com.agenday.iam.infrastructure.storage.MinioStorageService;
 import com.agenday.iam.repository.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,16 @@ public class EstablishmentService {
 
     private final EstablishmentRepository establishmentRepository;
     private final UserRepository userRepository;
+	private final MinioStorageService minioStorageService;
 
     public EstablishmentService(
             EstablishmentRepository establishmentRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+			MinioStorageService minioStorageService
     ){
         this.establishmentRepository = establishmentRepository;
         this.userRepository = userRepository;
+		this.minioStorageService = minioStorageService;
     }
 
     public EstablishmentResponse createEstablishment(String emailUser, EstablishmentRequest establishmentRequest){
@@ -63,4 +67,36 @@ public class EstablishmentService {
         return EstablishmentMapper.toDTO(establishmentRepository.save(establishment));
     }
 
+	public void deleteImage(UUID id, String emailUser) throws Exception {
+    	Establishment establishment = establishmentRepository.findById(id).orElseThrow(() 
+			-> new IllegalArgumentException("Establishment not found")
+        );
+
+		if (!establishment.getOwner().getEmail().equals(emailUser)) { 
+			throw new AccessDeniedException("No permission");
+		}
+
+		if(establishment.getImageUrl() != null){
+			minioStorageService.delete(establishment.getImageUrl());
+			establishment.setImageUrl(null);
+			establishmentRepository.save(establishment);
+		}
+	}
+
+
+	public void updateImage( UUID id, String emailUser, String newImage) throws Exception {
+    	Establishment establishment = establishmentRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException( "Establishment not found"));
+    	
+		if (!establishment.getOwner().getEmail().equals(emailUser)) {
+        	throw new AccessDeniedException("No permission");
+   	 	}
+
+   	 	String oldImage = establishment.getImageUrl();
+    	establishment.setImageUrl(newImage);
+    	establishmentRepository.save(establishment);
+    	if(oldImage != null){
+        	minioStorageService.delete(oldImage);
+    	}
+	}
 }

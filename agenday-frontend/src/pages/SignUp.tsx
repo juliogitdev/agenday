@@ -13,6 +13,7 @@ import { TermsOfUserCheckbox } from "../components/checkbox/TermsOfUseCheckbox";
 import { type CredentialResponse, GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
 import { MESSAGES, statusMap } from "../constants/messages";
+import { MESSAGES, statusMap } from "../constants/messages";
 import type { UserSignup } from "../types/User";
 import { SuccessAlert } from "../components/Alerts/SuccessAlert";
 import type { InputCallback } from "../types/Inputs";
