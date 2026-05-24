@@ -1,5 +1,6 @@
 
 export const valid = {
+
 	email: (value: string):string | null => {
 		const cleanValue = value.trim();
 		if ( cleanValue === '') { return 'O e-mail é obrigatório.';}
@@ -11,6 +12,7 @@ export const valid = {
 		}
 		return null; 
 	},
+
 	password: (value: string): string | null => {
 		if (!value || value === '') {  return 'Digite uma senha forte'; }
 		if (value.length < 8) { return 'mínimo 8 caracteres necessário.';}
@@ -76,7 +78,6 @@ export const valid = {
 };
 
 
-
 export function formatBRPhone(value: string): string {
 	const numbers = value.replace(/\D/g, '');
 	const truncated = numbers.slice(0, 11);
@@ -87,107 +88,4 @@ export function formatBRPhone(value: string): string {
 	}
 
 	return `(${truncated.slice(0, 2)}) ${truncated.slice(2, 7)}-${truncated.slice(7)}`;
-}
-
-
-export type Field = {
-	value: any;
-	errorMessage: string | null;
-	isValid: boolean;
-};
-
-const messages: Record<string, {title: string, description: string}> = {
-	"address.cep": {
-		title: "CEP inválido",
-		description: "O CEP informado é inválido."
-	},
-	"address.city": {
-		title: "Cidade",
-		description: "Preencha a cidade."
-	},
-	"address.state": {
-		title: "Estado",
-		description: "Preencha o estado."
-	},
-	"address.street": {
-		title: "Rua",
-		description: "Preencha a rua."
-	},
-	"address.number": {
-		title: "Número",
-		description: "Preencha o número."
-	},
-	"address.neighborhood": {
-		title: "Bairro",
-		description: "Preencha o bairro."
-	},
-	"basicInfo.name": {
-		title: "Nome do estabelecimento",
-		description: "Preencha o nome do estabelecimento."
-	},
-	"basicInfo.numberPhone": {
-		title: "Telefone",
-		description: "Preencha o telefone."
-	},
-	"basicInfo.category": {
-		title: "Categoria",
-		description: "Selecione uma categoria."
-	},
-	"basicInfo.manager": {
-		title: "Responsável",
-		description: "Preencha o responsável."
-	},
-	"visual.palette": {
-		title: "Paleta",
-		description: "Selecione uma paleta."
-	},
-	"visual.image": {
-		title: "Imagem",
-		description: "Adicione uma imagem."
-	}
-};
-
-
-export function validateFields(
-	obj: any,
-	path = ""
-): {title: string, description: string} | null {
-
-	for (const key in obj) {
-		const currentPath = path
-			? `${path}.${key}`
-			: key;
-
-		const value = obj[key];
-
-		// é um campo final
-		if (
-			value &&
-			typeof value === "object" &&
-			"value" in value &&
-			"isValid" in value
-		) {
-			if (!value.isValid) {
-				return messages[currentPath] || {
-					title: "Campo inválido",
-					description: `Corrija ${currentPath}`
-				};
-			}
-		}
-
-		// continua navegando
-		else if (
-			value &&
-			typeof value === "object"
-		) {
-			const error = validateFields(
-				value,
-				currentPath
-			);
-
-			if (error) return error;
-		}
-	}
-
-	return null;
 }
