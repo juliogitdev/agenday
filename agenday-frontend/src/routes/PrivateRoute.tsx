@@ -19,7 +19,14 @@ export function PrivateRoute({children,}: {children: React.ReactNode;}) {
 	return (
 		<main className="appMain">
 			<Panel /> 
-			<section style={{flex: "1"}}> {children} </section>
+			<section style={{
+				flex: "1", 
+				maxHeight: "calc(100vh - 20px)", 
+				overflow: "auto",
+				boxShadow: "inset 0 -8px 8px -8px rgba(0,0,0,.15)"
+			}}> 
+				{children} 
+			</section>
 		</main>
 	);
 
