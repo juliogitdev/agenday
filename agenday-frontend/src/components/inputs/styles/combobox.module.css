@@ -1,0 +1,38 @@
+
+
+.comboBox {
+	display:flex;
+	flex-direction:column;
+}
+	.comboLabel {
+		font-family:"Poppins",sans-serif;
+		font-weight:500;
+		font-size:.8rem;
+		color:var(--combo-label);
+		margin-bottom:5px;
+	}
+
+	.comboField {
+		border:1px solid var(--combo-input-border);
+		border-radius:5px;
+		font-size: .9rem;
+		padding:10px;
+		background:var(--combo-input-background);
+		color:var(--combo-input-foreground);
+		outline:none;
+		cursor:pointer;
+		transition:.2s;
+	}
+
+	.comboField:focus{ border-color:var(--primary);}
+	.errorBorder{ border-color:var(--combo-error); }
+
+	.comboError{
+		color:var(--combo-error);
+		font-family:"Poppins",sans-serif;
+		font-weight:500;
+		font-size:.7rem;
+		margin-top:5px;
+		text-align:right;
+		min-height:15px;
+	}
