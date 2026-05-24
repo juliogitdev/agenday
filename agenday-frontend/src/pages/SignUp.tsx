@@ -1,82 +1,50 @@
 
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import styles from './styles/signup.module.css';
-import React from "react";
 import { EmailInput } from "../components/inputs/EmailInput";
 import { PasswordInput } from "../components/inputs/PasswordInput";
-import { NameInput } from "../components/inputs/NameInput";
+import { TextInput } from "../components/inputs/TextInput";
 import { PhoneInput } from "../components/inputs/PhoneInput";
 import { LocationInput } from "../components/inputs/LocationInput";
 import { SolidButton } from "../components/buttons/SolidButton";
 import { TermsOfUserCheckbox } from "../components/checkbox/TermsOfUseCheckbox";
 import { type CredentialResponse, GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { validateEmail, validateName, validatePhone } from "../utils/Validations";
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
 import { MESSAGES, statusMap } from "../constants/messages";
 import type { UserSignup } from "../types/User";
 import { SuccessAlert } from "../components/Alerts/SuccessAlert";
+import type { InputCallback } from "../types/Inputs";
 
 
 export function SignUp() {
 	const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 	const {user, signup} = useContext(AuthContext);
 	const timerRef = useRef<number | null>(null);
-	
-	const [alertMessage, setAlertMessage] = React.useState<string>("");
-	const [showAlert, setShowAlert] = React.useState<boolean>(false);
-	const [showSuccessAlert, setShowSuccessAlert] = React.useState<boolean>(false);
+	const [alertMessage, setAlertMessage] = useState<string>("");
+	const [showAlert, setShowAlert] = useState<boolean>(false);
+	const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+	const [alertTitle, setAlertTitle] = useState<string>("error");
+	const [bntIsloading, setBtnIsLoading] = useState<boolean>(false);
+	const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
+	const [email, setEmail] = useState<InputCallback>({value: "", errorMessage: null, isValid: false});
+	const [passw, setPassw] = useState<InputCallback>({value: "", errorMessage: null, isValid: false});
+	const [uname, setUname] = useState<InputCallback>({value: "", errorMessage: null, isValid: false});
+	const [phone, setPhone] = useState<InputCallback>({value: "", errorMessage: null, isValid: false});
+	const [location, setLocation] = useState<InputCallback>({value: null, errorMessage: null, isValid: false});
 
-	const [alertTitle, setAlertTitle] = React.useState<string>("error");
-	const [bntIsloading, setBtnIsLoading] = React.useState<boolean>(false);
-
-	const [email, setEmail] = React.useState<string>("");
-	const [passw, setPassw] = React.useState<string>("");
-	const [name, setName] = React.useState<string>("");
-	const [phone, setPhone] = React.useState<string>("");
-	const [termsAccepted, setTermsAccepted] = React.useState<boolean>(false);
-	const [location, setLocation] = React.useState<{uf: string; city: string} | null>(null);
 
 	const navigate = useNavigate();
 	if (user) {  navigate('/home');}
-
-	function validateForm() {
-		const emailV = validateEmail(email);
-		const nameV = validateName(name);
-		const phoneV = validatePhone(phone);
-		const locationValid =
-			location !== null &&
-			location.uf?.trim() !== "" &&
-			location.city?.trim() !== "";
-		const isValid =
-			emailV.isValid &&
-			nameV.isValid &&
-			phoneV.isValid &&
-			passw.trim() !== "" &&
-			passw.trim().length >= 6 &&
-			locationValid &&
-			termsAccepted;
-
-		return {
-			isValid,
-			fields: {
-				email: emailV,
-				name: nameV,
-				phone: phoneV
-			}
-		};
-	}
-
-	const form = validateForm();
 	
 	const signUpWithEmail = async () => {
-		if ( form.isValid ) {
+		if ( isValidForm () ) {
 			setBtnIsLoading(true);
 			const user:UserSignup = {
-				fullName: name, email,
-				password: passw, numberPhone: phone,
-				state: location?.uf ?? '', city: location?.city ?? '',
+				fullName: uname.value, email: email.value,
+				password: passw.value, numberPhone: phone.value,
+				state: location.value?.uf ?? '', city: location.value?.city ?? '',
 			}
 
 			const status = await signup(user, 'email');
@@ -137,6 +105,13 @@ export function SignUp() {
 		showAlertWithMessage(msg.title, msg.message);
 	}
 
+
+	
+
+	const isValidForm = (): boolean => {
+		return email.isValid && passw.isValid && uname.isValid && phone.isValid && location.isValid;
+	}
+
 	return (
 		<GoogleOAuthProvider clientId={googleClientId}> 
 			{ showAlert && <ErrorAlert title={alertTitle} message={alertMessage}/>}
@@ -151,13 +126,14 @@ export function SignUp() {
 				<div className={styles.signupContainer}>
 					<div className={styles.signupForm}>
 						<div className={styles.inputGroup}>
-							<NameInput  name={name}   onChange={setName} />
-							<PhoneInput phone={phone} onChange={setPhone} />
-							<EmailInput email={email} onChange={setEmail} />
-							<PasswordInput password={passw} onChange={setPassw} showRecovery={false} />
+							<TextInput  label="Nome" placeholder="Ex. João Silva dos santos" onChangeField={(e)=>setUname(e)}/>
+							<PhoneInput label="Telefone" onChangeField={(e)=>setPhone(e)} />
+							<EmailInput label="Email" placeholder="Ex. user@email.com" onChangeField={(e)=>setEmail(e)}/>
+							<PasswordInput label="Senha" placeholder="Senha" onChangeField={(e)=>setPassw(e)}/>
 						</div>
 						
-						<LocationInput onChose={(location) => setLocation(location)} />
+						<LocationInput showBanner={true} onChangeField={(e)=>setLocation(e)} />
+
 						<TermsOfUserCheckbox 
 							termsLink="/terms-of-use" 
 							onChange={(a) => {setTermsAccepted(a)}} 
@@ -166,8 +142,8 @@ export function SignUp() {
 						<div className={styles.spacer} ></div>
 
 						<SolidButton 
-							text="Criar Conta" 
-							isActive={form.isValid}	  
+							isActive={isValidForm() && termsAccepted}
+							text="Criar Conta"  
 							onClick={signUpWithEmail} 
 							isLoading={bntIsloading}
 						/>

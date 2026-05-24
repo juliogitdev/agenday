@@ -1,5 +1,5 @@
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import styles from './styles/signin.module.css';
 import { EmailInput } from "../components/inputs/EmailInput";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
 import { MESSAGES, statusMap } from "../constants/messages";
 import { SuccessAlert } from "../components/Alerts/SuccessAlert";
+import type { InputCallback } from "../types/Inputs";
 
 export function SignIn() {
 	const {login} = React.useContext(AuthContext);
@@ -23,19 +24,14 @@ export function SignIn() {
 	const [alertTitle, setAlertTitle] = React.useState<string>("error");
 	const [bntIsloading, setBtnIsLoading] = React.useState<boolean>(false);
 
-	const [email, setEmail] = React.useState<string>("");
-	const [passw, setPassw] = React.useState<string>("");
+	const [email, setEmail] = useState<InputCallback>({value: "", errorMessage: null, isValid: false});
+	const [passw, setPassw] = useState<InputCallback>({value: "", errorMessage: null, isValid: false});
 
-	const [passwValid, setPasswValid] = React.useState<boolean>(false);
-	const [emailValid, setEmailValid] = React.useState<boolean>(false);
-	
-	const validEmail    = (value: string, isValid: boolean) => { setEmailValid(isValid); setEmail(value);}
-   	const validPassword = (value: string, isValid: boolean) => { setPasswValid(isValid); setPassw(value);}
-	
+
 	const loginWithEmail = async () => {
-		if (email && passw) {
+		if (email.isValid && passw.isValid) {
 			setBtnIsLoading(true);
-			const status = await login({password: passw, email}, 'email');
+			const status = await login({password: passw.value, email: email.value}, 'email');
 			if (status === 200)  {
 				setBtnIsLoading(true); // mantem o loading para evitar clique duplo
 				setShowSuccessAlert(true);
@@ -109,13 +105,13 @@ export function SignIn() {
 						</span>
 					</h2>
 
-					<EmailInput email={email} onChange={validEmail} />
-					<PasswordInput password={passw} onChange={validPassword}/>
+					<EmailInput label="Email" placeholder="Ex. user@email.com" onChangeField={(e)=>setEmail(e)}/>
+					<PasswordInput label="Senha" placeholder="Digite uma senha segura" onChangeField={(e)=>setPassw(e)}/>
 					
 					<div className={styles.spacer} ></div>
 					<div className={styles.spacer} ></div>
 					<SolidButton text="Entrar na plataforma" 
-						isActive={ emailValid && passwValid} 
+						isActive={ email.isValid && passw.isValid} 
 						onClick={loginWithEmail} 
 						isLoading={bntIsloading}
 					/>
