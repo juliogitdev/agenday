@@ -5,6 +5,7 @@ import com.agenday.iam.domain.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -17,12 +18,22 @@ public class Professional extends BaseEntity {
     private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            unique = true
+    )
     private User user;
 
+    @Column(columnDefinition = "TEXT")
     private String bio;
 
-    @Column(name = "profile_image_url")
-    private String profileImageUrl;
+    @Column(name = "working_since")
+    private LocalDate workingSince;
 
+    @Column(name = "instagram_url")
+    private String instagramUrl;
+
+    @Column(name = "specialized_in")
+    private String specializedIn;
 }

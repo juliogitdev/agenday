@@ -107,7 +107,8 @@ public class UserService {
         return new UserResponse(
                 user.getId(),
                 user.getEmail(),
-                user.getFullName()
+                user.getFullName(),
+				user.getProfileImageUrl()
         );
     }
 

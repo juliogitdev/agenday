@@ -4,12 +4,12 @@ export type PermissionMap = {
 }
 
 export const PERMISSIONS_MAP: PermissionMap = {
-	"/home": ["ROLE_CLIENT","ROLE_ADMIN"],	
-	"/dashboard": ["ROLE_CLIENT","ROLE_ADMIN"],	
-	"/agenda": ["ROLE_CLIENT","ROLE_ADMIN"],
-	"/establishments": ["ROLE_CLIENT","ROLE_ADMIN"],
-	"/employees": ["ROLE_CLIENT","ROLE_ADMIN"],
-	"/services": ["ROLE_ADMIN"],
-	"/clients": ["ROLE_CLIENT","ROLE_ADMIN"],
-	"/configurations": ["ROLE_CLIENT"],
+	"/home": ["ROLE_CLIENT","ROLE_ADMIN","ROLE_PROFESSIONAL"],	
+	"/dashboard": ["ROLE_ADMIN","ROLE_PROFESSIONAL"],	
+	"/agenda": ["ROLE_CLIENT","ROLE_ADMIN","ROLE_PROFESSIONAL"],
+	"/establishments": ["ROLE_ADMIN","ROLE_PROFESSIONAL"],
+	"/employees": ["ROLE_ADMIN"],
+	"/services": ["ROLE_ADMIN","ROLE_PROFESSIONAL"],
+	"/clients": ["ROLE_ADMIN"],
+	"/configurations": ["ROLE_CLIENT","ROLE_ADMIN","ROLE_PROFESSIONAL"],
 }

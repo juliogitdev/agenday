@@ -18,7 +18,6 @@ import { SuccessAlert } from "../components/Alerts/SuccessAlert";
 import { MESSAGES, statusMap } from "../constants/messages";
 
 
-
 export function Establishments() {
 	const handleRowClick = (index: number) => { console.log(index);};
 	const [isBlackWindowOpen, setIsBlackWindowOpen] = useState(false);
@@ -41,7 +40,8 @@ export function Establishments() {
 		
 		setIsLoading(true);
 		const API_URL = import.meta.env.VITE_API_URL;
-		let statusCode = 0;
+		let formStatusCode  = 0;
+		let imageStatusCode = 0;
 
 		try {
 			const coresRaw = [
@@ -67,33 +67,42 @@ export function Establishments() {
 					city: data.address.city.value,
 					street: data.address.street.value,
 					number: data.address.number.value,
-					// neighborhood: data.address.neighborhood,					
+					neighborhood: data.address.neighborhood,					
 				}
 			}
 
-			const response = await fetch(`${API_URL}establishments/register`, {
-				method: 'POST',
-				credentials: "include",
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(request_body)
-			});
-			
-			statusCode = response.status;
-			console.log(statusCode);
-			
-			if (response.ok && (statusCode === 201 || statusCode === 200)) {
-				setSuccessMessage("Estabelecimento criado com sucesso");
-				setTimeout(() => { 
-					setSuccessMessage("");
-					setIsBlackWindowOpen(false);
-					setIsLoading(false);
-				}, 3000);		
-			} else { throw new Error("Failed to create establishment"); }
+			try {
+				const image = await fetch(`${API_URL}upload/image-url?folder=establishments&extension=png`, {
+					method: 'POST',
+					credentials: "include",
+					headers: { 'Content-Type': 'application/json' },
+				});	
 
-		} catch {
-			const key = statusMap[statusCode] ?? "unknownError";
+				imageStatusCode = image.status;
+				if (image.ok && (imageStatusCode == 200 || imageStatusCode == 201 )) {
+					
+					const form = await fetch(`${API_URL}establishments/register`, {
+						method: 'POST',
+						credentials: "include",
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(request_body)
+					});
+					
+					formStatusCode = form.status;
+					
+					if (form.ok && (formStatusCode === 201 || formStatusCode === 200)) {
+						setSuccessMessage("Estabelecimento criado com sucesso");
+						setTimeout(() => { 
+							setSuccessMessage("");
+							setIsBlackWindowOpen(false);
+							setIsLoading(false);
+						}, 3000);		
+					} else { throw new Error("Failed to create establishment"); }
+				}
+			} catch (error) { throw error;}
+		} catch (error) {
+			const key = statusMap[formStatusCode] ?? "unknownError";
 			const msg = MESSAGES[key];
-			console.log(statusCode);
 			setIsLoading(false);
 			showErrorMessage(msg.title, msg.message);
 		}

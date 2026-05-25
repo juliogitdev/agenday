@@ -13,11 +13,10 @@ import { TermsOfUserCheckbox } from "../components/checkbox/TermsOfUseCheckbox";
 import { type CredentialResponse, GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
 import { MESSAGES, statusMap } from "../constants/messages";
-import { MESSAGES, statusMap } from "../constants/messages";
 import type { UserSignup } from "../types/User";
 import { SuccessAlert } from "../components/Alerts/SuccessAlert";
 import type { InputCallback } from "../types/Inputs";
-
+import type { Location } from "../types/Location";
 
 export function SignUp() {
 	const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -33,8 +32,7 @@ export function SignUp() {
 	const [passw, setPassw] = useState<InputCallback>({value: "", errorMessage: null, isValid: false});
 	const [uname, setUname] = useState<InputCallback>({value: "", errorMessage: null, isValid: false});
 	const [phone, setPhone] = useState<InputCallback>({value: "", errorMessage: null, isValid: false});
-	const [location, setLocation] = useState<InputCallback>({value: null, errorMessage: null, isValid: false});
-
+	const [location, setLocation] = useState<InputCallback<Location>>({value: { uf: "", city: "" },  errorMessage: null, isValid: false});
 
 	const navigate = useNavigate();
 	if (user) {  navigate('/home');}
@@ -133,8 +131,11 @@ export function SignUp() {
 							<PasswordInput label="Senha" placeholder="Senha" onChangeField={(e)=>setPassw(e)}/>
 						</div>
 						
-						<LocationInput showBanner={true} onChangeField={(e)=>setLocation(e)} />
-
+						<LocationInput 
+							initialValue={location.value}
+							showBanner={true} 
+							onChangeField={setLocation} />
+					
 						<TermsOfUserCheckbox 
 							termsLink="/terms-of-use" 
 							onChange={(a) => {setTermsAccepted(a)}} 

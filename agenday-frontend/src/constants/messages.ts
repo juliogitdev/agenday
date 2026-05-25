@@ -74,7 +74,7 @@ export const MESSAGES = {
 	// rede
 	networkError: {
 		title: "Falha na conexão",
-		message: "Não foi possível conectar ao servidor do Agenday. Verifique sua conexão ou tente novamente mais tarde."
+		message: "Não foi possível estabelecer uma conexão ao servidor do Agenday"
 	},
 
 	// fallback

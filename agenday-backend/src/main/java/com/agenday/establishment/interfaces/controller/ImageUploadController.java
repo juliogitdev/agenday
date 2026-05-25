@@ -26,7 +26,7 @@ public class ImageUploadController {
 	}
 
 	@PostMapping("/image-url")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSIONAL','CLIENT')")
 	public ResponseEntity<ImageUploadResponse> requestUploadUrl( 
 		@RequestParam String folder, 
 		@RequestParam String extension

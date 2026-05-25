@@ -2,7 +2,6 @@
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Home } from '../pages/Home'
-import { Home } from '../pages/Home'
 import { SignUp } from '../pages/SignUp';
 import { SignIn } from '../pages/SignIn';
 import { Agenda } from '../pages/Agenda';
@@ -15,26 +14,9 @@ import { PrivateLayout } from '../layouts/PrivateLayout';
 import { LandingPage } from '../pages/LandingPage';
 
 export function AppRoutes() {
-	
-
-	
-
     return (
         <BrowserRouter>
             <Routes>
-				{/* rotas privadas */}
-				 <Route element={<PrivateLayout />}>
-					<Route path="/home"      element={ <Home />} />
-					<Route path="/dashboard" element={ <Home />} />
-					<Route path="/agenda"    element={ <Agenda />} />
-					<Route path="/establishments" element={ <Establishments />} />
-					<Route path="/employees" element={ <Employees />} />
-					<Route path="/services" element={ <Services />} />
-					<Route path="/clients" element={ <Clients />} />
-					<Route path="/configurations" element={ <Configurations />} />
-				</Route>
-
-                {/* rotas públicas */}
 				{/* rotas privadas */}
 				 <Route element={<PrivateLayout />}>
 					<Route path="/home"      element={ <Home />} />
