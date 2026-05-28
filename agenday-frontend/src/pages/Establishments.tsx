@@ -1,7 +1,7 @@
+
 import { CirclePlus } from "lucide-react";
 import { Breadcrumb } from "../components/navigation/Breadcrumb";
 import { EstablishmentTable } from "../components/tables/EstableshmentTable";
-import { mock_fakeEstablishments } from "../mocks/fakeEstablishments";
 import { mock_establishmentDashboard } from "../mocks/establishmentDashboardMock";
 import { EstablishmentDashboardCard } from "../components/cards/EstablishmentDashboardCard";
 import { BlackWindow } from "../components/Ui/BlackWindow";
@@ -18,7 +18,6 @@ import { useContext, useState } from "react";
 import AuthContext from "../context/AuthContext";
 
 export function Establishments() {
-	const handleRowClick = (index: number) => { console.log(index); };
 	const [isBlackWindowOpen, setIsBlackWindowOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [asError, setAsError] = useState(false);
@@ -26,6 +25,7 @@ export function Establishments() {
 	const [errorTitle, setErrorTitle] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
 	const [loadingStatus, setLoadingStatus] = useState("Por favor, aguarde...");
+	const [updateTable, setUpdateTable] = useState(0);
 	const { user } = useContext(AuthContext);	
 	
 	const forms = [
@@ -33,7 +33,6 @@ export function Establishments() {
 		{ title: "Endereço", name: "address", content: <EstablishmentFormAdress/> },
 		{ title: "Personalização", name: "visual", content: <EstablishmentFormVisual/> }
 	];
-
 
 	const create = async (data: any) => {
 		const formIsValid = isValidEstablishmentForm(data); 
@@ -65,6 +64,7 @@ export function Establishments() {
 
 			setIsLoading(false);
 			setSuccessMessage("Estabelecimento criado com sucesso");
+			setUpdateTable(prev => prev + 1);
 			setTimeout(() => {
 				setSuccessMessage("");
 				setIsBlackWindowOpen(false);
@@ -78,7 +78,11 @@ export function Establishments() {
 		}
 	};
 
-	
+	const handleRowClick = (establishmentId:string, action:string) => {
+		console.log(establishmentId);
+		console.log(action);
+	}
+
 	const showErrorMessage = (title: string, message: string) => {
 		setErrorTitle(title);
 		setErrorMessage(message);
@@ -102,7 +106,7 @@ export function Establishments() {
 			</header>
 
 			<main className={style.estableshmentContent}>
-				<EstablishmentTable data={mock_fakeEstablishments} onClick={handleRowClick} />
+				<EstablishmentTable updateTable={updateTable} onClick={handleRowClick} />
 				<EstablishmentDashboardCard data={mock_establishmentDashboard} />
 			</main>
 			
