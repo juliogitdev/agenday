@@ -1,4 +1,4 @@
-package com.agenday.core.interfaces.controller;
+package com.agenday.core.interfaces.controller.Plan;
 
 import com.agenday.core.application.dto.PlanDto.PlanCreateRequest;
 import com.agenday.core.application.dto.PlanDto.PlanResponse;

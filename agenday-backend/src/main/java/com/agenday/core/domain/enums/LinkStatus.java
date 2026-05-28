@@ -1,4 +1,4 @@
-package com.agenday.establishment.domain.enums;
+package com.agenday.core.domain.enums;
 
 public enum LinkStatus {
     PENDING,

@@ -1,8 +1,8 @@
-package com.agenday.core.mapper;
+package com.agenday.core.mapper.Address;
 
 import com.agenday.core.application.dto.Address.AddressRequest;
 import com.agenday.core.application.dto.Address.AddressResponse;
-import com.agenday.core.domain.model.Address;
+import com.agenday.core.domain.model.Address.Address;
 
 public class AddressMapper {
 

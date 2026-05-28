@@ -19,14 +19,13 @@ public class JwtService {
     private static final String ACCESS_TOKEN_TYPE = "ACCESS";
     private static final String REFRESH_TOKEN_TYPE = "REFRESH";
 
-    @Value("${jwt.secret}")
+    @Value("${security.jwt.secret}")
     private String secret;
 
-    @Value("${jwt.access-token-expiration}")
+    @Value("${security.jwt.expiration-ms}")
     private long accessTokenExpiration;
 
-
-    @Value("${jwt.refresh-token-expiration}")
+    @Value("${security.jwt.expiration-ms}")
     private long refreshTokenExpiration;
 
     public String generateToken(User user) {

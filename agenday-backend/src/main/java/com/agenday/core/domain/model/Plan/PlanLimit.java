@@ -1,6 +1,5 @@
 
-package com.agenday.core.domain.model;
-import com.agenday.core.domain.model.Plan.Plan;
+package com.agenday.core.domain.model.Plan;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.UUID;

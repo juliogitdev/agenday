@@ -1,5 +1,5 @@
 
-package com.agenday.core.repository;
+package com.agenday.core.repository.Plan;
 import com.agenday.core.domain.model.Plan.Plan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

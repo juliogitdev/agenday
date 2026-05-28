@@ -26,7 +26,7 @@ const dicCategory: Record<keyof FormData, string> = {
 };
 
 
-export function validEstablishmentForm(data: FormData): true | EstablishmentFormValidCallBack {
+export function isValidEstablishmentForm(data: FormData): true | EstablishmentFormValidCallBack {
     for (const category in data) {
         const categoryKey = category as keyof FormData;
         const fields = data[categoryKey];

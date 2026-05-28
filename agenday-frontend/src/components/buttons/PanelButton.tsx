@@ -17,23 +17,22 @@ type PanelButtonProps = {
 	notificationsCount: number;
 };
 
-function resolveButtonState(pathname: string, to: string, userRole: string): ButtonState {
+function resolveButtonState(pathname: string, to: string, userRoles: string[]): ButtonState {
 	const allowedRoles = PERMISSIONS_MAP[to];
-
-	if (!allowedRoles) { return "disabled";}
-	const hasPermission = allowedRoles.includes(userRole);
-	if (!hasPermission) { return "disabled";}
-
+	if (!allowedRoles) { return "disabled"; }
+	const hasPermission = userRoles.some(role => allowedRoles.includes(role));
+	if (!hasPermission) { return "disabled"; }
 	return pathname === to ? "active" : "inactive";
 }
 
+
 export function PanelButton(props: PanelButtonProps) {
-	const { user } = useContext(AuthContext) as { user: UserLogged;};
+	const { user } = useContext(AuthContext) as { user: UserLogged; };
 	const location = useLocation();
 
 	const userData: AgendaJwt = jwtDecode(user.accessToken || "");
-	const userRole = userData.roles?.[0] ?? "";
-	const buttonState = resolveButtonState(location.pathname,props.to, userRole);
+	const userRoles = userData.roles ?? []; 
+	const buttonState = resolveButtonState(location.pathname, props.to, userRoles);
 	const isDisabled = buttonState === "disabled";
 
 	const iconClass = {
@@ -48,7 +47,7 @@ export function PanelButton(props: PanelButtonProps) {
 			className={styles.pannelButton}
 			aria-disabled={isDisabled}
 			tabIndex={isDisabled ? -1 : undefined}
-			style={{ pointerEvents: isDisabled ? "none" : "auto",}}
+			style={{ pointerEvents: isDisabled ? "none" : "auto" }}
 		>
 			{props.notificationsCount > 0 && (
 				<span className={styles.panelButtonNotificationsCount}> {props.notificationsCount}</span>

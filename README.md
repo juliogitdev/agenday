@@ -1,231 +1,86 @@
+# Agenday – Configuração de Ambientes
 
-# Agenday
 
-Sistema web para agendamento e gerenciamento de serviços voltado para profissionais autônomos.
-
----
-
-# Tecnologias
-
-## Backend
-- Java 21
-- Spring Boot 3
-- Spring Security
-- JWT Authentication
-- PostgreSQL
-- Redis
-- Flyway
-- Swagger / OpenAPI
-- Docker
-
-## Frontend
-- React
-- TypeScript
-- Vite
-- React Router
-- Docker
-
----
-
-# Estrutura do projeto
-
-```txt
-agenday/
-├── agenday-backend/
-├── agenday-frontend/
-├── docker-compose.yml
-└── .env.example
-````
-
----
-
-# Configuração inicial
-
-Antes de iniciar o projeto, configure os arquivos de ambiente.
-
-O projeto utiliza variáveis de ambiente para autenticação, banco de dados e integração com APIs externas.
-
-Copie os arquivos modelo:
+### DEV – Subir infraestrutura local
 
 ```bash
-cp .env.example .env
+docker compose -f docker/docker-compose.dev.yml up -d
 ```
 
-Frontend:
+
+
+Sobe: PostgreSQL :5432, Redis :6379, MinIO :9000/:9001 (console)
+
+Backend e frontend rodam localmente:
+```bash
+# Backend (Spring Boot)
+cd agenday-bakcend
+./mvnw clean
+./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=dev"
+
+# Frontend (Vite)
+cd agenday-frontend; npm run dev
+```
+
+### DEV - Matar infraestrutura local
 
 ```bash
-cp .env.example agenday-frontend/.env.local
+docker compose -f docker/docker-compose.dev.yml down -v
+```
+
+--- 
+
+### PROD – Subir stack completa
+
+```bash
+# 1. Criar arquivo de variáveis a partir do exemplo
+cp docker/.env.example docker/.env
+# edite docker/.env com os valores reais
+
+# 2. Fazer o build das imagens
+docker build -f docker/Dockerfile.backend -t agenday/backend:latest .
+docker build -f frontend/Dockerfile -t agenday/frontend:latest frontend/
+
+# 3. Subir tudo
+docker compose -f docker/docker-compose.prod.yml --env-file docker/.env up -d
 ```
 
 ---
 
-# Variáveis importantes
+## Arquitetura de URLs por ambiente
 
-## Backend (.env)
+| Recurso        | DEV                          | PROD                          |
+|----------------|------------------------------|-------------------------------|
+| Frontend       | http://localhost:5173         | https://agenday.com           |
+| API (backend)  | http://localhost:8080/api     | https://api.agenday.com/api   |
+| MinIO (storage)| http://localhost:9000         | https://storage.agenday.com   |
+| MinIO console  | http://localhost:9001         | (não exposto)                 |
 
-```env
-DB_USER=seu_usuario
-DB_PASSWORD=sua_senha
+---
 
-# JWT_SECRET deve possuir pelo menos 64 caracteres
-JWT_SECRET=sua_chave_jwt_super_secreta
+## Signed URLs – como funciona
+
 ```
+DEV:
+  MinioClient → endpoint: http://localhost:9000
+  publicBaseUrl:          http://localhost:9000
+  Resultado: http://localhost:9000/agenday-images/foto.jpg?X-Amz-...
+  ✓ Acessível pelo navegador
 
-## Frontend (.env.local)
-
-```env
-VITE_API_URL=http://localhost:8080/api/v1/
-
-# Google Client ID pode ser público
-VITE_GOOGLE_CLIENT_ID=seu_google_client_id
+PROD:
+  MinioClient → endpoint: http://minio:9000  (rede interna Docker)
+  publicBaseUrl:          https://storage.agenday.com
+  MinioStorageService reescreve o host antes de retornar ao cliente
+  Resultado: https://storage.agenday.com/agenday-images/foto.jpg?X-Amz-...
+  ✓ Acessível pelo navegador via Nginx → MinIO
 ```
 
 ---
 
-# Como gerar uma JWT_SECRET segura
+## Regras de segurança em PROD
 
-Linux:
-
-```bash
-openssl rand -base64 64
-```
-
-Windows PowerShell:
-
-```powershell
-[Convert]::ToBase64String((1..64 | ForEach-Object { Get-Random -Maximum 256 }))
-```
-
----
-
-# Configuração do Google OAuth
-
-Crie um projeto no Google Cloud Console:
-
-* Ative a API Google Identity
-* Gere um OAuth Client ID
-* Adicione:
-
-```txt
-http://localhost:5173
-```
-
-Cole o Client ID no:
-
-```txt
-agenday-frontend/.env.local
-```
-
----
-
-# Executando com Docker
-
-## Linux
-
-Subir serviços:
-
-```bash
-sudo docker compose up --build
-```
-
-Parar serviços:
-
-```bash
-sudo docker compose down -v
-```
-
-## Windows (Docker Desktop)
-
-Abra o CMD ou PowerShell:
-
-```powershell
-docker compose up --build
-```
-
-Parar serviços:
-
-```powershell
-docker compose down -v
-```
-
----
-
-# Serviços disponíveis
-
-| Serviço     | URL                                                                                        |
-| ----------- | ------------------------------------------------------------------------------------------ |
-| Frontend    | [http://localhost:5173](http://localhost:5173)                                             |
-| Backend API | [http://localhost:8080/api/v1/](http://localhost:8080/api/v1/)                             |
-| Swagger     | [http://localhost:8080/swagger-ui/index.html#/](http://localhost:8080/swagger-ui/index.html#/) |
-| PostgreSQL  | localhost:5432                                                                             |
-| Redis       | localhost:6379                                                                             |
-
----
-
-# Desenvolvimento do frontend
-
-Entre na pasta:
-
-```bash
-cd agenday-frontend
-```
-
-Instale as dependências:
-
-```bash
-npm install
-```
-
-Inicie o projeto:
-
-```bash
-npm run dev -- --host
-```
-
-Acesse:
-
-```txt
-http://localhost:5173/home
-```
-
-Na rede local:
-
-```txt
-http://SEU_IP:5173/home
-```
-
----
-
-# Desenvolvimento do backend
-
-Inicie PostgreSQL e Redis.
-
-Entre na pasta:
-
-```bash
-cd agenday-backend
-```
-
-Execute:
-
-```bash
-./mvnw spring-boot:run
-```
-
-Windows:
-
-```powershell
-mvnw.cmd spring-boot:run
-```
-
-API disponível em:
-
-```txt
-http://localhost:8080/api/v1/
-```
-
-Swagger:
-
-```txt
-http://localhost:8080/swagger-ui/index.html
-```
+- `db` e `redis`: sem `ports`, inacessíveis fora da rede Docker
+- `minio`: sem `ports`, acessível apenas via Nginx em storage.agenday.com
+- `/actuator` bloqueado no Nginx externo
+- JWT secret e passwords via variáveis de ambiente, nunca hardcoded
+- TLS obrigatório via Let's Encrypt (certbot gerencia os certificados)

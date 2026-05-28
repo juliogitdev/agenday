@@ -1,13 +1,8 @@
-package com.agenday.core.interfaces.controller;
+package com.agenday.core.interfaces.controller.Establishment;
 
-import com.agenday.core.application.dto.EstablishmentRequest;
-import com.agenday.core.application.dto.EstablishmentResponse;
-import com.agenday.core.application.dto.Image.ImageUpdateRequest;
-import com.agenday.core.application.dto.ProfessionalEstablishmentRequest;
-import com.agenday.core.application.dto.ProfessionalEstablishmentResponse;
-import com.agenday.core.application.service.EstablishmentService;
-import com.agenday.core.application.service.ProfessionalEstablishmentService;
-import com.agenday.iam.application.service.UserService;
+import com.agenday.core.application.dto.Establishment.*;
+import com.agenday.core.application.service.Establishment.EstablishmentService;
+import com.agenday.core.application.service.Professional.ProfessionalService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,77 +15,57 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/establishment")
 @CrossOrigin(origins = "http://localhost:5173")
+@PreAuthorize("hasRole('ROLE_PROFESSIONAL')")
 public class EstablishmentController {
-
-    private final UserService userService;
     private final EstablishmentService establishmentService;
-    private final ProfessionalEstablishmentService professionalEstablishmentService;
+    private final ProfessionalService professionalService;
 
     public EstablishmentController(
-            UserService userService,
             EstablishmentService establishmentService,
-            ProfessionalEstablishmentService professionalEstablishmentService){
-        this.userService = userService;
+            ProfessionalService professionalService) {
         this.establishmentService = establishmentService;
-        this.professionalEstablishmentService = professionalEstablishmentService;
+        this.professionalService = professionalService;
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSIONAL')")
-    public ResponseEntity<EstablishmentResponse> register(Authentication authentication, @RequestBody @Valid EstablishmentRequest request){
-
+    public ResponseEntity<EstablishmentResponse> register(
+            Authentication authentication,
+            @RequestBody @Valid EstablishmentRequest request) {
         String email = authentication.getName();
-
         return ResponseEntity.status(201).body(establishmentService.createEstablishment(email, request));
     }
 
-
-    @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<EstablishmentResponse>> getAll(){
-        return ResponseEntity.ok().body(establishmentService.getAll());
+    @GetMapping("/my-units")
+    public ResponseEntity<List<EstablishmentResponse>> getMyEstablishments(Authentication authentication) {
+        String email = authentication.getName();
+        List<EstablishmentResponse> response = establishmentService.getEstablishmentsByProfessional(email);
+        return ResponseEntity.ok().body(response);
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('PROFESSIONAL')")
     public ResponseEntity<EstablishmentResponse> updateEstablishment(
             Authentication authentication,
             @PathVariable UUID id,
-            @Valid @RequestBody EstablishmentRequest request
-    ){
-
+            @Valid @RequestBody EstablishmentRequest request) {
         String email = authentication.getName();
-
-        return ResponseEntity.status(200).
-                body(establishmentService.updateEstablishment(id, email, request));
-
+        return ResponseEntity.status(200).body(establishmentService.updateEstablishment(id, email, request));
     }
 
-    @PostMapping("/invite")
-    @PreAuthorize("hasRole('PROFESSIONAL')")
-    public ResponseEntity<ProfessionalEstablishmentResponse> invite(
-            Authentication authentication,
-            @Valid @RequestBody ProfessionalEstablishmentRequest request) {
+    @PostMapping("/{id}/logoUpdate")
+    public ResponseEntity<GetPresignedUploadUrlResponse> getPresignedUrl(
+            @PathVariable UUID id,
+            @RequestParam("filename") String originalFilename,
+            Authentication authentication) {
 
-        String email = authentication.getName();
-        return ResponseEntity.status(201)
-                .body(professionalEstablishmentService.inviteProfessional(email, request));
+        String emailUser = authentication.getName();
+        GetPresignedUploadUrlResponse responseData = establishmentService.getPresignedUploadUrl(id, emailUser, originalFilename);
+        return ResponseEntity.ok(responseData);
     }
 
-	@DeleteMapping("/{id}/image/delete")
-	@PreAuthorize("hasRole('PROFESSIONAL')")
-	public ResponseEntity<Void> deleteImage( Authentication authentication, @PathVariable UUID id) throws Exception {
-		establishmentService.deleteImage(id,authentication.getName());
-		return ResponseEntity.noContent().build();
-	}
-
-	@PatchMapping("/{id}/image/update")
-	@PreAuthorize("hasRole('PROFESSIONAL')")
-	public ResponseEntity<Void> updateImage(
-		Authentication authentication, 
-		@PathVariable UUID id, 
-		@RequestBody ImageUpdateRequest request) throws Exception {
-    	establishmentService.updateImage(id,authentication.getName(),request.imgUrl());
-    	return ResponseEntity.noContent().build();
-	}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEstablishment(@PathVariable UUID id, Authentication authentication) {
+        String email = authentication.getName();
+        establishmentService.deleteEstablishment(id, email);
+        return ResponseEntity.noContent().build();
+    }
 }

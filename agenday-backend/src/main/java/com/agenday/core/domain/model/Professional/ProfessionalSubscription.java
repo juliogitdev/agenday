@@ -1,15 +1,19 @@
 
-package com.agenday.core.domain.model;
+package com.agenday.core.domain.model.Professional;
 import com.agenday.common.domain.model.BaseEntity;
+import com.agenday.core.domain.enums.SubscriptionStatus;
 import com.agenday.core.domain.model.Plan.Plan;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "professional_subscriptions")
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class ProfessionalSubscription extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

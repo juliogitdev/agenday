@@ -2,13 +2,13 @@
 .establishmentTable {
     display: flex;
 	width: 100%;
-	height: 75vh;
+	height: 95vh;
     flex-direction: column;
 }
 
 	.establishmentTableHeader {
 		display: grid;
-		grid-template-columns: 30% 30% 20% 10% 10%;
+		grid-template-columns: 40% 20% 20% 20%;
 		border-radius: 6px;
 		margin-bottom: 10px;
 		border: 2px solid var(--establishment-table-header-border-color);
@@ -48,7 +48,7 @@
 
 		.establishmentTableRow {
 			display: grid;
-			grid-template-columns: 30% 30% 20% 10% 10%;
+			grid-template-columns: 40% 20% 20% 20%;
 			border-bottom: 2px solid var(--establishment-table-header-border-color);
 		}
 			.establishmentTableCell {

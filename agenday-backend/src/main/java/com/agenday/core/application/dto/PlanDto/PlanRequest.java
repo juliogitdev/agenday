@@ -1,5 +1,5 @@
 
-package com.agenday.core.application.dto;
+package com.agenday.core.application.dto.PlanDto;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 

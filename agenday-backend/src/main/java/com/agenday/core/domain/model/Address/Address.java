@@ -1,4 +1,4 @@
-package com.agenday.core.domain.model;
+package com.agenday.core.domain.model.Address;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

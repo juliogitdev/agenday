@@ -17,7 +17,6 @@ DROP COLUMN profile_image_url;
 
 -- Adiciona informações profissionais
 ALTER TABLE professionals
-ADD COLUMN bio TEXT,
 ADD COLUMN working_since DATE,
 ADD COLUMN instagram_url VARCHAR(255),
 ADD COLUMN specialized_in VARCHAR(500);

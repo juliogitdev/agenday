@@ -1,11 +1,10 @@
 
-package com.agenday.core.interfaces.controller;
-import com.agenday.core.application.dto.Profissional.ProfessionalRequest;
-import com.agenday.core.application.dto.ProfessionalResponse;
-import com.agenday.core.application.service.ProfessionalService;
+package com.agenday.core.interfaces.controller.Professional;
+import com.agenday.core.application.dto.Professional.ClientPromoteToProfessionalRequest;
+import com.agenday.core.application.service.Professional.ProfessionalService;
+import com.agenday.iam.application.dto.AuthResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,38 +17,38 @@ public class ProfessionalController {
     }
 
     @PostMapping("/promote")
-    public ResponseEntity<ProfessionalResponse>
-    promoteClientToProfessional (
-            Authentication authentication, @RequestBody  @Valid  ProfessionalRequest request
+    public ResponseEntity<AuthResponse>
+    promoteClientToProfessional(
+        Authentication authentication,
+        @RequestBody @Valid ClientPromoteToProfessionalRequest request
     ) {
         String email = authentication.getName();
-        return ResponseEntity.status(201)
-            .body(professionalService.promoteClientToProfessional(email, request));
+        return ResponseEntity.status(201).body(professionalService.promoteClientToProfessional(email, request));
     }
 
-    @GetMapping("/me")
-    @PreAuthorize("hasRole('PROFESSIONAL')")
-    public ResponseEntity<ProfessionalResponse>
-    getMyProfessionalProfile(Authentication authentication){
-        String email = authentication.getName();
-        return ResponseEntity.ok(professionalService.getMyProfessionalProfile(email));
-    }
-
-    @PatchMapping("/me")
-    @PreAuthorize("hasRole('PROFESSIONAL')")
-    public ResponseEntity<ProfessionalResponse>
-    updateMyProfessionalProfile (
-        Authentication authentication, @RequestBody @Valid ProfessionalRequest request
-    ) {
-        String email = authentication.getName();
-        return ResponseEntity.ok(professionalService.updateMyProfessionalProfile(email, request));
-    }
-
-    @DeleteMapping("/me")
-    @PreAuthorize("hasRole('PROFESSIONAL')")
-    public ResponseEntity<Void> deleteMyProfessionalProfile(Authentication authentication){
-        String email = authentication.getName();
-        professionalService.deleteMyProfessionalProfile(email);
-        return ResponseEntity.noContent().build();
-    }
+//    @GetMapping("/me")
+//    @PreAuthorize("hasRole('PROFESSIONAL')")
+//    public ResponseEntity<ProfessionalResponse>
+//    getMyProfessionalProfile(Authentication authentication){
+//        String email = authentication.getName();
+//        return ResponseEntity.ok(professionalService.getMyProfessionalProfile(email));
+//    }
+//
+//    @PatchMapping("/me")
+//    @PreAuthorize("hasRole('PROFESSIONAL')")
+//    public ResponseEntity<ProfessionalResponse>
+//    updateMyProfessionalProfile (
+//        Authentication authentication, @RequestBody @Valid PromoteToProfessionalRequest request
+//    ) {
+//        String email = authentication.getName();
+//        return ResponseEntity.ok(professionalService.updateMyProfessionalProfile(email, request));
+//    }
+//
+//    @DeleteMapping("/me")
+//    @PreAuthorize("hasRole('PROFESSIONAL')")
+//    public ResponseEntity<Void> deleteMyProfessionalProfile(Authentication authentication){
+//        String email = authentication.getName();
+//        professionalService.deleteMyProfessionalProfile(email);
+//        return ResponseEntity.noContent().build();
+//    }
 }

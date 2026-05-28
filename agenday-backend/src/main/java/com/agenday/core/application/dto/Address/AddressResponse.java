@@ -1,4 +1,4 @@
-package com.agenday.core.application.dto;
+package com.agenday.core.application.dto.Address;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -1,0 +1,53 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/agenday_dev
+    username: agenday
+    password: agenday_dev_pass
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ""
+      timeout: 2000ms
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    url: jdbc:postgresql://localhost:5432/agenday_dev
+    user: agenday
+    password: agenday_dev_pass
+
+minio:
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin123
+  bucket:
+    images: agenday-images
+    files: agenday-files
+  public-base-url: http://localhost:9000
+
+logging:
+  level:
+    root: INFO
+    com.agenday: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+
+server:
+  port: 8080
+
+security:
+  jwt:
+    secret: 7a8f9c2d1e4b6a9f3d8c5e7f2a1b4c6d9e8f7a3b5c1d2e6f
+    expiration-ms: 86400000
+  cors:
+    allowed-origins:
+      - http://localhost:5173
+      - http://localhost:3000

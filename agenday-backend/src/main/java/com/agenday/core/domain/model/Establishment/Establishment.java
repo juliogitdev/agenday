@@ -1,9 +1,11 @@
-package com.agenday.core.domain.model;
+package com.agenday.core.domain.model.Establishment;
 
 import com.agenday.common.domain.model.BaseEntity;
+import com.agenday.core.domain.model.Address.Address;
 import com.agenday.iam.domain.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
@@ -20,6 +22,7 @@ import java.util.UUID;
         )
     }
 )
+@EqualsAndHashCode(callSuper = false)
 public class Establishment extends BaseEntity {
     @Id  @GeneratedValue(strategy = GenerationType.UUID) private UUID id;
     @Column(nullable = false)  private String name;

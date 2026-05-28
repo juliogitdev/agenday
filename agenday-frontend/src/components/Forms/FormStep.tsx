@@ -5,7 +5,7 @@ import type { FormStepProps } from "../../types/MultStepForm";
 import { Check, CircleArrowLeft, CircleArrowRight, CircleX, Loader } from "lucide-react";
 import { EstablishmentFormStore } from "../../store/EstablishmentFormStore";
 
-export function FormStep({ forms, onFinished, title, type, close, asError, isLoading }: FormStepProps) {
+export function FormStep({ forms, onFinished, title, type, close, asError, isLoading, loadingStatus }: FormStepProps) {
     const [currentStep, setCurrentStep] = useState(0);
     const [formsData, setFormsData] = useState({});
     const [currentValid, setCurrentValid] = useState(false);
@@ -24,7 +24,7 @@ export function FormStep({ forms, onFinished, title, type, close, asError, isLoa
             {isLoading && ( 
                 <div className={styles.formLoading}> 
                     <Loader className={styles.formLoadingIcon}/>
-                    <p className={styles.formLoadingText}>Por favor, aguarde...</p> 
+                    <p className={styles.formLoadingText}>{loadingStatus}</p> 
                 </div>
             )}
 

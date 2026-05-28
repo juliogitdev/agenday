@@ -1,123 +1,237 @@
+package com.agenday.core.application.service.Professional;
 
-package com.agenday.core.application.service;
-import com.agenday.core.application.dto.Professional.PromoteToProfessionalRequest;
-import com.agenday.core.application.dto.ProfessionalResponse;
+import com.agenday.common.exception.BusinessException;
+import com.agenday.core.application.dto.Professional.ClientPromoteToProfessionalRequest;
+import com.agenday.core.application.dto.Professional.ProfessionalResponse;
+import com.agenday.core.application.dto.Professional.ProfessionalUpdateRequest;
 import com.agenday.core.domain.model.Plan.Plan;
-import com.agenday.core.domain.model.Professional;
-import com.agenday.core.domain.model.ProfessionalSubscription;
-import com.agenday.core.domain.model.SubscriptionStatus;
-import com.agenday.core.mapper.ProfessionalMapper;
+import com.agenday.core.domain.model.Professional.Professional;
+import com.agenday.core.domain.model.Professional.ProfessionalSubscription;
+import com.agenday.core.domain.enums.SubscriptionStatus;
 import com.agenday.core.repository.Plan.PlanRepository;
-import com.agenday.core.repository.ProfessionalRepository;
-import com.agenday.core.repository.ProfessionalSubscriptionRepository;
+import com.agenday.core.repository.Professional.ProfessionalRepository;
+import com.agenday.core.repository.Professional.ProfessionalSubscriptionRepository;
+import com.agenday.core.repository.Establishment.EstablishmentRepository;
+import com.agenday.iam.application.dto.AuthResponse;
 import com.agenday.iam.domain.model.Role;
 import com.agenday.iam.domain.model.User;
+import com.agenday.iam.infrastructure.security.JwtService;
 import com.agenday.iam.repository.RoleRepository;
 import com.agenday.iam.repository.UserRepository;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Service
 public class ProfessionalService {
+
     private final UserRepository userRepository;
     private final ProfessionalRepository professionalRepository;
     private final RoleRepository roleRepository;
     private final PlanRepository planRepository;
     private final ProfessionalSubscriptionRepository subscriptionRepository;
+    private final EstablishmentRepository establishmentRepository; // Injetado para contar unidades
+    private final JwtService jwtService;
 
     public ProfessionalService(
             UserRepository userRepository,
             ProfessionalRepository professionalRepository,
             RoleRepository roleRepository,
             PlanRepository planRepository,
-            ProfessionalSubscriptionRepository subscriptionRepository
+            JwtService jwtService,
+            ProfessionalSubscriptionRepository subscriptionRepository,
+            EstablishmentRepository establishmentRepository
     ) {
         this.userRepository = userRepository;
         this.professionalRepository = professionalRepository;
         this.roleRepository = roleRepository;
         this.planRepository = planRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.establishmentRepository = establishmentRepository;
+        this.jwtService = jwtService;
     }
 
     @Transactional
-    public ProfessionalResponse promoteClientToProfessional(String emailUser, PromoteToProfessionalRequest request) {
+    public AuthResponse promoteClientToProfessional(String emailUser, ClientPromoteToProfessionalRequest request) {
         User user = getUserByEmail(emailUser);
-        if(professionalRepository.findByUser(user).isPresent())
-            throw new IllegalArgumentException( "User already is professional");
-        
-        Plan plan = planRepository.findById(request.planId()).orElseThrow(() ->new RuntimeException("Plan not found"));
+        validateProfessional(user);
+        Plan plan = getPlan(request.planId());
+
         Professional professional = new Professional();
         professional.setUser(user);
+        professional = professionalRepository.save(professional);
+
+        createSubscription(professional, plan);
+        addProfessionalRole(user);
+        userRepository.save(user);
+
+        String accessToken = jwtService.generateToken(user);
+        return new AuthResponse(accessToken, "Bearer");
+    }
+
+    // NOVO: Retorna o perfil completo do profissional com o contador de estabelecimentos
+    @Transactional(readOnly = true)
+    public ProfessionalResponse getMyProfessionalProfile(String emailUser) {
+        Professional professional = professionalRepository.findByUserEmail(emailUser)
+                .orElseThrow(() -> new BusinessException(
+                        "PROFESSIONAL_NOT_FOUND",
+                        "Perfil profissional não encontrado para este usuário.",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        ProfessionalSubscription subscription = subscriptionRepository.findByProfessionalWithPlanAndLimits(professional)
+                .orElseThrow(() -> new BusinessException(
+                        "SUBSCRIPTION_NOT_FOUND",
+                        "Nenhuma assinatura de plano encontrada para este perfil profissional.",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        // Conta quantos estabelecimentos pertencem ao usuário dono do perfil
+        long establishmentCount = establishmentRepository.countByOwnerId(professional.getUser().getId());
+
+        return new ProfessionalResponse(
+                professional.getId(),
+                professional.getUser().getFullName(),
+                professional.getUser().getEmail(),
+                professional.getBio(),
+                professional.getWorkingSince(),
+                professional.getInstagramUrl(),
+                professional.getSpecializedIn(),
+                establishmentCount,
+                subscription.getPlan().getName(),
+                subscription.getStatus()
+        );
+    }
+
+    // NOVO: Atualiza os dados dinâmicos do perfil
+    @Transactional
+    public ProfessionalResponse updateMyProfessionalProfile(String emailUser, ProfessionalUpdateRequest request) {
+        Professional professional = professionalRepository.findByUserEmail(emailUser)
+                .orElseThrow(() -> new BusinessException(
+                        "PROFESSIONAL_NOT_FOUND",
+                        "Perfil profissional não encontrado.",
+                        HttpStatus.NOT_FOUND
+                ));
+
         professional.setBio(request.bio());
         professional.setWorkingSince(request.workingSince());
         professional.setInstagramUrl(request.instagramUrl());
         professional.setSpecializedIn(request.specializedIn());
 
         professional = professionalRepository.save(professional);
-        ProfessionalSubscription subscription = new ProfessionalSubscription();
-        subscription.setProfessional(professional);
-        subscription.setPlan(plan);
-        OffsetDateTime now = OffsetDateTime.now();
 
-		subscription.setStatus(SubscriptionStatus.ACTIVE);
-        subscription.setStartedAt(now);
-        subscription.setExpiresAt(now.plusDays(plan.getDurationDays()));
-        subscriptionRepository.save(subscription);
+        ProfessionalSubscription subscription = subscriptionRepository.findByProfessional(professional)
+                .orElseThrow(() -> new BusinessException(
+                        "SUBSCRIPTION_NOT_FOUND",
+                        "Assinatura não localizada.",
+                        HttpStatus.NOT_FOUND
+                ));
 
-        Role roleProfessional = roleRepository.findByName( "ROLE_PROFESSIONAL" ).orElseThrow(() -> new RuntimeException("Role not found"));
+        long establishmentCount = establishmentRepository.countByOwnerId(professional.getUser().getId());
 
+        return new ProfessionalResponse(
+                professional.getId(),
+                professional.getUser().getFullName(),
+                professional.getUser().getEmail(),
+                professional.getBio(),
+                professional.getWorkingSince(),
+                professional.getInstagramUrl(),
+                professional.getSpecializedIn(),
+                establishmentCount,
+                subscription.getPlan().getName(),
+                subscription.getStatus()
+        );
+    }
+
+    // NOVO: Altera o plano de assinatura do profissional de forma segura
+    @Transactional
+    public void changeSubscriptionPlan(String emailUser, UUID newPlanId) {
+        Professional professional = professionalRepository.findByUserEmail(emailUser)
+                .orElseThrow(() -> new BusinessException(
+                        "PROFESSIONAL_NOT_FOUND",
+                        "Perfil profissional não encontrado.",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        Plan newPlan = planRepository.findById(newPlanId)
+                .orElseThrow(() -> new BusinessException(
+                        "PLAN_NOT_FOUND",
+                        "O plano informado não existe.",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        // Busca a assinatura atual para desativar ou atualizar
+        ProfessionalSubscription currentSubscription = subscriptionRepository.findByProfessional(professional)
+                .orElse(null);
+
+        if (currentSubscription != null) {
+            // Se o plano novo for igual ao atual, não precisa reprocessar
+            if (currentSubscription.getPlan().getId().equals(newPlanId)) {
+                throw new BusinessException(
+                        "SAME_PLAN",
+                        "Você já possui uma assinatura ativa para este plano.",
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+            // Encerra ou remove a assinatura antiga conforme sua regra (aqui mudamos o status ou deletamos)
+            subscriptionRepository.delete(currentSubscription);
+            subscriptionRepository.flush(); // Sincroniza a remoção antes de criar a nova
+        }
+
+        // Cria a nova assinatura vinculada ao novo plano
+        createSubscription(professional, newPlan);
+    }
+
+    private void validateProfessional(User user) {
+        if (professionalRepository.findByUser(user).isPresent())
+            throw new BusinessException(
+                    "ALREADY_A_PROFESSIONAL",
+                    "Este usuário já possui um perfil profissional ativo.",
+                    HttpStatus.CONFLICT
+            );
+    }
+
+    private Plan getPlan(UUID planId) {
+        return planRepository.findById(planId)
+                .orElseThrow(() -> new BusinessException(
+                        "PLAN_NOT_FOUND",
+                        "Plano não encontrado no sistema.",
+                        HttpStatus.NOT_FOUND
+                ));
+    }
+
+    private void addProfessionalRole(User user) {
+        Role roleProfessional = roleRepository.findByName("ROLE_PROFESSIONAL")
+                .orElseThrow(() -> new BusinessException(
+                        "ROLE_NOT_FOUND",
+                        "Permissão profissional (ROLE_PROFESSIONAL) não configurada.",
+                        HttpStatus.INTERNAL_SERVER_ERROR
+                ));
         if (user.getRoles().stream().noneMatch(role -> role.getName().equals("ROLE_PROFESSIONAL"))) {
             user.getRoles().add(roleProfessional);
         }
-
-        userRepository.save(user);
-        return ProfessionalMapper.toDTO(professional, subscription);
     }
 
-    public ProfessionalResponse getMyProfessionalProfile(String emailUser) {
-        Professional professional = getProfessional(emailUser);
-        ProfessionalSubscription subscription = getSubscription(professional);
-        return ProfessionalMapper.toDTO(professional, subscription);
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(
+                        "USER_NOT_FOUND",
+                        "Usuário base não encontrado.",
+                        HttpStatus.NOT_FOUND
+                ));
     }
 
-    public ProfessionalResponse updateMyProfessionalProfile(String emailUser, PromoteToProfessionalRequest request) {
-        Professional professional = getProfessional(emailUser);
-        professional.setBio(request.bio());
-        professional.setWorkingSince(request.workingSince());
-        professional.setInstagramUrl(request.instagramUrl());
-        professional.setSpecializedIn(request.specializedIn());
-        professional = professionalRepository.save(professional);
-        ProfessionalSubscription subscription = getSubscription(professional);
-        return ProfessionalMapper.toDTO(professional, subscription);
-    }
-
-    @Transactional
-    public void deleteMyProfessionalProfile(String emailUser) {
-        User user = getUserByEmail(emailUser);
-        Professional professional = getProfessional(emailUser);
-		professionalRepository.delete(professional);
-        user.getRoles().removeIf(role ->role.getName().equals("ROLE_PROFESSIONAL"));
-        userRepository.save(user);
-    }
-
-    private User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() ->new UsernameNotFoundException("User not found"));
-    }
-
-    private Professional getProfessional( String email){
-        User user = getUserByEmail(email);
-        return professionalRepository.findByUser(user).orElseThrow(() ->new UsernameNotFoundException("Professional not found"));
-    }
-
-    private ProfessionalSubscription getSubscription(Professional professional){
-        return subscriptionRepository
-            .findByProfessional(professional)
-            .orElseThrow(
-                    () -> new RuntimeException(
-                            "Subscription not found"
-                    )
-            );
+    private void createSubscription(Professional professional, Plan plan) {
+        OffsetDateTime now = OffsetDateTime.now();
+        ProfessionalSubscription subscription = new ProfessionalSubscription();
+        subscription.setProfessional(professional);
+        subscription.setPlan(plan);
+        subscription.setStatus(SubscriptionStatus.ACTIVE);
+        subscription.setStartedAt(now);
+        subscription.setExpiresAt(plan.getDurationDays() == -1 ? now.plusYears(50) : now.plusDays(plan.getDurationDays()));
+        subscriptionRepository.save(subscription);
     }
 }

@@ -1,6 +1,6 @@
-package com.agenday.core.repository;
+package com.agenday.core.repository.Professional;
 
-import com.agenday.core.domain.model.Professional;
+import com.agenday.core.domain.model.Professional.Professional;
 import com.agenday.iam.domain.model.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;

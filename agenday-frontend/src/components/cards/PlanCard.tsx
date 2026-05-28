@@ -2,7 +2,10 @@
 import styles from "./styles/plancard.module.css"
 
 type ButtonType = "solid" | "outline";
+
 export type PlanData = {
+	planId?: string;
+	icon?: React.ReactNode | null;
 	planTitle: string;
 	planPrice: number;
 	planBeneficts: string[];
@@ -15,6 +18,8 @@ export type PlanData = {
 type PlanCardProps = PlanData & { onClick: (plan: PlanData) => void;};
 
 export default function PlanCard({
+	planId,
+	icon = null,
 	planTitle,
 	planPrice,
 	planBeneficts,
@@ -26,7 +31,8 @@ export default function PlanCard({
 }: PlanCardProps) {
 
 	const planData: PlanData = {
-		planTitle, planPrice,
+		planId,
+		icon, planTitle, planPrice,
 		planBeneficts, buttonType,
 		isRecommended,
 		width, height
@@ -39,6 +45,7 @@ export default function PlanCard({
 			)}
 
 			<div className={styles.content}>
+				{icon && <div className={styles.icon}> {icon} </div>}
 				<span className={styles.planTitle}> {planTitle} </span>
 				<h2 className={styles.planPrice}> R$ {planPrice.toFixed(2).replace(".", ",")} </h2>
 				

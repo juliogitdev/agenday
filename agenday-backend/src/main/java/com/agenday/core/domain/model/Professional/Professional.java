@@ -1,9 +1,10 @@
-package com.agenday.core.domain.model;
+package com.agenday.core.domain.model.Professional;
 
 import com.agenday.common.domain.model.BaseEntity;
 import com.agenday.iam.domain.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "professionals")
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class Professional extends BaseEntity {
 
     @Id

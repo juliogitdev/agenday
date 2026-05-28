@@ -20,4 +20,5 @@ export interface FormStepProps {
     onFinished: (data:any) => void;
     asError?: boolean;
 	isLoading?: boolean;
+    loadingStatus?: string;
 }

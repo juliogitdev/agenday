@@ -2,6 +2,7 @@
 import React from "react";
 import type { UserLogged, UserLogin, UserSignup } from "../types/User";
 import AuthContext from "../context/AuthContext";
+import { jwtDecode } from "jwt-decode";
 
 export function AuthProvider({children}: {children: React.ReactNode}) {
 	const [user, setUser] = React.useState<UserLogged | null>(null);
@@ -109,23 +110,17 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 	};
 
 
-	const refreshToken = async(): Promise<boolean> => { 
-		const API_URL = import.meta.env.VITE_API_URL;
-		try {
-			const response = await fetch(`${API_URL}auth/refresh`, {
-				method: 'POST',
-				credentials: "include",
-			});
+	const refreshSession = async (): Promise<boolean> => {
+    	const API_URL = import.meta.env.VITE_API_URL;
+    	try {
+        	const response = await fetch(`${API_URL}auth/refresh`,{method: 'POST',credentials: 'include'});
+        	if (!response.ok) { setUser(null); return false;}
+        	const data = await response.json();
 
-			if (response.ok && response.status === 200) {
-				const data = await response.json();
-				setUser({accessToken: data.accessToken, type: data.type});
-				return true;
-			}
-           setUser(null);
-		   return false;
-		}
-		catch { return false; }
+			console.log('refresh-data', jwtDecode(data.accessToken || ""));
+        	setUser(prev => ({ ...prev, accessToken: data.accessToken, type: data.type}));
+        	return true;
+    	} catch (error) { setUser(null); return false;}
 	};
 
 
@@ -151,7 +146,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 	// authReady evita renderizar rotas protegidas antes da validação da sessão.
 	React.useEffect(() => {
 		const initAuth = async () => {
-			await refreshToken();
+			await refreshSession();
 			await new Promise(resolve => setTimeout(resolve, 1000)); // simula delay de carregamento
 			setAuthReady(true);
 		};
@@ -161,11 +156,12 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 	return (
 		<AuthContext.Provider value={{
 			 user, 
+			 setUser,
 			 loginType, 
 			 login, 
 			 logout, 
 			 signup, 
-			 refreshToken, 
+			 refreshSession, 
 			 authReady 
 		}}>
 			{ children } 

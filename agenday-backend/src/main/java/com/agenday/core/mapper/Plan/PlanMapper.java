@@ -1,6 +1,6 @@
 
 
-package com.agenday.core.mapper;
+package com.agenday.core.mapper.Plan;
 import com.agenday.core.application.dto.PlanDto.PlanCreateRequest;
 import com.agenday.core.application.dto.PlanDto.PlanLimitResponse;
 import com.agenday.core.application.dto.PlanDto.PlanResponse;

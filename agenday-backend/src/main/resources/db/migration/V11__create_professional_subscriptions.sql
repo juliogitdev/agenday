@@ -1,4 +1,3 @@
-
 CREATE TABLE professional_subscriptions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     professional_id UUID NOT NULL

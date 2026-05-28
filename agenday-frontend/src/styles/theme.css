@@ -258,8 +258,8 @@
 	--multistep-form-button-primary-color: #ffffff;
 	--multistep-form-button-secondary-background: #ececec;
 	--multistep-form-button-secondary-color: #333333;
-	--multistep-form-loading-background: rgba(0, 0, 0, 0.8);
-	--multistep-form-loading-text-icon-color: #ffffff;
+	--multistep-form-loading-background: #f4f4f4;
+	--multistep-form-loading-text-icon-color: #333333;
 	--multistep-form-button-disabled-background: #cccccc;
 	--multistep-form-button-disabled-color: #666666;
 
@@ -291,7 +291,6 @@
 
 
 
-
 	/*  ==== customer since card ==== */
 	--customer-since-card-background: transparent;
 	--customer-since-card-border-color: #135184;
@@ -303,6 +302,60 @@
 	/* ======= ball name ======= */
 	--ball-name-background: #007bff;
 	--ball-name-color: #ffffff;
+
+
+	/* ======= welcome ======= */
+	--welcome-card-background-color: #ffffff;
+	--welcome-card-shadow-color: rgba(0, 0, 0, 0.1);
+	--welcome-banner-background-color: rgba(241, 245, 249, 0.9);
+	--welcome-banner-gradient-color: rgba(96, 115, 131, 0.08);
+	--welcome-title-color: #135184;
+	--welcome-close-button-color: #94a3b8;
+	--welcome-close-button-hover-background-color: #f1f5f9;
+	--welcome-close-button-hover-color: #0f172a;
+	--welcome-content-title-color: #135184;
+	--welcome-content-description-color: #475569;
+	--welcome-button-client-background-color: rgba(241, 245, 249, 0.9);
+	--welcome-button-client-hover-background-color: #e2e8f0;
+	--welcome-button-client-color: #334155;
+	--welcome-button-client-hover-color: #0f172a;
+	--welcome-button-professional-background-color: #135184;
+	--welcome-button-professional-hover-background-color: #0f4169;
+	--welcome-button-professional-color: #ffffff;
+	--welcome-button-professional-hover-color: #ffffff;
+	--welcome-footer-border-color: rgba(241, 245, 249, 0.9);
+	--welcome-checkbox-border-color: #94a3b8;
+	--welcome-checkbox-checked-color: #135184;
+	--welcome-checkbox-label-color: #64748b;
+	--welcome-checkbox-label-hover-color: #334155;
+
+
+	/* ======= card chose plan  ======= */
+	--chose-plan-container-background-color: #ffffff;
+	--chose-plan-container-shadow-color: rgba(0, 0, 0, 0.1);
+	--chose-plan-loading-overlay-background-color: rgba(255, 255, 255, 0.75);
+	--chose-plan-loading-primary-color: #135184;
+	--chose-plan-loading-text-color: #475569;
+	--chose-plan-loading-error-icon-color: #ef4444;
+	--chose-plan-loading-error-text-color: #ef4444;
+	--chose-plan-loading-error-back-link-color: #0f172a;
+
+	--chose-plan-close-button-color: #94a3b8;
+	--chose-plan-close-button-hover-background-color: #f1f5f9;
+	--chose-plan-close-button-hover-color: #0f172a;
+	--chose-plan-pro-title-background-color: rgba(96, 115, 131, 0.1);
+	--chose-plan-pro-title-color: #135184;
+	--chose-plan-features-title-color: #135184;
+	--chose-plan-features-description-color: #475569;
+	--chose-plan-features-subtitle-color: #135184;
+	--chose-plan-features-cta-color: #4a4d50;
+	--chose-plan-features-list-background-color: rgba(241, 245, 249, 0.9);
+	--chose-plan-features-list-item-color: #334155;
+	--chose-plan-feature-icon-color: #10b981;
+	--chose-plan-swiper-shadow-color: rgba(0, 0, 0, 0.1);
+	--chose-plan-swiper-navigation-color: #135184;
+	--chose-plan-swiper-pagination-active-background-color: #135184;
+
 
 }
 

@@ -10,7 +10,6 @@ export function EstablishmentTable({ data, onClick }: { data: EstablishmetTableT
             <div className={styles.establishmentTableHeader}>
 				<span className={styles.establishmentHeadTableCell}>Estabelecimento</span> 
 				<span className={styles.establishmentHeadTableCell}>Localização</span>
-				<span className={styles.establishmentHeadTableCell}>Gerente</span> 
 				<span className={styles.establishmentHeadTableCell}>Equipe</span>
 				<span className={styles.establishmentHeadTableCell}>Ações</span>
 			</div>
@@ -28,7 +27,6 @@ export function EstablishmentTable({ data, onClick }: { data: EstablishmetTableT
 							</div>
 						</div> 
 						<div className={`${styles.location} ${styles.establishmentTableCell}`}>{item.city}/{item.uf}</div>
-						<div className={`${styles.manager} ${styles.establishmentTableCell}`}>{item.manager}</div> 
 						<div className={`${styles.team} ${styles.establishmentTableCell}`}>{item.teamNumber}</div>
 
 						<div className={`${styles.actions} ${styles.establishmentTableCell}`}>
