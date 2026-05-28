@@ -188,18 +188,18 @@ public class EstablishmentService {
     }
 
     public void deleteEstablishment(UUID id, String emailUser) {
-        Establishment establishment = establishmentRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(
-                        "ESTABLISHMENT_NOT_FOUND",
-                        "Estabelecimento não encontrado.",
-                        HttpStatus.NOT_FOUND)
-                );
+        Establishment establishment = establishmentRepository.findByIdWithOwner(id)
+            .orElseThrow(() -> new BusinessException(
+                    "ESTABLISHMENT_NOT_FOUND",
+                    "Estabelecimento não encontrado.",
+                    HttpStatus.NOT_FOUND)
+            );
 
         if (!establishment.getOwner().getEmail().equals(emailUser)) {
             throw new BusinessException(
-                    "ACCESS_DENIED",
-                    "Você não tem permissão para excluir este estabelecimento.",
-                    HttpStatus.FORBIDDEN
+                "ACCESS_DENIED",
+                "Você não tem permissão para excluir este estabelecimento.",
+                HttpStatus.FORBIDDEN
             );
         }
         establishmentRepository.delete(establishment);

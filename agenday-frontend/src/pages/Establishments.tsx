@@ -16,6 +16,7 @@ import { SuccessAlert } from "../components/Alerts/SuccessAlert";
 import { createEstablishment, getImageUploadLink, prepareBodyData, uploadImage } from "../services/EstablishmentService";
 import { useContext, useState } from "react";
 import AuthContext from "../context/AuthContext";
+import { agenday_api } from "../services/Api";
 
 export function Establishments() {
 	const [isBlackWindowOpen, setIsBlackWindowOpen] = useState(false);
@@ -78,9 +79,28 @@ export function Establishments() {
 		}
 	};
 
+	const remove = async (id: string) => {
+    try {
+        // Certifique-se de colocar a barra '/' se a sua instância do agenday_api não terminar com ela
+        const response = await agenday_api.delete(`establishment/${id}`, {
+            headers: { 
+                'Authorization': `Bearer ${user?.accessToken}` 
+            }
+        });
+        
+        console.log("Sucesso ao deletar:", response);
+        setUpdateTable(prev => prev + 1);
+    } catch (error) {
+        console.error("Erro capturado na rota de remoção:", error);
+    }
+};
+
 	const handleRowClick = (establishmentId:string, action:string) => {
+
+		if (action === 'delete') { remove(establishmentId);}
+
 		console.log(establishmentId);
-		console.log(action);
+		console.log('aki:',action);
 	}
 
 	const showErrorMessage = (title: string, message: string) => {
