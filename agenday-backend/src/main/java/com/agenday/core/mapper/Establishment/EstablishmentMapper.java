@@ -1,5 +1,6 @@
 package com.agenday.core.mapper.Establishment;
 
+import com.agenday.core.application.dto.Address.AddressResponse;
 import com.agenday.core.application.dto.Establishment.EstablishmentRequest;
 import com.agenday.core.application.dto.Establishment.EstablishmentResponse;
 import com.agenday.core.domain.model.Establishment.Establishment;
@@ -17,22 +18,33 @@ public class EstablishmentMapper {
     public static EstablishmentResponse toDTO(Establishment establishment){
 
         User userOwner = establishment.getOwner();
+        AddressResponse addressDTO = null;
 
+        if (establishment.getAddress() != null) {
+            addressDTO = new AddressResponse(
+                establishment.getAddress().getCep(),
+                establishment.getAddress().getState(),
+                establishment.getAddress().getCity(),
+                establishment.getAddress().getStreet(),
+                establishment.getAddress().getNumber(),
+                establishment.getAddress().getNeighborhood()
+            );
+        }
         return new EstablishmentResponse(
                 establishment.getId(),
                 establishment.getName(),
+                establishment.getImageUrl(),
                 establishment.getSlogan(),
                 userOwner.getFullName(),
                 establishment.getTemplate(),
-                establishment.getPalette()
+                establishment.getPalette(),
+                addressDTO
         );
 
     }
 
     public static Establishment toEntity(EstablishmentRequest establishmentRequest){
-
         Establishment newEstablishment = new Establishment();
-
         newEstablishment.setName(establishmentRequest.name());
         newEstablishment.setSlogan(establishmentRequest.slogan());
         newEstablishment.setAddress(AddressMapper.toEntity(establishmentRequest.addressRequest()));
@@ -40,7 +52,6 @@ public class EstablishmentMapper {
         newEstablishment.setNumberPhone(establishmentRequest.numberPhone());
         newEstablishment.setTemplate(establishmentRequest.template());
         newEstablishment.setPalette(establishmentRequest.palette());
-
         return newEstablishment;
     }
 

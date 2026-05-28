@@ -12,7 +12,11 @@ import java.util.UUID;
 public interface EstablishmentRepository extends JpaRepository<Establishment, UUID> {
     @Query("SELECT e FROM Establishment e JOIN FETCH e.owner WHERE e.id = :id")
     Optional<Establishment> findByIdWithOwner(@Param("id") UUID id);
+
     long countByOwnerId(UUID ownerId);
+
+    @Query("SELECT e FROM Establishment e JOIN FETCH e.owner WHERE e.owner.email = :email")
     List<Establishment> findByOwnerEmail(String email);
+
     boolean existsByNumberPhone(String numberPhone);
 }
