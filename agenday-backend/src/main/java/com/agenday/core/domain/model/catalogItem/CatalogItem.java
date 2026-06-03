@@ -1,4 +1,4 @@
-package com.agenday.core.domain.model.catalogItems;
+package com.agenday.core.domain.model.catalogItem;
 
 import com.agenday.common.domain.model.BaseEntity;
 import com.agenday.core.domain.model.Establishment.Establishment;
