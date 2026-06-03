@@ -47,34 +47,6 @@ public class MinioStorageService {
                     .build()
         );
         return internalUrl;
-        //return rewriteToPublicUrl(internalUrl);
     }
 
-
-    /**
-     * Reescreve o host+scheme da URL gerada internamente pelo MinioClient
-     * para o domínio público configurado em minio.public-base-url.
-     *
-     * Exemplo:
-     *   internalUrl  = http://minio:9000/agenday-images/foto.jpg?X-Amz-...
-     *   publicBase   = https://storage.agenday.com
-     *   resultado    = https://storage.agenday.com/agenday-images/foto.jpg?X-Amz-...
-     */
-//    private String rewriteToPublicUrl(String internalUrl) {
-//        try {
-//            URI internal = URI.create(internalUrl);
-//            URI publicBase = URI.create(minioConfig.getPublicBaseUrl());
-//
-//            URI rewritten = new URI(
-//                    publicBase.getScheme(),
-//                    publicBase.getAuthority(),
-//                    internal.getPath(),
-//                    internal.getQuery(),
-//                    null
-//            );
-//            return rewritten.toString();
-//        } catch (Exception e) {
-//            return internalUrl;
-//        }
-//    }
 }
