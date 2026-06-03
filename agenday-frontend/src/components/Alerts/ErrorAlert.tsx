@@ -3,12 +3,13 @@ import { CircleX } from "lucide-react";
 import styles from './styles/errorAlert.module.css';
 
 type AlertProps = {	
+	isVisible?: boolean;
 	title: string;
 	message: string;
 }
 
-export function ErrorAlert({ title, message }: AlertProps) {
-	return (
+export function ErrorAlert({ isVisible = true, title, message }: AlertProps) {
+	return isVisible ? (
 		<div role="alert" className={styles.ErrorAlert}>
 			<CircleX className={styles.ErrorIcon}/>
 			<p className={styles.ErrorText}>
@@ -16,5 +17,5 @@ export function ErrorAlert({ title, message }: AlertProps) {
 				<span className={styles.ErrorMessage}>{message}</span>
 			</p> 
 		</div>
-	);
+	) : null;
 }
