@@ -66,6 +66,10 @@
     --combo-input-foreground: #333333;
     --combo-input-placeholder: #999999;
     --combo-error: #e74c3c;
+	--combo-icon-color: #999999;
+	--combo-options-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	--combo-item-background_1: #ffffff;
+	--combo-item-background_2: #f5f5f5;
 
 
 
@@ -304,30 +308,30 @@
 	--ball-name-color: #ffffff;
 
 
-	/* ======= welcome ======= */
-	--welcome-card-background-color: #ffffff;
-	--welcome-card-shadow-color: rgba(0, 0, 0, 0.1);
-	--welcome-banner-background-color: rgba(241, 245, 249, 0.9);
-	--welcome-banner-gradient-color: rgba(96, 115, 131, 0.08);
-	--welcome-title-color: #135184;
-	--welcome-close-button-color: #94a3b8;
-	--welcome-close-button-hover-background-color: #f1f5f9;
-	--welcome-close-button-hover-color: #0f172a;
-	--welcome-content-title-color: #135184;
-	--welcome-content-description-color: #475569;
-	--welcome-button-client-background-color: rgba(241, 245, 249, 0.9);
-	--welcome-button-client-hover-background-color: #e2e8f0;
-	--welcome-button-client-color: #334155;
-	--welcome-button-client-hover-color: #0f172a;
-	--welcome-button-professional-background-color: #135184;
-	--welcome-button-professional-hover-background-color: #0f4169;
-	--welcome-button-professional-color: #ffffff;
-	--welcome-button-professional-hover-color: #ffffff;
-	--welcome-footer-border-color: rgba(241, 245, 249, 0.9);
-	--welcome-checkbox-border-color: #94a3b8;
-	--welcome-checkbox-checked-color: #135184;
-	--welcome-checkbox-label-color: #64748b;
-	--welcome-checkbox-label-hover-color: #334155;
+	/* ======= onboarding ======= */
+	--onboarding-card-background-color: #ffffff;
+	--onboarding-card-shadow-color: rgba(0, 0, 0, 0.1);
+	--onboarding-banner-background-color: rgba(241, 245, 249, 0.9);
+	--onboarding-banner-gradient-color: rgba(96, 115, 131, 0.08);
+	--onboarding-title-color: #135184;
+	--onboarding-close-button-color: #94a3b8;
+	--onboarding-close-button-hover-background-color: #f1f5f9;
+	--onboarding-close-button-hover-color: #0f172a;
+	--onboarding-content-title-color: #135184;
+	--onboarding-content-description-color: #475569;
+	--onboarding-button-client-background-color: rgba(241, 245, 249, 0.9);
+	--onboarding-button-client-hover-background-color: #e2e8f0;
+	--onboarding-button-client-color: #334155;
+	--onboarding-button-client-hover-color: #0f172a;
+	--onboarding-button-professional-background-color: #135184;
+	--onboarding-button-professional-hover-background-color: #0f4169;
+	--onboarding-button-professional-color: #ffffff;
+	--onboarding-button-professional-hover-color: #ffffff;
+	--onboarding-footer-border-color: rgba(241, 245, 249, 0.9);
+	--onboarding-checkbox-border-color: #94a3b8;
+	--onboarding-checkbox-checked-color: #135184;
+	--onboarding-checkbox-label-color: #64748b;
+	--onboarding-checkbox-label-hover-color: #334155;
 
 
 	/* ======= card chose plan  ======= */
@@ -356,7 +360,35 @@
 	--chose-plan-swiper-navigation-color: #135184;
 	--chose-plan-swiper-pagination-active-background-color: #135184;
 
+	/* ====== delete modal ====== */
+	--delete-modal-background-color: #ffffff;
+  	--delete-modal-overlay-background-color: rgba(0, 0, 0, 0.4);
+  	--delete-modal-text-color-primary: #333333;
+	--delete-modal-text-color-secondary: #7f8c8d;
+	--delete-modal-text-color-danger: #ff4d4d;
+	--delete-modal-border-color-light: #f5f5f5;
+	--delete-modal-border-color-input: #cccccc;
+	--delete-modal-captcha-box-background: #f1f2f6;
+	--delete-modal-captcha-text-background: #ffcccc;
+	--delete-modal-captcha-text-color: #ff4d4d;
+	--delete-modal-button-cancel-background: #ffffff;
+	--delete-modal-button-cancel-text-color: #95a5a6;
+	--delete-modal-button-cancel-border-color: #cccccc;
+	--delete-modal-button-confirm-background-active: #ff8080;
+	--delete-modal-button-confirm-background-disabled: #ffb3b3;
+	--delete-modal-button-confirm-text-color: #ffffff;
+	--delete-modal-border-radius-standard: 8px;
+	--delete-modal-border-radius-small: 4px;
+	--delete-modal-loading-overlay-background-color:  rgba(96, 115, 131, 0.1);
+	--delete-modal-loading-text-color: #ff4d4d;
 
+
+	/* ==== bradingCard ==== */
+	--branding-primary: #135184;
+	--branding-secondary: #475569;
+	--branding-success: #27b54a;
+	--branding-border: #e2e8f0;
+	--branding-surface: #ffffff;
 }
 
 
