@@ -18,6 +18,7 @@ import com.agenday.iam.infrastructure.Store.MinioStorageService;
 import com.agenday.iam.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -112,8 +113,9 @@ public class EstablishmentService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public EstablishmentResponse updateEstablishment(UUID id, String emailUser, EstablishmentRequest request) {
-        Establishment establishment = establishmentRepository.findById(id)
+        Establishment establishment = establishmentRepository.findByIdWithOwner(id)
                 .orElseThrow(() -> new BusinessException(
                         "ESTABLISHMENT_NOT_FOUND",
                         "Estabelecimento não encontrado.",
