@@ -15,9 +15,9 @@ export function FormStep({ forms, onFinished, title, type, close, isLoading, isV
     const isFirstStep = currentStep === 0;
     const isLastStep = currentStep === totalSteps - 1;
 
-    function handleNext() {  if (isLastStep || !currentValid) return;  setCurrentStep(prev => prev + 1); }
-    function handlePrevious() {  if (isFirstStep) return;  setCurrentStep(prev => prev - 1); }
-    function handleFinish() {  if (!currentValid) return; onFinished(formsData); }
+    function handleNext() {  if (isLastStep || !currentValid){ return;}  setCurrentStep(prev => prev + 1); }
+    function handlePrevious() {  if (isFirstStep){ return; }  setCurrentStep(prev => prev - 1); }
+    function handleFinish() {  if (!currentValid){ return; }onFinished(formsData); }
 
     return isVisible ? (
         <div className={styles.multistepForm}>
