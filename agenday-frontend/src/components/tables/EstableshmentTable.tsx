@@ -7,7 +7,7 @@ import { agenday_api } from "../../services/Api";
 import AuthContext from "../../context/AuthContext";
 import { useState } from "react";
 
-export function EstablishmentTable({updateTable, onClick }: { updateTable: number; onClick?: (index: string, action: string) => void }) {
+export function EstablishmentTable({updateTable, onClick }: { updateTable: number; onClick?: (data: any, action: string) => void }) {
 	const {user} = useContext(AuthContext);
 	const [establishments, setEstablishments] = useState<any[]>([]);
 	const image_url = import.meta.env.VITE_STORAGE_BASE_URL+/agenday-images/;
@@ -31,7 +31,7 @@ export function EstablishmentTable({updateTable, onClick }: { updateTable: numbe
 
 			<ul className={styles.establishmentTableBody}>
 				{establishments.map((item,_) => (
-					<li className={styles.establishmentTableRow}  onClick={() => onClick?.(item.id, 'view')} key={item.id}>
+					<li className={styles.establishmentTableRow}  onClick={() => onClick?.(item, 'view')} key={item.id}>
 						<div className={styles.establishmentName}>
 							<div className={styles.establishmentIcon}>
 								{ item.imageUrl ? ( <img src={`${image_url}/${item.imageUrl}`}/>) : ( <BallName name={item.name} /> )}
@@ -47,8 +47,8 @@ export function EstablishmentTable({updateTable, onClick }: { updateTable: numbe
 						<div className={`${styles.team} ${styles.establishmentTableCell}`}>no-info</div>
 
 						<div className={`${styles.actions} ${styles.establishmentTableCell}`}>
-							<button className={styles.actionButtonEdit} title="Editar"    onClick={(e) => { e.stopPropagation(); onClick?.(item.id, 'edit')}}><FilePenLine /></button>
-							<button className={styles.actionButtonDelete} title="Excluir" onClick={(e) => { e.stopPropagation(); onClick?.(item.id, 'delete')}}><Trash2 /></button>
+							<button className={styles.actionButtonEdit} title="Editar"    onClick={(e) => { e.stopPropagation(); onClick?.(item, 'edit')}}><FilePenLine /></button>
+							<button className={styles.actionButtonDelete} title="Excluir" onClick={(e) => { e.stopPropagation(); onClick?.(item, 'delete')}}><Trash2 /></button>
 						</div>
 					</li>
 				))}
