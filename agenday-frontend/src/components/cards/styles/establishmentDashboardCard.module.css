@@ -2,6 +2,8 @@
 .establishmentDashboardCard {
     display: flex;
     flex-direction: column;
+	height: 700px;
+	overflow: auto;
     gap: 1rem;
     padding: 1rem;
     background-color: var(--establishment-dashboard-card-background);
@@ -11,9 +13,9 @@
 	.establishmentDashboardCardTitle {
     	color: var(--establishment-dashboard-card-title-color);
 		font-family: 'Poppins', sans-serif;
-		font-size: .8rem;
-		font-weight: 600;
-		padding: 10px 0;
+		font-size: .75rem;
+		font-weight: 500;
+		padding: 5px 0;
 		border-bottom: 1px solid var(--establishment-dashboard-card-border-color);
 		text-transform: uppercase;
 	}
@@ -21,28 +23,27 @@
 	.establishmentDashboardCardInfo {
 		display: flex;
 		flex-direction: row;
-		gap: 10px;
+		gap: 5px;
 	}
 		.establishmentDashboardCardInfoItem {
 			width: 50%;
 			background-color: var(--establishment-dashboard-card-info-background);
 			display: flex;
 			flex-direction: column;
-			align-items: center;
 			justify-content: center;
-			padding: 20px 0;
-			border-radius: 20px;
+			padding: 10px;
+			border-radius: 10px;
 		}
 			.establishmentDashboardCardInfoItemLabel {
 				color: var(--establishment-dashboard-card-info-item-label-color);
 				font-family: 'Poppins', sans-serif;
-				font-size: .8rem;
+				font-size: .73rem;
 				font-weight: 600;
 			}
 			.establishmentDashboardCardInfoItemValue {
 				color: var(--establishment-dashboard-card-info-item-value-color);
 				font-family: 'Poppins', sans-serif;
-				font-size: 1.2rem;
+				font-size: .95rem;
 				font-weight: 600;
 			}
 	.establishmentDashboardCardTopClients {
@@ -51,4 +52,8 @@
 		justify-content: space-between;
 		flex-wrap: wrap;
 		gap: 10px;
+	}
+
+	.bestServices {
+		height: 300px;
 	}

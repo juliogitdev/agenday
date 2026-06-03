@@ -2,13 +2,14 @@
 
 import type { EstablishmenteDashboardCardType } from "../../types/Estableshment";
 import { BestServicesChart } from "../graphics/BestServicesChart";
+import { BrandingCard } from "./BrandingCard";
 import { CustomerSinceCard } from "./CustomerSinceCard";
 import style from "./styles/establishmentDashboardCard.module.css";
 
-export function EstablishmentDashboardCard({ data }: { data: EstablishmenteDashboardCardType }) {
-    return (
+export function EstablishmentDashboardCard({ data }: { data: EstablishmenteDashboardCardType | null }) {
+    return data ? (
         <section className={style.establishmentDashboardCard}>
-            <h1 className={style.establishmentDashboardCardTitle}>{data.name}</h1>
+            <h1 className={style.establishmentDashboardCardTitle}>Informações da unidade</h1>
 			
 			<div className={style.establishmentDashboardCardInfo}>
 				<div className={style.establishmentDashboardCardInfoItem}>
@@ -31,7 +32,19 @@ export function EstablishmentDashboardCard({ data }: { data: EstablishmenteDashb
 			</ul>
 	
 			<h2 className={style.establishmentDashboardCardTitle}>Serviços mais rentáveis (unidade selecionada)</h2>
-			<BestServicesChart services={data.bestServices} />
+			<div className={style.bestServices}>
+				<BestServicesChart services={data.bestServices} />
+			</div>
+			<BrandingCard
+				id={data.id}
+				palette={data.palette}
+				name={data.name}
+				slogan={data.slogan}
+				slug={data.slug}
+				imageUrl={data.logo}
+				templateId={data.template}
+				onCustomize={data.onCustomize}
+			/>
         </section>
-    );
+    ) : null;
 }

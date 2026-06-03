@@ -1,3 +1,4 @@
+import type { ComboBoxOption } from "./ComboBox";
 import type { ColorPickerData, InputCallback, UploadLogoValue } from "./Inputs";
 
 
@@ -26,13 +27,13 @@ export type EstablishmenteDashboardCardType = {
 	slogan: string;
 	slug: string;
 	logo: string;
-	pallet: string;
+	palette: string;
 	template: number;
 	mensalAmount: number;
 	servicesPerWeek: number;
 	topClientes:ClientEstableshimentCardType[];
 	bestServices: BestServicesEstablishmentCardType[];
-
+	onCustomize: (id: string) => void;
 };
 
 export interface EstablishmentData {
@@ -53,11 +54,32 @@ export interface EstablishmentData {
 }
 
 
+export interface EstablishmentApiData {
+	id: string;
+	name: string;
+	imageUrl: string;
+	slogan: string;
+	nameOwner: string;
+	template: number;
+	palette: string | { text_color: string; back_color: string; main_color: string };
+	address?: {
+		cep: string;
+		state: string;
+		city: string;
+		street: string;
+		number: string;
+		neighborhood: string;
+	};
+	[key: string]: any; 
+}
+
+
+
 // tipos para formularios
 export type EstablishmentForm_basic = {
     name: InputCallback;
     numberPhone: InputCallback;
-    category: InputCallback;
+    category: InputCallback<ComboBoxOption>;
 }
 
 export type EstablishmentForm_adress = {
