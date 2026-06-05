@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class CatalogItemService {
 
@@ -72,4 +74,35 @@ public class CatalogItemService {
         );
     }
 
+    @Transactional
+    public void deleteCatalogItem(String email, UUID idCatalogItem){
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new BusinessException(
+                "USER_NOT_FOUND",
+                "Usuário não encontrado",
+                HttpStatus.NOT_FOUND
+        ));
+
+        CatalogItem catalog = catalogItemRepository.findById(idCatalogItem).orElseThrow(() -> new BusinessException(
+                "CATALOG_NOT_FOUND",
+                "Serviço não encontrado",
+                HttpStatus.NOT_FOUND
+        ));
+
+        Establishment establishment = establishmentRepository.findById(catalog.getEstablishment().getId())
+                .orElseThrow(() -> new BusinessException(
+                        "ESTABLISHMENT_NOT_FOUND", // Corrigido o digito extra 'E' no final de ESTABLISHMENT
+                        "Estabelecimento não encontrado",
+                        HttpStatus.NOT_FOUND
+        ));
+
+        if(!establishment.getOwner().equals(user)){
+            throw new BusinessException(
+                    "ACCESS_DENIED",
+                    "Você não tem acesso para deletar",
+                    HttpStatus.FORBIDDEN
+            );
+        }
+
+        catalog.setIsActive(false);
+    }
 }

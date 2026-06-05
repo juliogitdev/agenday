@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("api/v1/catalogItem")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -32,5 +34,13 @@ public class CatalogItemController {
         String email = authentication.getName();
         return ResponseEntity.status(201).body(catalogItemService.createCatalogItem(email, request));
 
+    }
+
+    @DeleteMapping("/delete/{catalogItemId}")
+    public ResponseEntity<Void> deleteCatalog(Authentication authentication, @PathVariable UUID catalogItemId) {
+        String email = authentication.getName();
+        catalogItemService.deleteCatalogItem(email, catalogItemId);
+
+        return ResponseEntity.noContent().build();
     }
 }
