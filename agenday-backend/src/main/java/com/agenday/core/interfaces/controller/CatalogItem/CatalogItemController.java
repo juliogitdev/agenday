@@ -2,6 +2,7 @@ package com.agenday.core.interfaces.controller.CatalogItem;
 
 import com.agenday.core.application.dto.CatalogItem.CatalogItemRequest;
 import com.agenday.core.application.dto.CatalogItem.CatalogItemResponse;
+import com.agenday.core.application.dto.CatalogItem.CatalogItemUpdateRequest;
 import com.agenday.core.application.service.CatalogItem.CatalogItemService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -42,5 +44,34 @@ public class CatalogItemController {
         catalogItemService.deleteCatalogItem(email, catalogItemId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/update/{catalogItemId}")
+    public ResponseEntity<CatalogItemResponse> updateCatalogItem(
+            @PathVariable UUID catalogItemId,
+            @RequestBody @Valid CatalogItemUpdateRequest request,
+            Authentication authentication
+    )
+    {
+
+        String email = authentication.getName();
+
+        return ResponseEntity.status(200).body(catalogItemService.updateCatalogItem(
+                email,
+                request,
+                catalogItemId
+        ));
+
+    }
+
+    @GetMapping("/establishment/{establishmentId}")
+    public ResponseEntity<List<CatalogItemResponse>> listCatalogItem(
+            @PathVariable UUID establishmentId,
+            Authentication authentication
+    ){
+        String email = authentication.getName();
+
+        return ResponseEntity.status(200).body(
+                catalogItemService.listByEstablishment(email, establishmentId));
     }
 }

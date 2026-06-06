@@ -3,6 +3,7 @@ package com.agenday.core.application.service.CatalogItem;
 import com.agenday.common.exception.BusinessException;
 import com.agenday.core.application.dto.CatalogItem.CatalogItemRequest;
 import com.agenday.core.application.dto.CatalogItem.CatalogItemResponse;
+import com.agenday.core.application.dto.CatalogItem.CatalogItemUpdateRequest;
 import com.agenday.core.domain.model.Establishment.Establishment;
 import com.agenday.core.domain.model.Professional.Professional;
 import com.agenday.core.domain.model.catalogItem.CatalogItem;
@@ -16,7 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CatalogItemService {
@@ -88,12 +91,7 @@ public class CatalogItemService {
                 HttpStatus.NOT_FOUND
         ));
 
-        Establishment establishment = establishmentRepository.findById(catalog.getEstablishment().getId())
-                .orElseThrow(() -> new BusinessException(
-                        "ESTABLISHMENT_NOT_FOUND", // Corrigido o digito extra 'E' no final de ESTABLISHMENT
-                        "Estabelecimento não encontrado",
-                        HttpStatus.NOT_FOUND
-        ));
+        Establishment establishment = catalog.getEstablishment();
 
         if(!establishment.getOwner().equals(user)){
             throw new BusinessException(
@@ -104,5 +102,65 @@ public class CatalogItemService {
         }
 
         catalog.setIsActive(false);
+    }
+
+    @Transactional
+    public CatalogItemResponse updateCatalogItem(String email, CatalogItemUpdateRequest request, UUID catalogItemID){
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new BusinessException(
+                "USER_NOT_FOUND",
+                "Usuário não encontrado",
+                HttpStatus.NOT_FOUND
+        ));
+
+        CatalogItem catalog = catalogItemRepository.findById(catalogItemID)
+                .orElseThrow(() -> new BusinessException(
+                   "CATALOG_NOT_FOUND",
+                   "Serviço não encontrado",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        Establishment establishment = catalog.getEstablishment();
+
+        if(!establishment.getOwner().equals(user)){
+            throw new BusinessException(
+                    "ACCESS_DENIED",
+                    "Você não tem acesso para editar",
+                    HttpStatus.FORBIDDEN
+            );
+        }
+
+        catalog = CatalogItemMapper.updateEntity(catalog, request);
+
+        return CatalogItemMapper.toDTO(catalog);
+
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<CatalogItemResponse> listByEstablishment(String email, UUID establishmentId){
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new BusinessException(
+                "USER_NOT_FOUND",
+                "Usuário não encontrado",
+                HttpStatus.NOT_FOUND
+        ));
+
+        Establishment establishment =  establishmentRepository.findById(establishmentId).orElseThrow(() -> new BusinessException(
+                "ESTABLISHMENT_NOT_FOUND",
+                "Estabelecimento não encontrado",
+                HttpStatus.NOT_FOUND
+        ));
+
+        if(!establishment.getOwner().equals(user)){
+            throw new BusinessException(
+                    "ACCESS_DENIED",
+                    "Você não tem acesso para acessar esse estabelecimento",
+                    HttpStatus.FORBIDDEN
+            );
+        };
+
+        return catalogItemRepository.findByEstablishmentIdAndIsActiveTrue(establishmentId)
+                .stream()
+                .map(CatalogItemMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }
