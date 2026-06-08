@@ -18,5 +18,7 @@ public interface EstablishmentRepository extends JpaRepository<Establishment, UU
     @Query("SELECT e FROM Establishment e JOIN FETCH e.owner WHERE e.owner.email = :email")
     List<Establishment> findByOwnerEmail(String email);
 
+    List<Establishment>
+
     boolean existsByNumberPhone(String numberPhone);
 }
