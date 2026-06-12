@@ -194,7 +194,7 @@ public class EstablishmentService {
 
 
     public List<EstablishmentSummaryResponse> getEstablishmentsByProfessionalSummary(String emailUser) {
-        return establishmentRepository.findByOwnerEmail(emailUser)
+        return establishmentRepository.findByOwnerEmailAndIsActiveTrue(emailUser)
                 .stream()
                 .map(EstablishmentSummaryMapper::toDTO)
                 .collect(Collectors.toList());

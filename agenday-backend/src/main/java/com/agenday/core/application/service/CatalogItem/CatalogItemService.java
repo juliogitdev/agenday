@@ -144,7 +144,7 @@ public class CatalogItemService {
                 HttpStatus.NOT_FOUND
         ));
 
-        Establishment establishment =  establishmentRepository.findById(establishmentId).orElseThrow(() -> new BusinessException(
+        Establishment establishment =  establishmentRepository.findByIdAndIsActiveTrue(establishmentId).orElseThrow(() -> new BusinessException(
                 "ESTABLISHMENT_NOT_FOUND",
                 "Estabelecimento não encontrado",
                 HttpStatus.NOT_FOUND

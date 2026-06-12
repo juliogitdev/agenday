@@ -23,4 +23,5 @@ public interface EstablishmentRepository extends JpaRepository<Establishment, UU
     boolean existsByNumberPhone(String numberPhone);
 
     Optional<Establishment> findByIdAndIsActiveTrue(UUID id);
+
 }
