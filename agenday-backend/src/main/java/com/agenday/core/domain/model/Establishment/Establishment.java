@@ -1,6 +1,7 @@
 package com.agenday.core.domain.model.Establishment;
 
 import com.agenday.common.domain.model.BaseEntity;
+import com.agenday.core.domain.enums.EstablishmentCategory;
 import com.agenday.core.domain.model.Address.Address;
 import com.agenday.iam.domain.model.User;
 import jakarta.persistence.*;
@@ -35,6 +36,10 @@ public class Establishment extends BaseEntity {
 
     @Column(name = "phone", unique = true, nullable = false)
     private String numberPhone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private EstablishmentCategory category;
 
     @Column(name = "image_url") private String imageUrl;
     @Embedded private Address address;

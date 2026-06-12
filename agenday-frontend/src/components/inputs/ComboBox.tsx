@@ -1,55 +1,45 @@
 
-import { useState } from 'react';
+
 import styles from './styles/combobox.module.css';
+import type { InputProps } from '../../types/Inputs';
+import { ArrowDown, ArrowUp } from 'lucide-react';
+import { useState } from 'react';
+import type { ComboBoxOption, ComboBoxOptionItem } from '../../types/ComboBox';
 
-type ComboOption = {
-	placeholder?: string;
-	label: string;
-	value: string;
-};
+export function ComboBox({onChangeField, label, initialValue}:InputProps<ComboBoxOption>){
+	const [showOption, setShowOption] = useState(false);
+	const [selectedLabel, setSelectedLabel] = useState(initialValue.value?.selectedLabel || 'Selecione uma opção');
 
-type ComboBoxProps = {
-	label: string;
-	value: string;
-	options: ComboOption[];
-	placeholder?: string;
-	required?: boolean;
-	onChange: (
-		value: string,
-		isValid: boolean
-	) => void;
-};
+	const updateValues = (option: ComboBoxOptionItem) => {		
+		onChangeField?.({
+			value: {
+				...initialValue,
+				selectedLabel: option.label,
+				selectedValue: option.value
+			},
+			errorMessage: null,
+			isValid: true
+		});
 
-export function ComboBox({ 
-			label, value, options, 
-			placeholder = "Selecione uma opção", required = false, onChange 
-		}: ComboBoxProps) 
-{
-
-	const [error, setError] = useState("");
-	function validate(value: string) {
-		if (required && !value) { setError("Campo obrigatório"); return false; }
-		setError("");
-		return true;
-	}
-
+		setSelectedLabel(option.label)
+		setShowOption(false);
+	};
 	return (
 		<div className={styles.comboBox}>
 			<label className={styles.comboLabel}> {label}</label>
-			<select
-				value={value}
-				className={`${styles.comboField} ${error ? styles.errorBorder : ""}`}
-				onChange={(e) => {
-					const newValue = e.target.value;
-					const isValid = validate(newValue);
-					onChange(newValue, isValid);
-				}}>
-				<option value="">{placeholder}</option>
-				{options.map(option => (
-					<option key={option.value} value={option.value}> {option.label}</option>
-				))}
-			</select>
-			<span className={styles.comboError}> {error}</span>
+			<div className={styles.comboField} onClick={() => setShowOption(!showOption)}>
+				<span className={styles.selectedOption}>{selectedLabel}</span>
+				<button className={styles.comboButtonIcon} type="button">
+					{showOption ? <ArrowUp /> : <ArrowDown />}
+				</button>
+			</div>
+			{ showOption && (
+				<ul className={styles.comboBoxItemsContainer}>
+					{initialValue?.value.options?.map((option:ComboBoxOptionItem) => (
+						<li className={styles.comboItem} key={option.value} onClick={() => updateValues(option)}>{option.label}</li>
+					))}
+				</ul>
+			)}
 		</div>
 	);
 }

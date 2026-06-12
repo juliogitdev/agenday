@@ -3,11 +3,31 @@ import React from "react";
 import type { UserLogged, UserLogin, UserSignup } from "../types/User";
 import AuthContext from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
+import axios, { type AxiosInstance } from "axios";
 
 export function AuthProvider({children}: {children: React.ReactNode}) {
 	const [user, setUser] = React.useState<UserLogged | null>(null);
 	const [authReady, setAuthReady] = React.useState(false);
 	const [loginType, setLoginType] = React.useState<string>('email');
+    
+    const [api, setApi] = React.useState<AxiosInstance>(() => 
+        axios.create({
+            baseURL: import.meta.env.VITE_API_URL,
+            withCredentials: true,
+            headers: { 'Content-Type': 'application/json' }
+        })
+    );
+
+    const createAxioInstance = (accessToken:string):AxiosInstance => {
+        return axios.create({
+            baseURL: import.meta.env.VITE_API_URL,
+            withCredentials: true,
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}` // <-- O token entra aqui!
+            }
+        });
+    }
 
 	const login = async (userData: UserLogin, loginType: string): Promise<number> => {
 		const API_URL = import.meta.env.VITE_API_URL;
@@ -31,6 +51,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 			if (response.ok && response.status === 200 ) {
 				const data = await response.json();
 				setUser({ accessToken: data.accessToken, type: data.type});
+                setApi(()=>createAxioInstance(data.accessToken));
 			}
  
 			return response.status;
@@ -51,6 +72,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 			if (response.ok && response.status === 200 ) {
 				const data = await response.json();
 				setUser({ accessToken: data.accessToken, type: data.type});
+                setApi(()=>createAxioInstance(data.accessToken));
 			} 
 			return response.status;
 		}
@@ -102,6 +124,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 			if (response.ok && response.status === 200 ) {
 				const data = await response.json();
 				setUser({ accessToken: data.accessToken, type: data.type});
+                setApi(()=>createAxioInstance(data.accessToken));
 			} 
 			return response.status;
 		}
@@ -117,8 +140,9 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
         	if (!response.ok) { setUser(null); return false;}
         	const data = await response.json();
 
-			console.log('refresh-data', jwtDecode(data.accessToken || ""));
+			
         	setUser(prev => ({ ...prev, accessToken: data.accessToken, type: data.type}));
+            setApi(()=>createAxioInstance(data.accessToken));
         	return true;
     	} catch (error) { setUser(null); return false;}
 	};
@@ -134,9 +158,17 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 
 			if (response.ok && response.status === 200) {
 				setUser(null);
+                setApi( 
+                    axios.create({
+                        baseURL: import.meta.env.VITE_API_URL,
+                        withCredentials: true,
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                )
 				return 200;
 			}
 		}
+
 		catch { return 0; }
 		return 500;
 	};
@@ -159,6 +191,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 			 setUser,
 			 loginType, 
 			 login, 
+             api,
 			 logout, 
 			 signup, 
 			 refreshSession, 

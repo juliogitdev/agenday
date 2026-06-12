@@ -81,6 +81,11 @@ export const MESSAGES = {
 	unknownError: {
 		title: "Erro inesperado",
 		message: "Não foi possível concluir a operação. Tente novamente"
+	},
+
+	imageUploadFail: {
+		title: "Falha no upload da imagem",
+		message: "Não foi possível fazer o upload da imagem. Tente novamente."
 	}
 };
 

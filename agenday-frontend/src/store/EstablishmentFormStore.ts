@@ -30,8 +30,15 @@ interface EstablishmentFormStateStoreType {
 const initialBasicData: EstablishmentForm_basic = {
 	name: { ...emptyInput },
 	numberPhone: { ...emptyInput },
-	category: { ...emptyInput },
-};
+	category: { 
+		value: {
+			selectedLabel: "",
+			selectedValue: "",
+			options: []
+		},
+		errorMessage: null,
+		isValid: false },
+	};
 
 const initialAdressData: EstablishmentForm_adress = {
 	cep: { ...emptyInput },

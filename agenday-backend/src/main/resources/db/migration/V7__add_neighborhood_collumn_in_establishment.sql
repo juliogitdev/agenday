@@ -1,1 +1,0 @@
-ALTER TABLE establishment ADD COLUMN neighborhood VARCHAR(255);

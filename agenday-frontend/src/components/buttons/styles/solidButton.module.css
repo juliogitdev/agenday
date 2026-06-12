@@ -1,5 +1,8 @@
 
 .solidButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 	width: 100%;
 	background-color: var(--solid-button-background);
 	border: 1px solid var(--solid-button-border-color);
@@ -11,6 +14,7 @@
 	font-family: "Poppins", sans-serif;
   	font-style: bold;
 	font-size: .8rem;
+    height: 44px;
 }
 
 	.solidButton:hover {
@@ -19,6 +23,9 @@
 		border-color: var(--solid-button-border-hover-color);
 	}
 
+    .solidButtonIcon {
+         animation: spin 1s linear infinite;
+    }
 
 .solidButton:disabled {
 	background-color: var(--solid-button-background);
@@ -26,4 +33,9 @@
 	color: var(--solid-button-foreground);
 	opacity: 0.6;
 	cursor: not-allowed;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }

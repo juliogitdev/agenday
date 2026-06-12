@@ -71,7 +71,7 @@ public class EstablishmentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEstablishment(@PathVariable UUID id, Authentication authentication) {
         String email = authentication.getName();
-        establishmentService.deleteEstablishment(id, email);
+        establishmentService.softDelete(id, email);
         return ResponseEntity.noContent().build();
     }
 }

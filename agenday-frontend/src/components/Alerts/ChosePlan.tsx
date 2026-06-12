@@ -1,12 +1,12 @@
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styles from './styles/choseplan.module.css';
 import type { PlanData } from '../cards/PlanCard';
-import { Loader, CheckCircle2, TriangleAlert } from 'lucide-react'; 
+import { CheckCircle2, Loader, TriangleAlert } from 'lucide-react'; 
 import PlanCard from '../cards/PlanCard';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
+import { Autoplay, EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -25,7 +25,7 @@ export function ChosePlan({onChose, isVisible}: {onChose: (planId: string | null
 		"Basic":  ["Agendamentos ilimitados", "Cadastro básico", "Dashboard financeiro", "Relatórios em PDF"]
 	};
 
-	const fetchPlans = async () => {
+	const fetchPlans = useCallback(async () => {
 		setIsLoading(true);
 		try {
 			const API_URL = import.meta.env.VITE_API_URL;
@@ -56,9 +56,9 @@ export function ChosePlan({onChose, isVisible}: {onChose: (planId: string | null
 			setIsLoading(true);
 			setAsErrorApiCommunication(true);
 		}	
-	};
+	}, []);
 
-	useEffect(() => { fetchPlans(); }, []);
+	useEffect(() => { fetchPlans(); }, [fetchPlans]);
 
 	return (
 		isVisible && (

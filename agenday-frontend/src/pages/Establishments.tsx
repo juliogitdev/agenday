@@ -1,8 +1,7 @@
 
 import { CirclePlus } from "lucide-react";
-import { Breadcrumb } from "../components/navigation/Breadcrumb";
 import { EstablishmentTable } from "../components/tables/EstableshmentTable";
-import { mock_establishmentDashboard } from "../mocks/establishmentDashboardMock";
+import { bestServices, topClientes } from "../mocks/establishmentDashboardMock";
 import { EstablishmentDashboardCard } from "../components/cards/EstablishmentDashboardCard";
 import { BlackWindow } from "../components/Ui/BlackWindow";
 import { FormStep } from "../components/Forms/FormStep";
@@ -13,21 +12,30 @@ import { EstablishmentFormAdress } from "../components/Forms/estableshimentForms
 import { ErrorAlert } from "../components/Alerts/ErrorAlert";
 import { isValidEstablishmentForm} from "../utils/ValidEstablishmentForm";
 import { SuccessAlert } from "../components/Alerts/SuccessAlert";
-import { createEstablishment, getImageUploadLink, prepareBodyData, uploadImage } from "../services/EstablishmentService";
+import { createEstablishment, fillEstablishmentForm, getImageUploadLink, prepareBodyData, updateEstablishment, uploadImage } from "../services/EstablishmentService";
 import { useContext, useState } from "react";
 import AuthContext from "../context/AuthContext";
-import { agenday_api } from "../services/Api";
+import { DeleteConfirmationModal } from "../components/Modal/DeleteConfirmationModal";
+import { ModalHook } from "../hooks/ModalHook";
+import { AlertHook } from "../hooks/AlertsHook";
+import { EstablishmentFormStore } from "../store/EstablishmentFormStore";
+import type { EstablishmenteDashboardCardType } from "../types/Estableshment";
+
 
 export function Establishments() {
-	const [isBlackWindowOpen, setIsBlackWindowOpen] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
-	const [asError, setAsError] = useState(false);
-	const [successMessage, setSuccessMessage] = useState("");
-	const [errorTitle, setErrorTitle] = useState("");
-	const [errorMessage, setErrorMessage] = useState("");
-	const [loadingStatus, setLoadingStatus] = useState("Por favor, aguarde...");
+	const [formMethod, setFormMethod] = useState<'create' | 'edit'>('create');
+	const [viewEstablishment, setViewEstablishment] = useState<EstablishmenteDashboardCardType | null>(null);
+	const { resetForm } = EstablishmentFormStore.getState();
+
+	const erroAlert    = AlertHook();
+	const successAlert = AlertHook();
+	const blackWindow  = ModalHook();
+	const formModal    = ModalHook();
+	const deleteModal  = ModalHook();
+	
+
 	const [updateTable, setUpdateTable] = useState(0);
-	const { user } = useContext(AuthContext);	
+	const { user, api } = useContext(AuthContext);	
 	
 	const forms = [
 		{ title: "Informações Básicas", name: "basicInfo", content: <BasicEstablishmentDataForm/> },
@@ -38,81 +46,165 @@ export function Establishments() {
 	const create = async (data: any) => {
 		const formIsValid = isValidEstablishmentForm(data); 
 		if (formIsValid !== true) {
-			showErrorMessage(formIsValid.title, formIsValid.message);
+			erroAlert.show("Erro","Por favor, preencha todos os campos obrigatórios", 3000);
 			return;
 		}
 
-		setIsLoading(true);    
-		setLoadingStatus('Criando Estabelecimento...');    
-		
-		const requestBody = prepareBodyData("default", data);
+		formModal.setLoading(true);
+		const requestBody  = prepareBodyData("default", data);
 		const createResult = await createEstablishment(user, requestBody);
-
-		if (createResult.statusCode === 200 || createResult.statusCode === 201) {
-			setLoadingStatus('Estabelecimento criado...');
-			const establishment = createResult.responseData;
-
+			
+		if (createResult.statusCode === 200 || createResult.statusCode === 201 ) {
+			const establishmentId = createResult.responseData.id;
 			const logoFile = data.visual?.image?.value.file;
-			if (logoFile instanceof File) {
-				setLoadingStatus('Gerando link de upload...');
-				const linkResult = await getImageUploadLink(user, establishment.id, logoFile.name);
 
-				if (linkResult.statusCode === 200 && linkResult.responseData) {
-					setLoadingStatus('Enviando logo...');
-					await uploadImage(linkResult.responseData.uploadUrl, logoFile);
+			if (logoFile instanceof File) {
+				const assignedUrl = await getImageUploadLink(user, establishmentId, logoFile.name);
+				if (assignedUrl.statusCode === 200 && assignedUrl.responseData) {
+					await uploadImage(assignedUrl.responseData.uploadUrl, logoFile);
+
+                    setTimeout(()=> {
+					    formModal.setLoading(false);
+					    formModal.hidden();
+					    blackWindow.hidden();
+					    setUpdateTable(prev => prev + 1);
+					    successAlert.show("Sucesso","Estabelecimento criado com sucesso", 3000);
+                    },3000);
+					return;
 				}
 			}
 
-			setIsLoading(false);
-			setSuccessMessage("Estabelecimento criado com sucesso");
-			setUpdateTable(prev => prev + 1);
-			setTimeout(() => {
-				setSuccessMessage("");
-				setIsBlackWindowOpen(false);
-			}, 3000);
+			formModal.setLoading(false);
+			formModal.hidden();
+			blackWindow.hidden();
+			erroAlert.show("Erro",`${createResult.responseData?.message || createResult.responseData?.error || "Erro desconhecido"}`, 5000);
+			return;
+		}
 
-		} else {
-			setIsLoading(false);
-			const backendError = createResult.responseData; 
-			const message = backendError?.message ?? "Não foi possível conectar ao servidor.";
-			showErrorMessage("Error", message);
+		formModal.setLoading(false);
+		formModal.hidden();
+		blackWindow.hidden();
+		erroAlert.show("Erro",`${createResult.responseData?.message || createResult.responseData?.error || "Erro desconhecido"}`, 5000);
+		return;
+	};
+
+	const remove = async () => {
+		deleteModal.setLoading(true);
+		let response;
+		console.log(deleteModal.data)
+		if (!deleteModal.data) {
+			deleteModal.setLoading(false);
+			deleteModal.hidden();
+			blackWindow.hidden();
+			erroAlert.show("Erro","Estabelecimento não encontrado", 3000);
+			return;
+		}
+
+    	try {
+        	response = await api.delete(`establishment/${deleteModal.data}`, {
+				headers: {
+					'Authorization': `Bearer ${user?.accessToken}`
+				}
+			});
+
+			if (response.status === 204 || response.status === 201 || response.status === 200) {
+				deleteModal.setLoading(false);
+				deleteModal.hidden();
+				blackWindow.hidden();
+				successAlert.show("Sucesso","Estabelecimento removido com sucesso", 3000);
+				setUpdateTable(prev => prev + 1);
+			}
+    	} catch (error) {
+			deleteModal.setLoading(false);
+			deleteModal.hidden();
+			blackWindow.hidden();
+			erroAlert.show("Erro",response?.data?.message || "Erro ao remover estabelecimento", 3000);
 		}
 	};
 
-	const remove = async (id: string) => {
-    try {
-        // Certifique-se de colocar a barra '/' se a sua instância do agenday_api não terminar com ela
-        const response = await agenday_api.delete(`establishment/${id}`, {
-            headers: { 
-                'Authorization': `Bearer ${user?.accessToken}` 
-            }
-        });
-        
-        console.log("Sucesso ao deletar:", response);
-        setUpdateTable(prev => prev + 1);
-    } catch (error) {
-        console.error("Erro capturado na rota de remoção:", error);
-    }
-};
+	const update = async (data:any) => {
+		const formIsValid = isValidEstablishmentForm(data);
+		const establishmentId = formModal.data?.id;
+		console.log(data)
 
-	const handleRowClick = (establishmentId:string, action:string) => {
+		if (formIsValid !== true) {
+			erroAlert.show("Erro","Por favor, preencha todos os campos obrigatórios", 3000);
+			return;
+		}
+		
+		formModal.setLoading(true);
+		const imageField = data.visual?.image?.value?.file;
+		const imageName = imageField instanceof File ? imageField.name: imageField;
+		const requestBody  = prepareBodyData(imageName, data);
 
-		if (action === 'delete') { remove(establishmentId);}
+		const updateResult = await updateEstablishment(user, establishmentId, requestBody);
 
-		console.log(establishmentId);
-		console.log('aki:',action);
+		if (updateResult.statusCode === 200) {
+			if (imageField instanceof File) {
+				const image = data.visual?.image?.value?.file;
+				const assignedUrl = await getImageUploadLink(user, establishmentId, image.name);
+
+				if (assignedUrl.statusCode === 200 && assignedUrl.responseData) {
+					const uploadStatus = await uploadImage(assignedUrl.responseData.uploadUrl, image);
+					if ( uploadStatus.statusCode !== 200 ) {
+						formModal.setLoading(false);
+						formModal.hidden();
+						blackWindow.hidden();
+						erroAlert.show("Erro","Erro ao fazer Atualizar imagem", 3000);
+						return;
+					}
+				}
+			}
+
+			formModal.setLoading(false);
+			formModal.hidden();
+			blackWindow.hidden();
+			setUpdateTable(prev => prev + 1);
+			successAlert.show("Sucesso","Os dados foram atualizados com sucesso", 3000);
+			return;
+		} else {
+			formModal.setLoading(false);
+			formModal.hidden();
+			blackWindow.hidden();
+			erroAlert.show("Erro",`${updateResult.responseData?.message || updateResult.responseData?.error || "Erro desconhecido"}`, 5000);
+			return;
+		}		
 	}
 
-	const showErrorMessage = (title: string, message: string) => {
-		setErrorTitle(title);
-		setErrorMessage(message);
-		setAsError(true);
-		setTimeout(() => { setAsError(false); }, 4000);
-	};
+	const view = (e:any) => {
+		setViewEstablishment({
+			id: e.id || "",
+			name: e.name || "",
+			slogan: e.slogan || "",
+			slug: "ainda nao tem",
+			logo: e.imageUrl || "",
+			palette: e.palette || "",
+			template: e.template || 0,
+			mensalAmount: 100,
+			servicesPerWeek: 100,
+			topClientes: topClientes,
+			bestServices: bestServices,
+			onCustomize: () => {},
+		});
+	}
+
+	const handleRowClick = (establishment:any, action:string) => {
+		if (action === 'delete') {
+			formModal.hidden();
+			blackWindow.show();
+			deleteModal.show(establishment.id);
+		} else if (action === 'edit') {
+			setFormMethod('edit');
+			formModal.hidden();
+			deleteModal.hidden();
+			blackWindow.show();
+			formModal.show(establishment);
+			fillEstablishmentForm(establishment);
+		}else { view(establishment);}
+	}
 
 	return (
 		<section className={style.estableshmentPage}> 
-			<Breadcrumb/>
 			<header className={style.estableshmentHeader}>
 				<h1 className={style.estableshmentHeaderTitle}>
 					Estabelecimentos 
@@ -120,33 +212,56 @@ export function Establishments() {
 						Controle o branding e a performance das sua unidades
 					</span>
 				</h1>
-				<button className={style.estableshmentHeaderButton} onClick={() => setIsBlackWindowOpen(true)}> 
-					<CirclePlus /> novo
+				<button 
+					className={style.estableshmentHeaderButton} 
+					onClick={() => {
+						resetForm();
+						setFormMethod('create');
+						blackWindow.show();
+						formModal.show();
+					}}> 
+					Adicionar estabelecimento
 				</button>
 			</header>
 
 			<main className={style.estableshmentContent}>
 				<EstablishmentTable updateTable={updateTable} onClick={handleRowClick} />
-				<EstablishmentDashboardCard data={mock_establishmentDashboard} />
+				<EstablishmentDashboardCard data={viewEstablishment} />
 			</main>
 			
-			<BlackWindow isOpen={isBlackWindowOpen}>
+			<BlackWindow isVisible={blackWindow.visible}>
 				<FormStep
-					asError={asError} 
-					isLoading={isLoading}
-					loadingStatus={loadingStatus}
+					isVisible= {formModal.visible} 
+					isLoading= {formModal.loading}
+					loadingText="Criando estabelecimento, Por favor aguarde..."
 					title="estabelecimento"
-					type="edit"
-					forms={forms as any}
-					close={() => setIsBlackWindowOpen(false)}
-					onFinished={(data) => { create(data); }} />
-			</BlackWindow>
+					type={formMethod}
+					forms={ forms as any }
+					close={() => {
+						formModal.hidden();
+						blackWindow.hidden();
+					}}
+					onFinished={(data) => { 
+						if (formMethod === 'create') create(data);  else update(data); 
+					}} 
+				/>
 
-			<div className={style.errorsContainer}>
-				{ asError && ( <ErrorAlert title={errorTitle} message={errorMessage}/> )}
-				{ successMessage.length > 0 && ( <SuccessAlert title="Sucesso" message={successMessage}/> )}
-			</div>
-			<footer></footer>
+				<DeleteConfirmationModal 
+					isVisible= {deleteModal.visible} 
+					isLoading= {deleteModal.loading}
+					loadingText="Removendo estabelecimento, Por favor aguarde..."
+					onChoice={(option:boolean) => {
+						if (!option) { 
+							blackWindow.hidden();
+							deleteModal.hidden(); 
+							return; 
+						} 
+						remove();
+					}}
+				/>
+			</BlackWindow>
+		 	<ErrorAlert   isVisible={erroAlert.isVisible} title={erroAlert.title} message={erroAlert.message}/>
+			<SuccessAlert isVisible={successAlert.isVisible} title={successAlert.title} message={successAlert.message}/>
 		</section> 
 	);
 }

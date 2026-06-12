@@ -6,11 +6,12 @@ import { PhoneInput } from "../../inputs/PhoneInput";
 import style from "./styles/establishmentformbasic.module.css";
 import { useEffect } from "react";
 import { EstablishmentFormStore } from "../../../store/EstablishmentFormStore";
+import { ComboBox } from "../../inputs/ComboBox";
 
 
 export function BasicEstablishmentDataForm({ onFormChange }: FormChildProps<EstablishmentForm_basic>) {	
 	const { basicData, setBasicData } = EstablishmentFormStore();
-
+	
 	useEffect(() => {
 		const isValid = 
 			basicData.name.isValid && 
@@ -19,6 +20,32 @@ export function BasicEstablishmentDataForm({ onFormChange }: FormChildProps<Esta
 
 		onFormChange?.(basicData, isValid);
 	}, [basicData]);
+
+	const options = [
+		{ label: 'Barbearia', value: 'BARBERSHOP' },
+		{ label: 'Salão de Beleza', value: 'BEAUTY_SALON' },
+		{ label: 'Manicure e Pedicure', value: 'NAIL_SALON' },
+		{ label: 'Estética', value: 'ESTHETIC_CLINIC' },
+		{ label: 'Design de Sobrancelhas', value: 'EYEBROW_STUDIO' },
+		{ label: 'Extensão de Cílios', value: 'EYELASH_STUDIO' },
+		{ label: 'Tratamentos Capilares', value: 'HAIR_CLINIC' },
+		{ label: 'Spa', value: 'SPA' },
+		{ label: 'Massoterapia', value: 'MASSAGE_CENTER' },
+		{ label: 'Estúdio de Tatuagem', value: 'TATTOO_STUDIO' },
+		{ label: 'Estúdio de Piercing', value: 'PIERCING_STUDIO' },
+		{ label: 'Maquiagem', value: 'MAKEUP_STUDIO' },
+		{ label: 'Outros', value: 'OTHER' }
+	]
+
+	const comboBoxOptions = {
+		value: {
+			selectedValue: basicData.category.value?.selectedValue || 'BARBERSHOP',
+			selectedLabel: options.find( (opt:any) => opt.value === basicData.category.value?.selectedValue )?.label || "Barbearia",
+			options
+		},
+		errorMessage: basicData.category.errorMessage,
+		isValid: basicData.category.isValid
+	};
 
     return (
         <div className={style.establishmentBasicForm}>
@@ -34,11 +61,11 @@ export function BasicEstablishmentDataForm({ onFormChange }: FormChildProps<Esta
 				onChangeField={(e)=>setBasicData({name: e})}/>
 
             <div className={style.establishmentBasicFormTwoColumns}>
-				<TextInput  
-					initialValue={basicData.category.value}
-					label="Categoria"  
-					placeholder="Ex: Barbearia"  
-					onChangeField={(e)=>setBasicData({category: e})}/>
+				<ComboBox
+					label="Categoria"
+					initialValue={comboBoxOptions}
+					onChangeField={(e:any)=>setBasicData({category: e})}
+				/>
 				<PhoneInput 
 					initialValue={basicData.numberPhone.value}
 					label="Telefone" 
