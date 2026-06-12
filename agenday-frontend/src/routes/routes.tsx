@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Home } from '../pages/Home'
 import { SignUp } from '../pages/SignUp';
 import { SignIn } from '../pages/SignIn';
-import { Agenda } from '../pages/Agenda';
+import { Appointments } from '../pages/Appointments';
 import { Establishments } from '../pages/Establishments';
 import { Employees } from '../pages/Employees';
 import { Services } from '../pages/Services';
@@ -21,7 +21,7 @@ export function AppRoutes() {
 				 <Route element={<PrivateLayout />}>
 					<Route path="/home"      element={ <Home />} />
 					<Route path="/dashboard" element={ <Home />} />
-					<Route path="/agenda"    element={ <Agenda />} />
+					<Route path="/appointments"    element={ <Appointments />} />
 					<Route path="/establishments" element={ <Establishments />} />
 					<Route path="/employees" element={ <Employees />} />
 					<Route path="/services" element={ <Services />} />
