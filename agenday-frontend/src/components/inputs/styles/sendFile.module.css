@@ -1,0 +1,105 @@
+.sendFile {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.label {
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--text-secondary);
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.uploadArea {
+	min-height: 140px;
+	border: 2px dashed var(--border-color);
+	border-radius: 12px;
+	background: var(--background-secondary);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	cursor: pointer;
+	padding: 20px;
+	transition: 0.2s;
+}
+
+.uploadArea:hover {
+	border-color: var(--primary-color);
+}
+
+.primaryText {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--text-primary);
+}
+
+.secondaryText {
+	font-size: 12px;
+	color: var(--text-secondary);
+}
+
+.fileName {
+	margin-top: 10px;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--primary-color);
+	text-align: center;
+	word-break: break-word;
+}
+
+.linkContainer {
+	min-height: 64px;
+	padding: 16px;
+	border: 1px solid var(--border-color);
+	border-radius: 12px;
+	background: var(--background-secondary);
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.link {
+	color: var(--primary-color);
+	font-size: 14px;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.link:hover {
+	text-decoration: underline;
+}
+
+.error {
+	min-height: 18px;
+	font-size: 12px;
+	color: var(--danger-color);
+}
+
+.loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px;
+}
+
+.loadingIcon {
+	animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
+}
