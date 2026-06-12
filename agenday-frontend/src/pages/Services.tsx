@@ -64,7 +64,7 @@ export function Services() {
         
         const updateComboBox = async () => {
             const data = await getEstablishements(); 
-            if (!data || !active) return; 
+            if (!data || !active || data.length == 0) return; 
 
             const newOptions = data.map((d: any) => ({ label: d.name, value: d.id }));
             const finalOptions = newOptions.length > 0 ? newOptions : NO_ESTABLISHMENTS;
