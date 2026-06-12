@@ -184,12 +184,14 @@ public class EstablishmentService {
         }
     }
 
+    @Transactional
     public List<EstablishmentResponse> getEstablishmentsByProfessional(String emailUser) {
-        return establishmentRepository.findByOwnerEmail(emailUser)
+        return establishmentRepository.findByOwnerEmailAndIsActiveTrue(emailUser)
                 .stream()
                 .map(EstablishmentMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
 
     public List<EstablishmentSummaryResponse> getEstablishmentsByProfessionalSummary(String emailUser) {
         return establishmentRepository.findByOwnerEmail(emailUser)
@@ -198,8 +200,10 @@ public class EstablishmentService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteEstablishment(UUID id, String emailUser) {
-        Establishment establishment = establishmentRepository.findByIdWithOwner(id)
+
+    @Transactional
+    public void softDelete(UUID id, String emailUser) {
+        Establishment establishment = establishmentRepository.findByIdAndIsActiveTrue(id)
             .orElseThrow(() -> new BusinessException(
                     "ESTABLISHMENT_NOT_FOUND",
                     "Estabelecimento não encontrado.",
@@ -213,6 +217,7 @@ public class EstablishmentService {
                 HttpStatus.FORBIDDEN
             );
         }
-        establishmentRepository.delete(establishment);
+
+        establishment.setIsActive(false);
     }
 }
