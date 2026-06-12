@@ -54,10 +54,19 @@ export function CepInput({initialValue,onChangeField}:InputProps<Location>) {
 		}
 	};
 
+    const formatCep = (raw: string) => {
+        const digits = raw.replace(/\D/g, "").slice(0, 8); // apenas até 8 dígitos
+        if (digits.length <= 5) return digits;
+        return digits.slice(0, 5) + "-" + digits.slice(5);
+    };
+
 	const onChangeHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
-		if (valid.cep(e.target.value) == null) {setErrorMessage(null)}
-	    else{setErrorMessage("CEP com formato inválido")}
-		setCepValue(e.target.value);
+        const formatted =  formatCep(e.target.value);
+        setCepValue(formatted);
+
+        const validation = valid.cep(formatted);
+        if (validation == null) setErrorMessage(null);
+        else setErrorMessage("CEP com formato inválido");
 	};
 
 	useEffect(() => {

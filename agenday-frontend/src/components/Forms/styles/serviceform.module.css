@@ -1,0 +1,77 @@
+
+.serviceFormContainer {
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 6px;
+    overflow: auto;
+    height: fit-content;
+    padding: 20px;
+    width: 96%;
+    max-width: 490px;
+    margin-left: auto;
+}
+
+    .serviceFormLoading {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        top: 0; left: 0;
+        position: absolute;
+        background-color: rgba(255,255,255,0.5);
+        backdrop-filter: blur(5px);
+        width: 100%;
+        height: 100%;
+    }
+        .serviceFormLoadingIcon { animation: spin 1s linear infinite; color: #313131;}
+        .serviceFormLoadingText {
+            font-size: .95rem;
+            font-weight: 400px;
+            margin-top: 5px;
+            color: #313131;
+            font-family: "Poppins", sans-serif;
+        }
+
+   .serviceFormSeparator {
+        display: block;
+        width: 100%;
+        margin: 20px 0;
+        border-bottom: 1px solid #c4c4c4;
+   } 
+ 
+ 
+    .serviceFormTwoColumn {
+       display: grid;
+        gap: 2%;
+        grid-template-columns: 49% 49%;
+        margin-bottom: 10px;
+   }
+
+   .serviceFormCloseButtonContainer {
+       display: flex;
+       justify-content: space-between;
+       width: 100%;
+       text-align: right;
+       border-bottom: 1px solid #d4d4d4;
+       margin-bottom: 25px;
+       padding-bottom: 10px;
+   }
+        .serviceFormCloseButtonContainer p {
+            font-size: .95rem;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            color: #134180;
+        }
+       .serviceFormCloseButtonContainer button {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #c4c4c4;
+            background: none;
+            border: none;
+            outline: none;
+       }
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

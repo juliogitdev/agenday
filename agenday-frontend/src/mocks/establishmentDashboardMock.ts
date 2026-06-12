@@ -1,18 +1,6 @@
 
-import { type EstablishmenteDashboardCardType,} from "../types/Estableshment";
 
-export const mock_establishmentDashboard: EstablishmenteDashboardCardType = {
-	id: "est-001",
-	name: "Barbearia Imperial",
-	slogan: "Estilo e cuidado em cada detalhe",
-	slug: "barbearia-imperial",
-	logo: "https://picsum.photos/200",
-	pallet: "#1f2937",
-	template: 2,
-	mensalAmount: 12450.75,
-	servicesPerWeek: 83,
-
-	topClientes: [
+export const topClientes = [
 		{
 			name: "Carlos Henrique",
 			profilePicture: "https://i.pravatar.cc/150?img=11",
@@ -41,9 +29,9 @@ export const mock_establishmentDashboard: EstablishmenteDashboardCardType = {
 			amount: 470,
 			dateOfFirstAppointment: "2025-04-03",
 		},
-	],
+	]
 
-	bestServices: [
+export const bestServices = [
 		{
 			name: "Corte Masculino",
 			monthlyAverageOfAchievements: 85,
@@ -64,5 +52,4 @@ export const mock_establishmentDashboard: EstablishmenteDashboardCardType = {
 			monthlyAverageOfAchievements: 67,
 			amount: 2950,
 		},
-	],
-};
+	]

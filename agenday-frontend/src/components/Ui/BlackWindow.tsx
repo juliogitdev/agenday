@@ -6,15 +6,15 @@ import styles from './styles/blackwindow.module.css';
 
 interface BlackWindowProps {
 	children: React.ReactNode;
-	isOpen: boolean;
+	isVisible: boolean;
 }
 
-export function BlackWindow({ children, isOpen }: BlackWindowProps) {
-	const [shouldRender, setShouldRender] = useState(isOpen);
+export function BlackWindow({ children, isVisible }: BlackWindowProps) {
+	const [shouldRender, setShouldRender] = useState(isVisible);
 	const [isAnimated, setIsAnimated] = useState(false);
 
 	useEffect(() => {
-		if (isOpen) {
+		if (isVisible) {
 			setShouldRender(true);
 			const animationTimeout = setTimeout(() => { setIsAnimated(true);}, 10);
 			return () => clearTimeout(animationTimeout);
@@ -23,7 +23,7 @@ export function BlackWindow({ children, isOpen }: BlackWindowProps) {
 			const removeTimeout = setTimeout(() => {setShouldRender(false);}, 400);
 			return () => clearTimeout(removeTimeout);
 		}
-	}, [isOpen]);
+	}, [isVisible]);
 
 	if (!shouldRender) return null;
 

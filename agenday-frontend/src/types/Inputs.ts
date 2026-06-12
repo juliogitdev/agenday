@@ -11,6 +11,7 @@ export interface InputProps<T = any> {
 	showError?: boolean;
 	showBanner?: boolean;
 	label?: string;
+    _height?: number;
 	placeholder?: string;
 	disabled?: boolean;
 	required?: boolean;

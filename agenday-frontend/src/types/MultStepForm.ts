@@ -18,7 +18,7 @@ export interface FormStepProps {
     forms: FormStepChild[];
 	close: () => void;
     onFinished: (data:any) => void;
-    asError?: boolean;
 	isLoading?: boolean;
-    loadingStatus?: string;
+	isVisible?: boolean;
+    loadingText?: string;
 }

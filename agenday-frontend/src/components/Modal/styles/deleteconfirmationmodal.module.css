@@ -1,0 +1,209 @@
+
+.modalCard {
+	position: relative;
+	background-color: var(--delete-modal-background-color);
+  	width: 100%;
+  	max-width: 420px;
+  	border-radius: 12px;
+  	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  	overflow: hidden;
+}
+	.deleteLoading {
+		position: absolute;
+		top: 0; left: 0;
+		width: 100%; height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border-radius: 12px;
+		z-index: 100;
+		backdrop-filter: blur(8px);
+		background-color: var(--delete-modal-loading-overlay-background-color);
+	}
+		.deleteLoaginContainer {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+		}
+			.deleteLoadingIcon {
+				width: 28px;
+				height: 28px;
+				animation: spin 0.8s linear infinite;
+				margin-bottom: 0.5rem;
+				color: var(--delete-modal-loading-text-color);
+			}
+
+			.deleteLoadingText {
+				font-family: "Poppins", sans-serif;
+				font-size: 0.72rem;
+				font-weight: 600;
+				color: var(--delete-modal-loading-text-color);
+			}
+
+	.header {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 24px;
+		border-bottom: 1px solid var(--delete-modal-border-color-light);
+	}
+
+		.headerTitle {
+			font-family: "Poppins", sans-serif;
+			color: var(--delete-modal-text-color-danger);
+			font-size: .75rem;
+			font-weight: 500;
+			letter-spacing: 0.5px;
+			margin: 0;
+		}
+
+		.closeButton {
+			position: absolute;
+			right: 24px;
+			top: 50%;
+			transform: translateY(-50%);
+			background: none;
+			border: none;
+			cursor: pointer;
+			color: var(--delete-modal-text-color-secondary);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 4px;
+			transition: opacity 0.2s;
+		}
+			.closeButton:hover { opacity: 0.7;}
+
+	.content {
+		padding: 24px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+		.titleQuestion {
+			font-family: "Poppins", sans-serif;
+			font-size: 0.75rem;
+			font-weight: 600;
+			color: var(--delete-modal-text-color-secondary);
+			text-transform: uppercase;
+			margin: 0 0 8px 0;
+		}
+
+		.description {
+			font-family: "Poppins", sans-serif;
+			font-size: 0.70rem;
+			color: var(--delete-modal-text-color-secondary);
+			margin: 0 0 20px 0;
+		}
+
+		.captchaContainer {
+			background-color: var(--delete-modal-captcha-box-background);
+			width: 100%;
+			padding: 10px;
+			border-radius: var(--delete-modal-border-radius-standard);
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+			box-sizing: border-box;
+			margin-bottom: 24px;
+		}
+
+			.captchaCharacter {
+				font-family: "Poppins", sans-serif;
+				background-color: var(--delete-modal-captcha-text-background);
+				color: var(--delete-modal-captcha-text-color);
+				font-weight: 600;
+				font-style: italic;
+				padding: 8px 14px;
+				border-radius: var(--delete-modal-border-radius-small);
+				font-size: .76rem;
+				user-select: none;
+			}
+
+			.inputField {
+				letter-spacing: 10px;
+				width: 100%;
+				font-family: "Poppins", sans-serif;
+				padding: 10px;
+				border: 1px solid var(--delete-modal-border-color-input);
+				border-radius: var(--delete-modal-border-radius-standard);
+				text-align: center;
+				font-size: .95rem;
+				box-sizing: border-box;
+				margin-bottom: 24px;
+				outline: none;
+			}
+
+				.inputField::placeholder {
+					letter-spacing: 1px;
+					font-family: "Poppins", sans-serif;
+					font-size: .95rem;
+					color: var(--delete-modal-text-color-secondary);
+					opacity: 0.6;
+				}
+
+	.actionsContainer {
+		width: 100%;
+		display: flex;
+		gap: 16px;
+	}
+
+		.buttonCancel {
+			flex: 1;
+			background-color: var(--delete-modal-button-cancel-background);
+			color: var(--delete-modal-button-cancel-text-color);
+			border: 1px solid var(--delete-modal-button-cancel-border-color);
+			padding: 10px;
+			border-radius: var(--delete-modal-border-radius-standard);
+			font-weight: 500;
+			text-transform: uppercase;
+			cursor: pointer;
+			font-family: "Poppins", sans-serif;
+			font-size: 0.70rem;
+			transition: background-color 0.2s;
+		}
+			.buttonCancel:hover { background-color: var(--delete-modal-border-color-light);}
+
+		.buttonDelete {
+			flex: 1;
+			background-color: var(--delete-modal-button-confirm-background-active);
+			color: var(--delete-modal-button-confirm-text-color);
+			border: none;
+			padding: 10px;
+			border-radius: var(--delete-modal-border-radius-standard);
+			font-weight: 500;
+			text-transform: uppercase;
+			cursor: pointer;
+			font-family: "Poppins", sans-serif;
+			font-size: 0.70rem;
+			transition: opacity 0.2s;
+		}
+
+			.buttonDelete:disabled {
+				background-color: var(--delete-modal-button-confirm-background-disabled);
+				cursor: not-allowed;
+			}
+
+	.footer {
+		padding: 16px;
+		border-top: 1px solid var(--delete-modal-border-color-light);
+		text-align: center;
+	}
+
+	.footerText {
+		font-family: "Poppins", sans-serif;
+		font-size: 0.60rem;
+		color: var(--delete-modal-text-color-secondary);
+		margin: 0;
+	}
+
+
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}

@@ -3,6 +3,7 @@ package com.agenday.core.application.service.Establishment;
 import com.agenday.common.exception.BusinessException;
 import com.agenday.core.application.dto.Establishment.EstablishmentRequest;
 import com.agenday.core.application.dto.Establishment.EstablishmentResponse;
+import com.agenday.core.application.dto.Establishment.EstablishmentSummaryResponse;
 import com.agenday.core.application.dto.Establishment.GetPresignedUploadUrlResponse;
 import com.agenday.core.domain.model.Establishment.Establishment;
 import com.agenday.core.domain.model.Plan.Plan;
@@ -10,6 +11,7 @@ import com.agenday.core.domain.model.Plan.PlanLimit;
 import com.agenday.core.domain.model.Professional.Professional;
 import com.agenday.core.domain.model.Professional.ProfessionalSubscription;
 import com.agenday.core.mapper.Establishment.EstablishmentMapper;
+import com.agenday.core.mapper.Establishment.EstablishmentSummaryMapper;
 import com.agenday.core.repository.Establishment.EstablishmentRepository;
 import com.agenday.core.repository.Professional.ProfessionalRepository;
 import com.agenday.core.repository.Professional.ProfessionalSubscriptionRepository;
@@ -18,6 +20,7 @@ import com.agenday.iam.infrastructure.Store.MinioStorageService;
 import com.agenday.iam.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -112,8 +115,9 @@ public class EstablishmentService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public EstablishmentResponse updateEstablishment(UUID id, String emailUser, EstablishmentRequest request) {
-        Establishment establishment = establishmentRepository.findById(id)
+        Establishment establishment = establishmentRepository.findByIdWithOwner(id)
                 .orElseThrow(() -> new BusinessException(
                         "ESTABLISHMENT_NOT_FOUND",
                         "Estabelecimento não encontrado.",
@@ -184,6 +188,13 @@ public class EstablishmentService {
         return establishmentRepository.findByOwnerEmail(emailUser)
                 .stream()
                 .map(EstablishmentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<EstablishmentSummaryResponse> getEstablishmentsByProfessionalSummary(String emailUser) {
+        return establishmentRepository.findByOwnerEmail(emailUser)
+                .stream()
+                .map(EstablishmentSummaryMapper::toDTO)
                 .collect(Collectors.toList());
     }
 

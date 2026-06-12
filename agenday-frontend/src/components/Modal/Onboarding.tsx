@@ -1,18 +1,18 @@
 
-import styles from "./styles/welcome.module.css";
+import styles from "./styles/onboarding.module.css";
 
-export function Welcome({ onFinish, isVisible }: { onFinish: (becomeProfessional: boolean) => void, isVisible: boolean }) {
+export function Onboarding({ onFinish, isVisible }: { onFinish: (becomeProfessional: boolean) => void, isVisible: boolean }) {
 	return (
 		isVisible && (
-		<div className={styles.welcomeCard}>
-			<div className={styles.welcomeBanner}>
-				<h1 className={styles.welcomeTitle}>
+		<div className={styles.onboardingCard}>
+			<div className={styles.onboardingBanner}>
+				<h1 className={styles.onboardingTitle}>
 					SEJA BEM-VINDO AO AGENDAY!
 				</h1>
 				<button className={styles.closeButton} onClick={() => onFinish(false)}>✕</button>
 			</div>
 
-			<div className={styles.welcomeContent}>
+			<div className={styles.onboardingContent}>
 				<div className={styles.contentText}>
 					<p className={styles.contentTitle}> Sua conta foi criada com o perfil de  Cliente </p>
 					<p className={styles.contentDescription}>
@@ -22,12 +22,12 @@ export function Welcome({ onFinish, isVisible }: { onFinish: (becomeProfessional
 					</p>
 				</div>
 
-				<div className={styles.welcomeActions}>
+				<div className={styles.onboardingActions}>
 					<button type="button"  className={styles.btnClient} onClick={() => onFinish(false)}> Continuar como Cliente </button>
 					<button type="button"  className={styles.btnProfessional} onClick={() => onFinish(true)}> Me tornar Profissional </button>
 				</div>
 
-				<div className={styles.welcomeFooter}>
+				<div className={styles.onboardingFooter}>
 					<label className={styles.checkboxLabel}>
 						<input 
 							type="checkbox"

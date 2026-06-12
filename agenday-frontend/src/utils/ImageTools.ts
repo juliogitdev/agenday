@@ -1,49 +1,69 @@
 
-export async function validateImage( file: File): Promise<{ isValid: boolean; error: string | null }> {
-	const MAX_SIZE = 500 * 1024; // 500KB
-	const MIN_WIDTH = 150;
-	const MIN_HEIGHT = 150;
-	const MAX_WIDTH = 1000;
-	const MAX_HEIGHT = 1000;
 
-	if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
+export async function validateImage(
+	file: File
+): Promise<{ isValid: boolean; error: string | null }> {
+	const MAX_SIZE = 2 * 1024 * 1024;
+
+	const MIN_WIDTH = 128;
+	const MIN_HEIGHT = 128;
+
+	const MAX_WIDTH = 512;
+	const MAX_HEIGHT = 512;
+
+	const ALLOWED_TYPES = [
+		"image/png",
+		"image/jpeg",
+		"image/webp",
+		"image/svg+xml"
+	];
+
+	if (!ALLOWED_TYPES.includes(file.type)) {
 		return {
 			isValid: false,
-			error: "Formato inválido"
+			error: "Formato inválido. Utilize PNG, JPEG, WEBP ou SVG."
 		};
 	}
 
 	if (file.size > MAX_SIZE) {
 		return {
 			isValid: false,
-			error: "Imagem acima de 500KB"
+			error: "A imagem deve possuir no máximo 2 MB."
+		};
+	}
+
+	if (file.type === "image/svg+xml") {
+		return {
+			isValid: true,
+			error: null
 		};
 	}
 
 	return new Promise(resolve => {
+		const objectUrl = URL.createObjectURL(file);
 		const img = new Image();
 
 		img.onload = () => {
-			const { width, height } = img;
+			URL.revokeObjectURL(objectUrl);
 
 			if (
-				width < MIN_WIDTH ||
-				height < MIN_HEIGHT
+				img.width < MIN_WIDTH ||
+				img.height < MIN_HEIGHT
 			) {
 				resolve({
 					isValid: false,
-					error: "Imagem muito pequena"
+					error: `A imagem deve possuir no mínimo ${MIN_WIDTH}x${MIN_HEIGHT}px.`
 				});
 				return;
 			}
 
 			if (
-				width > MAX_WIDTH ||
-				height > MAX_HEIGHT
+				img.width > MAX_WIDTH ||
+				img.height > MAX_HEIGHT
 			) {
 				resolve({
 					isValid: false,
-					error: "Resolução muito grande"
+					error: `A imagem deve possuir no máximo ${MAX_WIDTH}x${MAX_HEIGHT}px.`
 				});
 				return;
 			}
@@ -52,17 +72,18 @@ export async function validateImage( file: File): Promise<{ isValid: boolean; er
 				isValid: true,
 				error: null
 			});
-
-			URL.revokeObjectURL(img.src);
 		};
 
-		img.onerror = () =>
+		img.onerror = () => {
+			URL.revokeObjectURL(objectUrl);
+
 			resolve({
 				isValid: false,
-				error: "Imagem inválida"
+				error: "Não foi possível processar a imagem."
 			});
+		};
 
-		img.src = URL.createObjectURL(file);
+		img.src = objectUrl;
 	});
 }
 

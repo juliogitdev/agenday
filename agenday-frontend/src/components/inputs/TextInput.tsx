@@ -4,19 +4,18 @@ import styles from './styles/nameInput.module.css';
 import { valid } from '../../utils/Validations';
 import type { InputProps } from '../../types/Inputs';
 
-export function TextInput({label,placeholder,initialValue, onChangeField}: InputProps) {
+export function TextInput({label, _height=0, placeholder,initialValue, onChangeField}: InputProps) {
 	const [error, setError] = useState<string | null>(null);
 	const [value, setValue] = useState<string>(initialValue || "");
 
 	
 
-	const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const nextValue = e.target.value;
-		const validationError = valid.textField(nextValue);
+	const onChangeHandler = (value:any) => {
+		const validationError = valid.textField(value);
 		setError(validationError);
-		setValue(nextValue);
+		setValue(value);
 		onChangeField?.({ 
-			value: nextValue, 
+			value: value, 
 			errorMessage: validationError, 
 			isValid: validationError === null 
 		});
@@ -33,15 +32,25 @@ export function TextInput({label,placeholder,initialValue, onChangeField}: Input
 	return (
 		<div className={styles.nameInput}>
 			<label htmlFor="name" className={styles.nameLabel}>{label}</label>
-			<input
-				className={styles.nameField}
-				type="text"
-				id="name"
-				name="name"
-				value={value}
-				onChange={onChangeHandler}
-				placeholder={placeholder}
-			/>
+            { _height < 40 
+                ? <input
+    				className={styles.nameField}
+    				type="text"
+    				id="name"
+	    			name="name"
+		    		value={value}
+			    	onChange={(e)=>onChangeHandler(e.target.value)}
+				    placeholder={placeholder}
+			    />
+                : <textarea
+                    style={_height > 0 ? {height: `${_height}px`} : {}}
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={(e)=> onChangeHandler(e.target.value)}
+                    className={styles.textArea}
+                ></textarea>
+                    
+            } 
 			<span className={styles.nameError}>{error}</span>
 		</div>
 	);

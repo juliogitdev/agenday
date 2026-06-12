@@ -10,7 +10,7 @@ export function UploadLogo({ label, initialValue, onChangeField }: InputProps<Up
 	const [errors, setErrors] = useState("");
 	const [isLoading, setIsLoading] = useState(false);	
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
+	
 	useEffect(() => {
 		const currentFile = initialValue.value.file;
 		
@@ -21,7 +21,8 @@ export function UploadLogo({ label, initialValue, onChangeField }: InputProps<Up
 		}
 
 		if (typeof currentFile === "string") {
-			setPreviewUrl(currentFile);
+			const image_url = import.meta.env.VITE_STORAGE_BASE_URL+/agenday-images/+currentFile;
+			setPreviewUrl(image_url);
 			setErrors("");
 			return;
 		}

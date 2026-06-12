@@ -41,6 +41,12 @@ public class EstablishmentController {
         List<EstablishmentResponse> response = establishmentService.getEstablishmentsByProfessional(email);
         return ResponseEntity.ok().body(response);
     }
+    @GetMapping("/my-units/summary")
+    public ResponseEntity<List<EstablishmentSummaryResponse>> getMyEstablishmentsSummary(Authentication authentication) {
+        String email = authentication.getName();
+        List<EstablishmentSummaryResponse> response = establishmentService.getEstablishmentsByProfessionalSummary(email);
+        return ResponseEntity.ok().body(response);
+    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<EstablishmentResponse> updateEstablishment(
