@@ -6,13 +6,7 @@ import { Navigate } from "react-router-dom";
 import { Panel } from "../layouts/Panel";
 
 export function PrivateRoute({children,}: {children: React.ReactNode;}) {
-	const { user, setUser, authReady } = useContext(AuthContext);
-	
-	// mock para teste, remover depois
-	setUser({
-		accessToken: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGdtYWlsLmNvbSIsInJvbGVzIjpbIlJPTEVfQ0xJRU5UIl19.8nXo7sHj3mLh6a9e7v8ZtqjKkKZl3b5u9X9X9X9X9",
-		type: "email"
-	});
+	const { user, authReady } = useContext(AuthContext);
 
 	// enquanto authReady for false, a aplicação ainda está tentando
 	// restaurar a sessão do usuário através do refresh token.
