@@ -1,8 +1,20 @@
 :root {
+	--blue: #135184;
+	--red: #e74c3c;
+	--green: #2f9e44;
+	--yellow: #f1c40f;
+
     --background: #f5f5f5;
     --foreground: #111111;
     --card-background: #64635e;
     --card-foreground: #f0efeb;
+	--gray-text: #a3a3a3;
+	--dark-gray-text: #7e7e7e;
+	--blue-text: #135184;
+	--red-text: #e74c3c;
+	--border-color: #d4d4d4;
+	--background-cards: #efefef;
+	--text-secondary: #666666;
 
 
 	/* ===== LANDING PAGE ===== */

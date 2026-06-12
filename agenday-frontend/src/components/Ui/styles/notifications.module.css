@@ -1,0 +1,35 @@
+
+.notification {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background-color: var(--blue);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	cursor: pointer;
+}
+	.notificationIcon {
+		color: white;
+		width: 20px;
+		height: 20px;
+	}
+	.notificationBadge {
+		position: absolute;
+		top: -5px;
+		right: -5px;
+		background-color: var(--red);
+		color: white;
+		border-radius: 50%;
+		width: 16px;
+		height: 16px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 10px;
+	}
+
+	.notification:hover {
+		opacity: 0.8;
+	}

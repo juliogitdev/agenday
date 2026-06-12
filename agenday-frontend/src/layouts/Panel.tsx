@@ -15,9 +15,9 @@ export function Panel() {
 					notificationsCount={10}
 				/>
 				<PanelButton 
-					to="/agenda"
+					to="/appointments"
 					icon={<NotebookPen />}
-					toastHoverText="Agenda"
+					toastHoverText="Agendamentos"
 					notificationsCount={0}
 				/>
 				<PanelButton 
