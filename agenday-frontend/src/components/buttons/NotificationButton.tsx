@@ -1,8 +1,8 @@
 
 import { Bell } from "lucide-react";
-import styles from "./styles/notifications.module.css";
+import styles from "./styles/notificationButton.module.css";
 
-export function Notification({onClick}:{onClick:(asModified: boolean) => void}) {
+export function NotificationButton({onClick}:{onClick:(asModified: boolean) => void}) {
 	return (
 		<div className={styles.notification} onClick={(e) => {
 			const isModified = e.altKey || e.ctrlKey || e.metaKey || e.shiftKey;

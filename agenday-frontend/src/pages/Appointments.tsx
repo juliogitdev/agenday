@@ -7,12 +7,16 @@ import { AlertHook } from "../hooks/AlertsHook";
 import { ComboBox } from "../components/inputs/ComboBox";
 import { type EstablishmentSummary } from "../types/Estableshment";
 import image404 from './../../public/resource/icons/image_404.png';
-import { Notification } from "../components/Ui/Notifications";
+import { NotificationButton } from "../components/buttons/NotificationButton";
+import { ModalHook } from "../hooks/ModalHook";
+import { BlackWindow } from "../components/Ui/BlackWindow";
+import { NotificationModal } from "../components/Modal/NotificationModal";
 
 export function Appointments() {
 	const {api} = useContext(AuthContext);
     const errorAlert  = AlertHook();
-    
+    const blackWidow  = ModalHook();
+
     const image_url = import.meta.env.VITE_STORAGE_BASE_URL+/agenday-images/;
     const [updateTable, setUpdateTable] = useState<boolean>(false);
     const [establishments, setEstablishments] = useState<EstablishmentSummary[]>([]);
@@ -91,9 +95,10 @@ export function Appointments() {
                             setSelectedEstablishment(found || null);
                         }}
                     />
-					<Notification 
-						onClick={(asModified) => 
-							console.log("Notificação clicada", asModified)}
+					<NotificationButton 
+						onClick={
+							(asModified) => blackWidow.show(asModified)
+						}
 					 />
                 </div>
             </div> 
@@ -116,6 +121,9 @@ export function Appointments() {
 					onClose = {() => console.log("Fechar detalhes do agendamento")}
 				/>
 			</div>
+			<BlackWindow isVisible={blackWidow.visible}>
+				<NotificationModal onClose={()=> blackWidow.hidden()}/>
+			</BlackWindow>
 		</section> 
 	);
 }
