@@ -11,6 +11,8 @@ import { NotificationButton } from "../components/buttons/NotificationButton";
 import { ModalHook } from "../hooks/ModalHook";
 import { BlackWindow } from "../components/Ui/BlackWindow";
 import { NotificationModal } from "../components/Modal/NotificationModal";
+import { AppointmentsTable } from "../components/tables/AppointmentsTable";
+import { MOCK_APPOINTMENTS } from "../mocks/appointmentsMocks";
 
 export function Appointments() {
 	const {api} = useContext(AuthContext);
@@ -103,7 +105,13 @@ export function Appointments() {
                 </div>
             </div> 
 			<div className={styles.appointmentsContent}>
-				<p>Ola</p>
+				<AppointmentsTable
+					startTime="08:00"
+					endTime="20:00"
+					appointments={MOCK_APPOINTMENTS}
+					userView="client"
+					onClick={() => {}}
+				/>
 				<AppointmentsDetailsCard
 					appointmentId="h6asdasd"
 					serviceName = "Corte de Cabelo"

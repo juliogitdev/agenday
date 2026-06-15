@@ -18,7 +18,7 @@
 			font-family: 'Poppins', sans-serif;
 			font-size: 0.85rem;
 			text-transform: uppercase;
-			margin-bottom: 20px;
+			margin-bottom: 10px;
 			font-weight: 400;
 			color: var(--blue)
 		}
@@ -33,7 +33,6 @@
 			display: block;
 			font-family: 'Poppins', sans-serif;
 			font-size: 0.85rem;
-			text-align: center;
 		}
 			.headerClientName {
 				font-style: italic;
@@ -42,7 +41,6 @@
 				color: var(--blue);
 			}
 		.headerTextObs {
-			font-size: 0.75rem;
 			font-style: italic;
 		}
 	.space {
