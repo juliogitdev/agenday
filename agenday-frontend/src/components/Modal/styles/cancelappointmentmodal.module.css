@@ -1,0 +1,50 @@
+
+.CancelAppointmentModal  {
+	background-color: var(--background);
+	border-radius: 4px;
+	padding: 20px;
+	width: 450px;
+}
+	.header {
+		width: 100%;
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: 10px;
+		margin-bottom: 20px;
+	}
+		.headerTitle {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-family: 'Poppins', sans-serif;
+			font-size: 0.85rem;
+			text-transform: uppercase;
+			margin-bottom: 20px;
+			font-weight: 400;
+			color: var(--blue)
+		}
+			.headerCloseBnt {
+				background: none;
+				border: none;
+				outline: none;
+				cursor: pointer;
+			}
+
+		.headerText, .headerTextObs {
+			display: block;
+			font-family: 'Poppins', sans-serif;
+			font-size: 0.85rem;
+			text-align: center;
+		}
+			.headerClientName {
+				font-style: italic;
+				padding: 0 10px;
+				background: none;
+				color: var(--blue);
+			}
+		.headerTextObs {
+			font-size: 0.75rem;
+			font-style: italic;
+		}
+	.space {
+		padding: 10px 0;
+	}
