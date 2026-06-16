@@ -31,8 +31,7 @@ public class EstablishmentController {
     public ResponseEntity<EstablishmentResponse> register(
             Authentication authentication,
             @RequestBody @Valid EstablishmentRequest request) {
-        String email = authentication.getName();
-        return ResponseEntity.status(201).body(establishmentService.createEstablishment(email, request));
+        return ResponseEntity.status(201).body(establishmentService.createEstablishment(request, authentication));
     }
 
     @GetMapping("/my-units")
