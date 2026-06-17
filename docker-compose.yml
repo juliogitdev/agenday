@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: agenday-db
+    restart: always
+    environment:
+      POSTGRES_DB: agenday
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: agenday-redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  #backend:
+  #  build: ./agenday-backend
+  #  container_name: agenday-api
+  #  restart: always
+  #  ports:
+  #    - "8080:8080"
+  #  depends_on:
+  #    - db
+  #    - redis
+  #  environment:
+  #    - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/agenday
+  #    - SPRING_DATASOURCE_USERNAME=${DB_USER}
+  #    - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+  #    - SPRING_REDIS_HOST=redis
+  #    - JWT_SECRET=${JWT_SECRET}
+  #frontend:
+  #  build: ./agenday-frontend
+  #  container_name: agenday-web
+  #  restart: always
+  #  ports:
+  #    - "3000:80"
+  #  depends_on:
+  #    - backend
+  
+volumes:
+  postgres_data:

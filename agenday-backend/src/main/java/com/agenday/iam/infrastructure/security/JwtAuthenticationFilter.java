@@ -8,19 +8,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
 
-    public JwtAuthenticationFilter(JwtService jwtService, UserRepository userRepository) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserRepository userRepository){
         this.jwtService = jwtService;
         this.userRepository = userRepository;
     }
@@ -29,19 +29,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+            FilterChain filterChain) throws ServletException, IOException {
 
-        // 1. Libera imediatamente as requisições de Preflight (CORS)
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
-            return;
-        }
 
         final String authHeader = request.getHeader("Authorization");
 
-        // 2. Verifica se o header de autenticação está presente e correto
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if(authHeader == null || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,44 +42,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt = authHeader.substring(7);
         String username;
 
-        // 3. Tenta extrair o username do token
-        try {
+        try{
             username = jwtService.extractUsername(jwt);
         } catch (Exception e) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 4. Verifica se o usuário já não está autenticado no contexto
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var userOpt = userRepository.findByEmail(username);
+        //Verifica se existe usuário no jwt e se não está authenticado
+        if(username != null & SecurityContextHolder.getContext().getAuthentication() == null){
+            var user = userRepository.findByEmail(username);
 
-            if (userOpt.isPresent() && jwtService.isAccessTokenValid(jwt, userOpt.get())) {
-                var user = userOpt.get();
+            if(user != null &&
+            jwtService.isTokenValid(jwt, user.get())){
 
                 var roles = jwtService.extractRoles(jwt);
-                var authorities = roles.stream()
+                var authorities = roles.
+                        stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList();
 
-                // Import limpo usando a classe do Spring Security importada no topo
-                var userDetails = new User(
-                        user.getEmail(),
-                        user.getPasswordHash() != null ? user.getPasswordHash() : "",
-                        authorities
-                );
-
                 var authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
+                        user.get().getEmail(),
                         null,
-                        userDetails.getAuthorities()
+                        authorities
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
-        // 5. Continua o fluxo para o próximo filtro
         filterChain.doFilter(request, response);
+
     }
+
+
+
 }
