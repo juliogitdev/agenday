@@ -1,4 +1,4 @@
-package com.agenday.core.application.dto.Establishment;
+package com.agenday.core.application.dto.Professional;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -164,4 +164,28 @@ public class UserService {
                         HttpStatus.NOT_FOUND
                 ));
     }
+
+    public UserResponse getCurrentUser(String email){
+
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return new UserResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getFullName()
+        );
+    }
+
+    public User authenticate(LoginRequest request) {
+
+        var user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+
+        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        return user;
+    }
 }
