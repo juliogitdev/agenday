@@ -1,0 +1,43 @@
+
+
+.customerSinceCard {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--customer-since-card-background);
+    color: var(--customer-since-card-color);
+    padding: .5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--customer-since-card-border-color);
+}
+	.customerSinceCardImage {
+		display: flex;
+		width: 45px;
+		height: 45px;
+		border-radius: 50%;
+		background-color: var(--customer-since-card-image-background);
+		align-items: center;
+		justify-content: center;
+	}
+	.customerSinceCardContent {
+    	display: flex;
+    	flex-direction: column;
+	}	
+	.customerSinceCardName { 
+		font-weight: 600;
+		color: var(--customer-since-card-name-color);
+		font-family: "Poppins", sans-serif;
+		font-size: .8rem;
+	}
+	.customerSinceCardDate {
+    	font-family: "Poppins", sans-serif;
+		font-size: .7rem;
+    	color: var(--customer-since-card-date-color);
+	}
+
+	.customerSinceCardAmount {
+		text-transform: uppercase;
+		font-family: "Poppins", sans-serif;
+		font-size: .7rem;
+		color: var(--customer-since-card-amount-color);
+	}

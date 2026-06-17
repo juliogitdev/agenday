@@ -22,6 +22,9 @@ public class User extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
+	@Column(name = "profile_image_url")
+	private String profileImageUrl;
+
     @Column(name="password_hash")
     private String passwordHash;
 
@@ -37,7 +40,13 @@ public class User extends BaseEntity {
     @Column(name="phone")
     private String numberPhone;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @Column(name="state")
+    private String state;
+
+    @Column(name="city")
+    private String city;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

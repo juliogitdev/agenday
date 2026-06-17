@@ -1,0 +1,73 @@
+
+
+.comboBox {
+	position: relative;
+	display:flex;
+	flex-direction:column;
+}
+	.comboLabel {
+		font-family:"Poppins",sans-serif;
+		font-weight:500;
+		font-size:.8rem;
+		color:var(--combo-label);
+		margin-bottom:5px;
+	}
+
+	.comboField {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border:1px solid var(--combo-input-border);
+		border-radius:5px;
+		padding:10px;
+		background:var(--combo-input-background);
+		cursor:pointer;
+		transition:.2s;
+	}
+		.selectedOption {
+				font-family:"Poppins",sans-serif;
+				font-size: .9rem;
+				color:var(--combo-input-foreground);
+		}
+
+		.comboButtonIcon {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 20px;
+			height: 20px;
+			background: none;
+			outline: none;
+			border: none;
+			cursor: pointer;
+			color: var(--combo-icon-color);
+		}
+
+	.comboBoxItemsContainer {
+		position: absolute;
+		border:1px solid var(--combo-input-border);
+		background:var(--combo-input-background);
+		display: block;
+		width: 100%;
+		height: 220px;
+		list-style: none;
+		overflow: auto;
+		margin-top: 70px;
+		border-radius:0px 0px 5px 5px;
+		box-shadow: var(--combo-options-shadow);
+        z-index: 2;
+	}
+		.comboItem {
+			font-family:"Poppins",sans-serif;
+			font-size: .75rem;
+			padding:10px;
+			color:var(--combo-input-foreground);
+			cursor:pointer;
+			transition:.2s;
+		}
+			.comboItem:nth-child(odd) {background:var(--combo-item-background_1);}
+			.comboItem:nth-child(even) { background:var(--combo-item-background_2);}
+            .comboItem:hover {
+                background-color: #135184;
+                color: #f4f4f4;
+            }

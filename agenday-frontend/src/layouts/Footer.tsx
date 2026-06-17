@@ -1,4 +1,3 @@
-
-export const  Footer  = function() {
-    return ( <h1>roda-pé</h1>);
+export const Footer = function () {
+    return <h1>roda-pé</h1>
 }

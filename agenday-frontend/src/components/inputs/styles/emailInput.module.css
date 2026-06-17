@@ -1,0 +1,39 @@
+
+.emailInput {
+	display: flex;
+	flex-direction: column;
+}
+	.emailLabel {
+		font-family: "Poppins", sans-serif;
+		font-weight: 500;
+		font-size: .8rem;
+		color: var(--email-label);
+		margin-bottom: 5px;
+	}
+
+	.emailField {
+		border: 1px solid var(--email-input-border);
+		border-radius: 5px;
+		font-size: 1rem;
+		padding: 10px;
+		background: var(--email-input-background);
+		outline: var(--email-input-border);
+		color: var(--email-input-foreground);
+	}
+
+	.emailField::placeholder {
+		color: var(--email-input-placeholder);
+		font-family: "Poppins", sans-serif;
+		font-weight: 300;
+		font-size: .8rem;
+	}
+
+	.emailError {
+		visibility: hidden;
+		color: var(--email-error);
+		font-family: "Poppins", sans-serif;
+		font-weight: 500;
+		font-size: 0.7rem;
+		margin-top: 5px;
+		text-align: right;
+	}

@@ -1,0 +1,74 @@
+
+.cepContainer {
+    display: flex;
+	width: 100%;
+    flex-direction: column;
+	background-color: var(--cep-input-container-background);
+	border-radius: 10px;
+    gap: 0.5rem;
+}
+	.cepLabel {
+		font-family: "Poppins", sans-serif;
+		font-size: 0.76rem;
+		font-weight: 500;
+		color: var(--cep-label-color);
+	}
+	.cepInputContainer {
+		width: 100%;
+        display: flex;
+		flex-wrap: wrap;
+        gap: 1rem;
+    }
+		.cepInput {
+			width: 100%;
+			font-family: "Poppins", sans-serif;
+			background-color: var(--cep-input-background-color);
+			color: var(--cep-input-color);	
+			padding: .5rem;
+			outline: none;
+			border-radius: 4px;
+			border: 1px solid var(--cep-input-border-color);
+		}
+		
+		.cepButton {
+			font-family: "Poppins", sans-serif;
+			background-color: var(--cep-button-background-color);
+			color: var(--cep-button-color);
+			padding: .3rem 2rem;
+			cursor: pointer;
+			border-radius: 4px;
+			height: 38px;
+			border: 1px solid var(--cep-button-border-color);
+		}
+
+		.cepButtonSearching {
+			font-family: "Poppins", sans-serif;
+			background-color: var(--cep-button-background-color-searching);
+			color: var(--cep-button-color-searching);
+			padding: .3rem 2rem;
+			cursor: pointer;
+			border-radius: 4px;
+			height: 38px;
+			border: 1px solid var(--cep-button-border-color-searching);
+			animation: searching 1s infinite;
+		}
+
+		.cepButton:hover {
+			background-color: var(--cep-button-background-color-hover);
+			color: var(--cep-button-color-hover);
+			border-color: var(--cep-button-border-color-hover);
+		}
+		.cepError {
+			display: block;
+			width: 100%;
+			font-family: "Poppins", sans-serif;
+			font-size: 0.66rem;
+			margin-top: 2px;
+			font-weight: 500;
+			text-align: right;
+			color: var(--cep-error-color);
+		}
+
+@keyframes searching {
+	0% {opacity: 1;}50% {opacity: 0.5;}100% {opacity: 1;}
+}
