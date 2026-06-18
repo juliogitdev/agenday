@@ -7,6 +7,7 @@ import com.agenday.core.application.dto.PlanDto.PlanUpdateRequest;
 import com.agenday.core.domain.model.Plan.Plan;
 import com.agenday.core.mapper.Plan.PlanMapper;
 import com.agenday.core.repository.Plan.PlanRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class PlanService {
 
     private final PlanRepository planRepository;
-
-    public PlanService(PlanRepository planRepository) {
-        this.planRepository = planRepository;
-    }
 
     public PlanResponse getById(UUID id) {
         Plan plan = planRepository.findByIdWithLimits(id)
