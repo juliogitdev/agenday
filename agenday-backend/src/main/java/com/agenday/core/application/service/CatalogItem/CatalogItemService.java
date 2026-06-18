@@ -13,6 +13,7 @@ import com.agenday.core.repository.Establishment.EstablishmentRepository;
 import com.agenday.core.repository.Professional.ProfessionalRepository;
 import com.agenday.iam.domain.model.User;
 import com.agenday.iam.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,24 +23,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CatalogItemService {
 
     private final CatalogItemRepository catalogItemRepository;
     private final EstablishmentRepository establishmentRepository;
     private final UserRepository userRepository;
     private final ProfessionalRepository professionalRepository;
-
-    public CatalogItemService(
-            CatalogItemRepository catalogItemRepository,
-            EstablishmentRepository establishmentRepository,
-            UserRepository userRepository,
-            ProfessionalRepository professionalRepository
-    ){
-        this.catalogItemRepository = catalogItemRepository;
-        this.establishmentRepository = establishmentRepository;
-        this.userRepository = userRepository;
-        this.professionalRepository = professionalRepository;
-    }
 
     @Transactional
     public CatalogItemResponse createCatalogItem(String emailUser, CatalogItemRequest request){

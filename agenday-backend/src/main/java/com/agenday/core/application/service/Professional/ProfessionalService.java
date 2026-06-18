@@ -18,6 +18,7 @@ import com.agenday.iam.domain.model.User;
 import com.agenday.iam.infrastructure.security.JwtService;
 import com.agenday.iam.repository.RoleRepository;
 import com.agenday.iam.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ProfessionalService {
 
     private final UserRepository userRepository;
@@ -35,24 +37,6 @@ public class ProfessionalService {
     private final ProfessionalSubscriptionRepository subscriptionRepository;
     private final EstablishmentRepository establishmentRepository; // Injetado para contar unidades
     private final JwtService jwtService;
-
-    public ProfessionalService(
-            UserRepository userRepository,
-            ProfessionalRepository professionalRepository,
-            RoleRepository roleRepository,
-            PlanRepository planRepository,
-            JwtService jwtService,
-            ProfessionalSubscriptionRepository subscriptionRepository,
-            EstablishmentRepository establishmentRepository
-    ) {
-        this.userRepository = userRepository;
-        this.professionalRepository = professionalRepository;
-        this.roleRepository = roleRepository;
-        this.planRepository = planRepository;
-        this.subscriptionRepository = subscriptionRepository;
-        this.establishmentRepository = establishmentRepository;
-        this.jwtService = jwtService;
-    }
 
     @Transactional
     public AuthResponse promoteClientToProfessional(String emailUser, ClientPromoteToProfessionalRequest request) {
