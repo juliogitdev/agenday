@@ -8,6 +8,7 @@ import com.agenday.iam.domain.model.Role;
 import com.agenday.iam.domain.model.User;
 import com.agenday.iam.repository.RoleRepository;
 import com.agenday.iam.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,20 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
-
-    public UserService(UserRepository userRepository,
-                       RoleRepository roleRepository,
-                       BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public User register(RegisterRequest request) {
         // Substituído UserAlreadyExistsException por BusinessException (409 Conflict)

@@ -5,20 +5,26 @@ import com.agenday.core.application.dto.Establishment.EstablishmentRequest;
 import com.agenday.core.application.dto.Establishment.EstablishmentResponse;
 import com.agenday.core.application.dto.Establishment.EstablishmentSummaryResponse;
 import com.agenday.core.application.dto.Establishment.GetPresignedUploadUrlResponse;
+import com.agenday.core.application.dto.Professional.ProfessionalEstablishmentRequest;
+import com.agenday.core.application.service.Professional.ProfessionalEstablishmentService;
 import com.agenday.core.domain.model.Establishment.Establishment;
 import com.agenday.core.domain.model.Plan.Plan;
 import com.agenday.core.domain.model.Plan.PlanLimit;
 import com.agenday.core.domain.model.Professional.Professional;
+import com.agenday.core.domain.model.Professional.ProfessionalEstablishment;
 import com.agenday.core.domain.model.Professional.ProfessionalSubscription;
 import com.agenday.core.mapper.Establishment.EstablishmentMapper;
 import com.agenday.core.mapper.Establishment.EstablishmentSummaryMapper;
 import com.agenday.core.repository.Establishment.EstablishmentRepository;
+import com.agenday.core.repository.Professional.ProfessionalEstablishmentRepository;
 import com.agenday.core.repository.Professional.ProfessionalRepository;
 import com.agenday.core.repository.Professional.ProfessionalSubscriptionRepository;
 import com.agenday.iam.domain.model.User;
 import com.agenday.iam.infrastructure.Store.MinioStorageService;
 import com.agenday.iam.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +33,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class EstablishmentService {
 
     private final EstablishmentRepository establishmentRepository;
@@ -34,22 +41,14 @@ public class EstablishmentService {
     private final ProfessionalRepository professionalRepository;
     private final ProfessionalSubscriptionRepository subscriptionRepository;
     private final MinioStorageService minioStorageService;
+    private final ProfessionalEstablishmentService professionalEstablishmentService;
 
-    public EstablishmentService(
-            EstablishmentRepository establishmentRepository,
-            UserRepository userRepository,
-            MinioStorageService minioStorageService,
-            ProfessionalRepository professionalRepository,
-            ProfessionalSubscriptionRepository subscriptionRepository
-    ) {
-        this.establishmentRepository = establishmentRepository;
-        this.userRepository = userRepository;
-        this.minioStorageService = minioStorageService;
-        this.professionalRepository = professionalRepository;
-        this.subscriptionRepository = subscriptionRepository;
-    }
 
-    public EstablishmentResponse createEstablishment(String emailUser, EstablishmentRequest establishmentRequest) {
+    public EstablishmentResponse createEstablishment(EstablishmentRequest establishmentRequest,
+                                                     Authentication authentication) {
+
+        String emailUser = authentication.getName();
+
         User user = userRepository.findByEmail(emailUser)
                 .orElseThrow(() -> new BusinessException(
                         "USER_NOT_FOUND",
@@ -105,7 +104,15 @@ public class EstablishmentService {
 
         Establishment newEstablishment = EstablishmentMapper.toEntity(establishmentRequest);
         newEstablishment.setOwner(user);
-        return EstablishmentMapper.toDTO(establishmentRepository.save(newEstablishment));
+        newEstablishment = establishmentRepository.save(newEstablishment);
+
+        //Cria vínculo entre o estabelecimento e o dono
+        professionalEstablishmentService.linkProfessional(
+                new ProfessionalEstablishmentRequest(newEstablishment.getId(), emailUser),
+                authentication
+        );
+
+        return EstablishmentMapper.toDTO(newEstablishment);
     }
 
     public List<EstablishmentResponse> getAll() {
