@@ -35,4 +35,9 @@ public interface ProfessionalScheduleRepository extends JpaRepository<Profession
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime
     );
+
+    List<ProfessionalSchedule> findByProfessionalEstablishmentIdAndDayOfWeekAndIsActiveTrue(
+            UUID professionalEstablishmentId,
+            DayOfWeek dayOfWeek
+    );
 }

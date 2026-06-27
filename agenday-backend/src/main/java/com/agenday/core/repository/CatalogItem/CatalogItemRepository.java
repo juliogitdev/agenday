@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.xml.catalog.Catalog;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CatalogItemRepository extends JpaRepository<CatalogItem, UUID> {
 
     List<CatalogItem> findByEstablishmentIdAndIsActiveTrue(UUID establishmentId);
 
+    Optional<CatalogItem> findByIdAndIsActiveTrue(UUID uuid);
 }
