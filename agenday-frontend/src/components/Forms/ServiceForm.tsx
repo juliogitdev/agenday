@@ -8,6 +8,8 @@ import { ErrorAlert } from "../Alerts/ErrorAlert";
 import type { InputCallback } from "../../types/Inputs";
 import { ServiceUseFormStore } from "../../store/ServiceFormStore";
 import { Loader } from "lucide-react";
+import { ComboBox } from "../inputs/ComboBox";
+
 
 export type ServiceFormData = {
     price: InputCallback;
@@ -27,9 +29,12 @@ export type ServiceFormProps = {
     onClick: ()=> void;
 }
 
+
+
 export function ServiceForm({buttonLabel, isLoading,loadingText, showCloseBnt=false, isVisible=true, onClose, onClick}:ServiceFormProps) {
     const form  = ServiceUseFormStore();
     const errorAlert = AlertHook();
+
 
     return isVisible ? (
         <div className={styles.serviceFormContainer}>

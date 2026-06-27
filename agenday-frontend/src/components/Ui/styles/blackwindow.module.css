@@ -11,14 +11,17 @@
 	z-index: 10000;
 	transition: background-color 0.25s ease, backdrop-filter 0.25s ease;
 	transition-delay: 0.15s; 
+	will-change: background-color, backdrop-filter;
+	transform: translateZ(0); 
 }
-	.blackWindowContent {
-		opacity: 0;
-		transform: scale(0.95) translateY(10px);
-		transition: opacity 0.15s ease, transform 0.15s ease;
-		transition-delay: 0s;
-	}
 
+.blackWindowContent {
+	opacity: 0;
+	transform: scale(0.95) translate3d(0, 10px, 0);
+	transition: opacity 0.15s ease, transform 0.15s ease;
+	transition-delay: 0s;
+	will-change: opacity, transform;
+}
 
 .blackWindow.windowOpen {
 	background-color: rgba(15, 23, 42, 0.4);
@@ -26,8 +29,13 @@
 	transition-delay: 0s;
 }
 
-	.blackWindow.windowOpen .blackWindowContent {
-		opacity: 1;
-		transform: scale(1) translateY(0);
-		transition-delay: 0.15s;
-	}
+.blackWindow.windowOpen .blackWindowContent {
+	opacity: 1;
+	transform: scale(1) translate3d(0, 0, 0);
+	transition-delay: 0.15s;
+}
+
+.blackWindow.windowOpen:has(~ .blackWindow.windowOpen) {
+	backdrop-filter: blur(0px) !important;
+	background-color: transparent !important;
+}

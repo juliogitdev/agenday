@@ -1,18 +1,17 @@
-
-
 .loadingContainer {
     width: 350px;
     height: fit-content; 
-    background-color: #fafafa;
-    border-radius: 6px;
-    box-shadow: 1px 2px 3px #c0c0c0;
+    background-color: var(--multistep-form-background); 
+    border: 1px solid var(--multistep-form-border-color);
+    border-radius: var(--delete-modal-border-radius-standard); 
+    box-shadow: var(--plan-card-shadow); 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 1.5rem;
     box-sizing: border-box;
-    padding: 30px;
+    padding: 2rem;
 }
 
 .clockWrapper {
@@ -24,16 +23,18 @@
 .clockFace {
     width: 100%;
     height: 100%;
-    border: 4px solid #135184;
+    border: 3.5px solid var(--solid-button-background); 
     border-radius: 50%;
     position: relative;
+    box-sizing: border-box;
+    background-color: var(--email-input-background);
 }
 
 .clockCenter {
     position: absolute;
-    width: 8px;
-    height: 8px;
-    background-color: #135184;
+    width: 6px;
+    height: 6px;
+    background-color: var(--solid-button-background);
     border-radius: 50%;
     top: 50%;
     left: 50%;
@@ -41,10 +42,8 @@
     z-index: 10;
 }
 
-
 .hourHand, .minuteHand {
     position: absolute;
-    background-color: #135184;
     border-radius: 4px;
     bottom: 50%;
     left: 50%;
@@ -52,37 +51,41 @@
 }
 
 .hourHand {
-    width: 4px;
-    height: 25px;
-    margin-left: -2px;
-    animation: spin 6s linear infinite;
+    width: 3.5px;
+    height: 16px;
+    margin-left: -1.75px;
+    background-color: var(--solid-button-background);
+    animation: spin 8s linear infinite; 
 }
 
 .minuteHand {
-    width: 3px;
-    height: 38px;
-    margin-left: -1.5px;
-    animation: spin 1.5s linear infinite;
+    width: 2.5px;
+    height: 23px; 
+    margin-left: -1.25px;
+    background-color: var(--panel-button-hover-color);
+    animation: spin 1.8s linear infinite;
 }
 
-
 .loadingText {
-    color: #135184;
+    color: var(--solid-button-background);
     font-family: 'Poppins', sans-serif;
-    font-size: .75rem;
+    font-size: 0.75rem; 
     font-weight: 500;
     text-align: center;
-    margin-top: 20px;
-    letter-spacing: 0.5px;
-    animation: pulse 2s ease-in-out infinite;
+    margin-top: 0.5rem;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    animation: pulse 2.2s ease-in-out infinite;
 }
 
 
 @keyframes spin {
-  from { transform: rotate(0deg);}
-  to { transform: rotate(360deg);}
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.6; } 50% { opacity: 1; }
+    0%, 100% { opacity: 0.5; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1); }
 }

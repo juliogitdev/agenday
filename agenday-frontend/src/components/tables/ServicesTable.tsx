@@ -38,7 +38,7 @@ export function ServicesTable({serviceList, isLoading, onCLick: callBack }:Table
             {serviceList?.length > 0 ? (
             <ul className={styles.serviceTableBody}>
             { serviceList.map((service,_) => ( 
-                <li className={styles.serviceTableRow}>
+                <li className={styles.serviceTableRow} key={service.serviceId}>
                     <div className={styles.serviceTableRowCollumn}>
                         <span className={styles.serviceTableRowCollumnTitle}> 
                             <span className={styles.serviceTitle}>{service.name}</span>

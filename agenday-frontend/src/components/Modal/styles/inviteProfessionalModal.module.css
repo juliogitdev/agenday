@@ -1,0 +1,172 @@
+
+
+.modalBox {
+	background-color: var(--multistep-form-background);
+	border: 1px solid var(--multistep-form-border-color);
+	box-shadow: var(--multistep-form-shadow);
+	border-radius: var(--delete-modal-border-radius-standard);
+	width: 100%;
+	max-width: 500px;
+	padding: 2rem;
+	position: relative;
+	box-sizing: border-box;
+}
+
+	.closeTop {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		background: none;
+		border: none;
+		font-size: 1.5rem;
+		color: var(--chose-plan-close-button-color);
+		cursor: pointer;
+	}
+
+		.closeTop:hover { color: var(--chose-plan-close-button-hover-color);}
+		.brandingHeader { margin-bottom: 1.5rem;}
+
+		.brandingHeader h2 {
+			color: var(--branding-primary);
+			font-size: 1rem;
+			margin: 0 0 0.5rem 0;
+		}
+
+		.brandingHeader p {
+			color: var(--branding-secondary);
+			font-size: 0.8rem;
+			margin: 0;
+			padding-bottom: 0.4rem;
+			border-bottom: 1px solid var(--border-color);
+
+		}
+
+		.form {
+			display: flex;
+			flex-direction: column;
+		}
+
+			.radioGroupContainer { margin: 1.2rem 0;}
+			.radioLabelSection {
+				font-size: 0.8rem;
+				font-weight: 600;
+				color: var(--email-label);
+				display: block;
+				margin-bottom: 0.5rem;
+			}
+
+			.radioOptions {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 0.5rem;
+			}
+
+			.radioCard {
+				border: 1px solid var(--email-input-border);
+				background-color: var(--email-input-background);
+				padding: 0.75rem;
+				border-radius: var(--delete-modal-border-radius-standard);
+				display: flex;
+				align-items: center;
+				gap: 0.4rem;
+				cursor: pointer;
+				transition: border-color 0.2s ease;
+			}
+
+			.radioCard input[type="radio"] { accent-color: var(--solid-button-background);}
+			.radioCardActive {
+				border-color: var(--solid-button-background);
+				background-color: rgba(19, 81, 132, 0.04);
+			}
+
+			.radioText {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.radioText strong {
+				font-size: 0.8rem;
+				color: var(--foreground);
+			}
+
+			.radioText span {
+				font-size: 0.75rem;
+				color: var(--text-secondary);
+			}
+
+		.dynamicFieldsSection {
+			background-color: var(--background-cards);
+			padding: 1rem;
+			border-radius: var(--delete-modal-border-radius-standard);
+			margin-bottom: 1.5rem;
+		}
+
+.rowFields {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+}
+
+.inputWrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.inputWrapper label {
+	font-size: 0.8rem;
+	font-weight: 600;
+	color: var(--email-label);
+}
+
+.inputWrapper input {
+	padding: 0.6rem;
+	border: 1px solid var(--email-input-border);
+	border-radius: var(--delete-modal-border-radius-small);
+	background-color: var(--email-input-background);
+	color: var(--email-input-foreground);
+	font-size: 0.9rem;
+}
+
+.inputWrapper input:focus {
+	outline: none;
+	border-color: var(--solid-button-background);
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+}
+
+.cancelBtn {
+	background-color: var(--delete-modal-button-cancel-background);
+	color: var(--delete-modal-button-cancel-text-color);
+	border: 1px solid var(--delete-modal-button-cancel-border-color);
+	padding: 0.6rem 1.2rem;
+	border-radius: var(--delete-modal-border-radius-small);
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.submitBtn {
+	background-color: var(--solid-button-background);
+	color: var(--solid-button-foreground);
+	border: 1px solid var(--solid-button-border-color);
+	padding: 0.6rem 1.2rem;
+	border-radius: var(--delete-modal-border-radius-small);
+	cursor: pointer;
+	font-weight: 500;
+	transition: background-color 0.2s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+	background-color: var(--solid-button-hover-background);
+}
+
+.submitBtn:disabled {
+	background-color: var(--multistep-form-button-disabled-background);
+	color: var(--multistep-form-button-disabled-color);
+	border-color: var(--multistep-form-button-disabled-background);
+	cursor: not-allowed;
+}

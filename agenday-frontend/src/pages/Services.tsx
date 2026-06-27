@@ -16,6 +16,15 @@ import { LoadingClock } from "../components/Alerts/LoadingClock";
 import { BlackWindow } from "../components/Ui/BlackWindow";
 import { SuccessAlert } from "../components/Alerts/SuccessAlert";
 import { DeleteConfirmationModal } from "../components/Modal/DeleteConfirmationModal";
+import type { InputProps } from "../types/Inputs";
+import type { ComboBoxOption } from "../types/ComboBox";
+
+type Employers = {
+	professionalEstablishmentId: string,
+	catalogItemId: string,
+	customPrice: number,
+	customDurationMinutes: number
+}
 
 export function Services() {
     const {api} = useContext(AuthContext);
@@ -34,7 +43,8 @@ export function Services() {
     const [establishments, setEstablishments] = useState<EstablishmentSummary[]>([]);
     const [selectedEstablishment, setSelectedEstablishment] = useState<EstablishmentSummary | null>(null);
     const NO_ESTABLISHMENTS = [{ label: "Nenhum estabelecimento encontrado", value: '' }];
-    const [comboBoxState, setComboBoxState] = useState({
+	
+    const [establshimentComboBoxState, setEstablishmentComboBoxState] = useState({
         value: {
             selectedValue: '',
             selectedLabel: '',
@@ -61,23 +71,38 @@ export function Services() {
                 return null;
             }
         }
+
+		const getEmployers = async (establismentId:string): Promise<Employers[] | null > => {
+			try {
+				const r = await api.get(`professional-establishments/establishment/${establismentId}`);
+				if (r.status == 200 && active ) {
+					setUpdateTable(!updateTable);
+					return r.data;
+				}
+				return null;
+			}
+			catch{return null}
+		}
         
         const updateComboBox = async () => {
-            const data = await getEstablishements(); 
-            if (!data || !active || data.length == 0) return; 
+            const establishments = await getEstablishements(); 
+            if (!establishments || !active || establishments.length == 0) return; 
 
-            const newOptions = data.map((d: any) => ({ label: d.name, value: d.id }));
+            const newOptions = establishments.map((d: any) => ({ label: d.name, value: d.id }));
             const finalOptions = newOptions.length > 0 ? newOptions : NO_ESTABLISHMENTS;
-            setSelectedEstablishment(data[0]);
+            setSelectedEstablishment(establishments[0]);
 
-            setComboBoxState(prevState => ({
+            setEstablishmentComboBoxState(prevState => ({
                 ...prevState,
                 value: {
-                    selectedLabel: data[0].name,
-                    selectedValue: data[0].id,
+                    selectedLabel: establishments[0].name,
+                    selectedValue: establishments[0].id,
                     options: finalOptions
                 }
             }));
+
+			const employers = await getEmployers(establishments[0].id);
+			console.log(employers);
         };
 
         updateComboBox();
@@ -192,7 +217,6 @@ export function Services() {
 
         api.patch(`catalogItem/update/${editModal.data}`,requestBody).then((r)=>{
             if (r.status == 200 ) {
-                console.log(r.data);
                 setTimeout(()=> {
                     blackWidow.hidden();
                     editModal.hidden();
@@ -248,7 +272,7 @@ export function Services() {
                 <div className={styles.servicesHeaderComboboxContainer}>
                     <ComboBox 
                         label="Selecione um estabelecimento" 
-                        initialValue={comboBoxState}
+                        initialValue={establshimentComboBoxState}
                         onChangeField={(d)=>{
                             const found = establishments.find(est => est.id === d.value.selectedValue);
                             setUpdateTable(!updateTable);

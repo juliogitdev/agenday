@@ -3,7 +3,7 @@
 .ErrorAlert {
 	display: flex;
 	align-items: center;
-	position: absolute;
+	position: fixed;
 	right: 10px;
 	width: 300px;
 	top: 10px;

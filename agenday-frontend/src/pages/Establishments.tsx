@@ -1,5 +1,5 @@
 
-import { CirclePlus } from "lucide-react";
+
 import { EstablishmentTable } from "../components/tables/EstableshmentTable";
 import { bestServices, topClientes } from "../mocks/establishmentDashboardMock";
 import { EstablishmentDashboardCard } from "../components/cards/EstablishmentDashboardCard";
@@ -20,6 +20,7 @@ import { ModalHook } from "../hooks/ModalHook";
 import { AlertHook } from "../hooks/AlertsHook";
 import { EstablishmentFormStore } from "../store/EstablishmentFormStore";
 import type { EstablishmenteDashboardCardType } from "../types/Estableshment";
+import { InviteProfessionalModal } from "../components/Modal/InviteProfessionalModal";
 
 
 export function Establishments() {
@@ -32,6 +33,7 @@ export function Establishments() {
 	const blackWindow  = ModalHook();
 	const formModal    = ModalHook();
 	const deleteModal  = ModalHook();
+	const inviteProfissionalModal  = ModalHook();
 	
 
 	const [updateTable, setUpdateTable] = useState(0);
@@ -200,7 +202,11 @@ export function Establishments() {
 			blackWindow.show();
 			formModal.show(establishment);
 			fillEstablishmentForm(establishment);
-		}else { view(establishment);}
+		}else if (action === 'invite') {
+			blackWindow.show();
+			inviteProfissionalModal.show(establishment.id);
+		}
+		else { view(establishment);}
 	}
 
 	return (
@@ -244,6 +250,16 @@ export function Establishments() {
 					onFinished={(data) => { 
 						if (formMethod === 'create') create(data);  else update(data); 
 					}} 
+				/>
+
+				<InviteProfessionalModal 
+					establishmentId={inviteProfissionalModal.data}
+					isVisible={inviteProfissionalModal.visible} 
+
+					onClose={() => {
+						blackWindow.hidden();
+						inviteProfissionalModal.hidden();
+					} } 
 				/>
 
 				<DeleteConfirmationModal 

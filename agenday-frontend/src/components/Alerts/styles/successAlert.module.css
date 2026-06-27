@@ -3,7 +3,6 @@
 .SuccessAlert {
 	display: flex;
 	align-items: center;
-	position: absolute;
 	right: 10px;
 	width: 300px;
 	top: 10px;
@@ -16,6 +15,7 @@
 	animation: slideDown 0.5s ease-out;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	z-index: 9999999999999999; /* hum */
+	position: fixed;
 }
 	.SuccessIcon {
 		color: var(--success-icon-color);
