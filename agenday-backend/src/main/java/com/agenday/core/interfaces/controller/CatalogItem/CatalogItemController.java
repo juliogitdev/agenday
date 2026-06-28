@@ -1,8 +1,6 @@
 package com.agenday.core.interfaces.controller.CatalogItem;
 
-import com.agenday.core.application.dto.CatalogItem.CatalogItemRequest;
-import com.agenday.core.application.dto.CatalogItem.CatalogItemResponse;
-import com.agenday.core.application.dto.CatalogItem.CatalogItemUpdateRequest;
+import com.agenday.core.application.dto.CatalogItem.*;
 import com.agenday.core.application.service.CatalogItem.CatalogItemService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -73,5 +71,19 @@ public class CatalogItemController {
 
         return ResponseEntity.status(200).body(
                 catalogItemService.listByEstablishment(email, establishmentId));
+    }
+
+    @PostMapping("/professionals-with-service-status")
+    public ResponseEntity<List<ProfessionalWithServiceStatusResponse>> getProfessionalsWithServiceStatus(
+            Authentication authentication,
+            @RequestBody @Valid ProfessionalServiceStatusRequest request) {
+
+        String email = authentication.getName();
+        List<ProfessionalWithServiceStatusResponse> professionals = catalogItemService.getProfessionalsWithServiceStatus(
+                email,
+                request
+        );
+
+        return ResponseEntity.ok(professionals);
     }
 }

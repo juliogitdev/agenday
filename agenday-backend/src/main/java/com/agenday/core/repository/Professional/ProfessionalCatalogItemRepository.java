@@ -16,4 +16,5 @@ public interface ProfessionalCatalogItemRepository extends JpaRepository<Profess
             UUID professionalEstablishmentId,
             UUID catalogItemId
     );
+    List<ProfessionalCatalogItem> findByCatalogItemIdAndIsActiveTrue(UUID catalogItemId);
 }
