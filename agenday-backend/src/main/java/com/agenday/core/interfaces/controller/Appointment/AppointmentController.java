@@ -2,6 +2,8 @@ package com.agenday.core.interfaces.controller.Appointment;
 
 import com.agenday.core.application.dto.Appointment.AppointmentRequest;
 import com.agenday.core.application.dto.Appointment.AppointmentResponse;
+import com.agenday.core.application.dto.Appointment.AvailableSlotsRequest;
+import com.agenday.core.application.dto.Appointment.AvailableSlotsResponse;
 import com.agenday.core.application.service.Appointment.AppointmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -72,5 +75,13 @@ public class AppointmentController {
                 authentication, professionalEstabId, start, end
         );
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/available-slots")
+    public ResponseEntity<List<AvailableSlotsResponse>> getAvailableSlots(
+            @RequestBody @Valid AvailableSlotsRequest request) {
+
+        List<AvailableSlotsResponse> slots = appointmentService.getAvailableSlots(request);
+        return ResponseEntity.ok(slots);
     }
 }

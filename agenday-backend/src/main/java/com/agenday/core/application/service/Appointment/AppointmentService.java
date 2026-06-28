@@ -3,11 +3,15 @@ package com.agenday.core.application.service.Appointment;
 import com.agenday.common.exception.BusinessException;
 import com.agenday.core.application.dto.Appointment.AppointmentRequest;
 import com.agenday.core.application.dto.Appointment.AppointmentResponse;
+import com.agenday.core.application.dto.Appointment.AvailableSlotsRequest;
+import com.agenday.core.application.dto.Appointment.AvailableSlotsResponse;
 import com.agenday.core.domain.enums.AppointmentStatus;
 import com.agenday.core.domain.model.Appointment.Appointment;
+import com.agenday.core.domain.model.Professional.ProfessionalCatalogItem;
 import com.agenday.core.domain.model.catalogItem.CatalogItem;
 import com.agenday.core.domain.model.Professional.ProfessionalEstablishment;
 import com.agenday.core.domain.model.Professional.ProfessionalSchedule;
+import com.agenday.core.repository.Professional.ProfessionalCatalogItemRepository;
 import com.agenday.iam.domain.model.User;
 import com.agenday.core.mapper.Appointment.AppointmentMapper;
 import com.agenday.core.repository.Appointment.AppointmentRepository;
@@ -21,8 +25,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,7 +39,12 @@ public class AppointmentService {
     private final ProfessionalEstablishmentRepository establishmentRepository;
     private final CatalogItemRepository catalogItemRepository;
     private final ProfessionalScheduleRepository scheduleRepository;
+    private final ProfessionalCatalogItemRepository professionalCatalogItemRepository;
+    private final ProfessionalEstablishmentRepository professionalEstablishmentRepository;
     private final UserRepository userRepository; // Para buscar o cliente logado
+
+    // Constante: slots de 15 em 15 minutos
+    private static final int SLOT_INTERVAL_MINUTES = 15;
 
     @Transactional
     public AppointmentResponse createAppointment(AppointmentRequest request, Authentication authentication) {
@@ -221,5 +230,131 @@ public class AppointmentService {
                 .stream()
                 .map(AppointmentMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * HORÁRIOS DISPONÍVEIS
+     * Retorna todos os slots de 15 em 15 minutos que estão livres para agendamento
+     * em um determinado dia, considerando:
+     * - Jornada de trabalho do profissional (ProfessionalSchedule)
+     * - Duração do serviço selecionado
+     * - Agendamentos já existentes
+     */
+    @Transactional(readOnly = true)
+    public List<AvailableSlotsResponse> getAvailableSlots(AvailableSlotsRequest request) {
+
+        UUID professionalEstabId = request.professionalEstabId();
+        LocalDate date = request.date();
+        UUID catalogItemId = request.catalogItemId();
+
+        // 1. Buscar o serviço para obter a duração
+        CatalogItem catalogItem = catalogItemRepository.findById(catalogItemId)
+                .orElseThrow(() -> new BusinessException(
+                        "SERVICE_NOT_FOUND",
+                        "Serviço não encontrado.",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        // 2. Buscar o vínculo profissional-estabelecimento
+        ProfessionalEstablishment establishment = establishmentRepository
+                .findByIdAndIsActiveTrue(professionalEstabId)
+                .orElseThrow(() -> new BusinessException(
+                        "PROFESSIONAL_NOT_FOUND",
+                        "Profissional não está ativo neste estabelecimento.",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        // 3. NOVO: Verificar se o profissional está vinculado a este serviço
+        boolean isLinked = professionalCatalogItemRepository
+                .existsByProfessionalEstablishmentIdAndCatalogItemIdAndIsActiveTrue(
+                        professionalEstabId,
+                        catalogItemId
+                );
+
+        if (!isLinked) {
+            throw new BusinessException(
+                    "PROFESSIONAL_NOT_LINKED_TO_SERVICE",
+                    "Este profissional não está vinculado ao serviço selecionado.",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        int serviceDurationMinutes = catalogItem.getDefaultDurationMinutes();
+
+        // 2. Buscar o vínculo profissional-estabelecimento
+        ProfessionalEstablishment professionalEstablishment = professionalEstablishmentRepository
+                .findByIdAndIsActiveTrue(professionalEstabId)
+                .orElseThrow(() -> new BusinessException(
+                        "PROFESSIONAL_NOT_FOUND",
+                        "Profissional não está ativo neste estabelecimento.",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        // 3. Buscar todos os turnos ativos daquele dia da semana
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        List<ProfessionalSchedule> schedules = scheduleRepository
+                .findByProfessionalEstablishmentIdAndDayOfWeekAndIsActiveTrue(
+                        professionalEstabId, dayOfWeek
+                );
+
+        if (schedules.isEmpty()) {
+            return List.of(); // Profissional não trabalha nesse dia
+        }
+
+        // 4. Buscar todos os agendamentos existentes naquele dia
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(23, 59, 59);
+
+        List<Appointment> existingAppointments = appointmentRepository
+                .findByProfessionalEstablishmentIdAndStartTimeBetweenAndIsActiveTrue(
+                        professionalEstabId, startOfDay, endOfDay
+                );
+
+        // 5. Gerar slots possíveis para cada turno
+        List<LocalDateTime> allPossibleSlots = new ArrayList<>();
+
+        for (ProfessionalSchedule schedule : schedules) {
+            LocalTime shiftStart = schedule.getStartTime();
+            LocalTime shiftEnd = schedule.getEndTime();
+
+            // Verificar se o serviço cabe no turno
+            long shiftDurationMinutes = Duration.between(shiftStart, shiftEnd).toMinutes();
+            if (shiftDurationMinutes < serviceDurationMinutes) {
+                continue; // Ignora esse turno - serviço não cabe
+            }
+
+            // Gerar slots de 15 em 15 minutos
+            // O último slot possível é (shiftEnd - serviceDuration)
+            LocalTime lastPossibleStart = shiftEnd.minusMinutes(serviceDurationMinutes);
+
+            LocalTime currentSlotStart = shiftStart;
+            while (!currentSlotStart.isAfter(lastPossibleStart)) {
+                LocalDateTime slotDateTime = date.atTime(currentSlotStart);
+                allPossibleSlots.add(slotDateTime);
+                currentSlotStart = currentSlotStart.plusMinutes(SLOT_INTERVAL_MINUTES);
+            }
+        }
+
+        // 6. Filtrar slots que conflitam com agendamentos existentes
+        List<AvailableSlotsResponse> availableSlots = allPossibleSlots.stream()
+                .filter(slotStart -> {
+                    LocalDateTime slotEnd = slotStart.plusMinutes(serviceDurationMinutes);
+
+                    // Verificar se conflita com algum agendamento existente
+                    boolean hasConflict = existingAppointments.stream()
+                            .anyMatch(appointment -> {
+                                LocalDateTime appStart = appointment.getStartTime();
+                                LocalDateTime appEnd = appointment.getEndTime();
+
+                                // Conflito se: slotStart < appEnd E slotEnd > appStart
+                                return slotStart.isBefore(appEnd) && slotEnd.isAfter(appStart);
+                            });
+
+                    return !hasConflict;
+                })
+                .map(startTime -> new AvailableSlotsResponse(startTime))
+                .collect(Collectors.toList());
+
+        return availableSlots;
     }
 }
