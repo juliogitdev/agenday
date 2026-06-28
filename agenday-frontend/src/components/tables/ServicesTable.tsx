@@ -1,6 +1,6 @@
 
 import styles from "./styles/servicesTable.module.css"
-import { FilePenLine,WandSparkles, Trash2 } from "lucide-react";
+import { FilePenLine, Trash2, UserPlus } from "lucide-react";
 
 export type TableServicesData = {
     name: string;
@@ -20,11 +20,13 @@ export type TableServiceProps = {
 export type Action = 'edit' | 'delete' | 'select' | 'promotion';
 export type TableClickCallback = {
     action: Action;
+	price: number;
+	duration: number;
     serviceId: string | null;
 }
 
 export function ServicesTable({serviceList, isLoading, onCLick: callBack }:TableServiceProps)  {
-    const clickHandler = (a:Action, id:string | null ) => {callBack({action: a, serviceId: id})}
+    const clickHandler = (a:Action, id:string,price:number, duration:number) => {callBack({action: a, serviceId: id, price, duration})}
 
     return (
         <div className={styles.serviceTable}>
@@ -56,9 +58,9 @@ export function ServicesTable({serviceList, isLoading, onCLick: callBack }:Table
                     </div> 
 
                     <div className={styles.serviceTableRowCollumnActions}>
-                        <button onClick={()=> clickHandler("promotion",service.serviceId)}> <WandSparkles color="#8347b7" /></button>
-                        <button onClick={()=> clickHandler("edit",service.serviceId)}><FilePenLine color="#387abc" /></button>
-                        <button onClick={()=> clickHandler("delete",service.serviceId)}><Trash2 color="#d17084"/></button>
+                        <button onClick={()=> clickHandler("promotion",service.serviceId, service.price, service.duration)}><UserPlus color="#387abc"/></button>
+                        <button onClick={()=> clickHandler("edit",service.serviceId,service.price, service.duration)}><FilePenLine color="#387abc" /></button>
+                        <button onClick={()=> clickHandler("delete",service.serviceId,service.price, service.duration)}><Trash2 color="#d17084"/></button>
                     </div>
                 </li>
             ))}

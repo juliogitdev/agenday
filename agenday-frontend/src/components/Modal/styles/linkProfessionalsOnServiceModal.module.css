@@ -1,0 +1,201 @@
+.card {
+	background-color: var(--multistep-form-background, #ffffff);
+	border: 1px solid var(--multistep-form-border-color, #d4d4d4);
+	border-radius: 10px;
+	box-shadow: var(--multistep-form-shadow, 0 10px 25px rgba(0, 0, 0, .08));
+	width: 560px;
+	max-width: calc(100vw - 32px);
+	padding: 1.5rem;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+	.cardHeader {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		border-bottom: 1px solid var(--panel-border-color, #d4d4d4);
+		padding-bottom: 1rem;
+		margin-bottom: 0;
+	}
+
+		.cardHeaderL {
+			display: flex;
+			flex-direction: column;
+			gap: 0.25rem;
+		}
+
+			.cardHeaderTitle {
+				font-size: 1rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				color: var(--service-page-header-title, #135184);
+				margin: 0;
+			}
+
+			.cardHeaderStatus {
+				display: flex;
+				gap: 1rem;
+				font-size: 0.875rem;
+				margin: 0;
+			}
+
+				.cardHeaderPrice,
+				.cardHeaderTimer {
+					color: var(--service-page-header-subtitle, #616161);
+				}
+
+	.cardHeaderCLoseBnt {
+		background: transparent;
+		border: none;
+		border-radius: 6px;
+		font-size: 1.25rem;
+		color: var(--chose-plan-close-button-color, #94a3b8);
+		cursor: pointer;
+		transition: all .2s;
+		line-height: 1;
+		padding: 0.35rem;
+	}
+
+	.cardHeaderCLoseBnt:hover {
+		background: var(--combo-item-background_2, #f5f5f5);
+		color: var(--chose-plan-close-button-hover-color, #0f172a);
+	}
+
+	.cardLabel {
+		font-size: 0.95rem;
+		color: var(--text-secondary, #666666);
+		margin: 0;
+	}
+
+	.cardTable {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		border: 1px solid var(--border-color, #d4d4d4);
+		border-radius: 8px;
+		max-height: 300px;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	.cardTableHead {
+		display: grid;
+		grid-template-columns: 60px 1fr;
+		background-color: var(--combo-item-background_2, #f5f5f5);
+		padding: 0.75rem 0.9rem;
+		border-bottom: 1px solid var(--border-color, #d4d4d4);
+		font-weight: 600;
+		font-size: 0.85rem;
+		position: sticky;
+		top: 0;
+		z-index: 1;
+	}
+
+	.cardTableHeadCollum {
+		color: var(--text-secondary, #666666);
+	}
+
+	.cardTableRow {
+		display: grid;
+		grid-template-columns: 60px 1fr;
+		align-items: center;
+		padding: 0.8rem 0.9rem;
+		border-bottom: 1px solid var(--border-color, #d4d4d4);
+		transition: background-color .2s;
+	}
+
+	.cardTableRow:last-child {
+		border-bottom: none;
+	}
+
+	.cardTableRow:hover {
+		background-color: var(--establishment-table-row-hover-background, #f5f5f5);
+	}
+
+	.cardTableRow:has(input:checked) {
+		background-color: var(--combo-item-background_2, #f5f5f5);
+	}
+
+	.cardTableRowCollumA {
+		width: 18px;
+		height: 18px;
+		cursor: pointer;
+		accent-color: var(--onboarding-checkbox-checked-color, #135184);
+		justify-self: center;
+	}
+
+	.cardTableRowCollumB {
+		display: flex;
+		align-items: center;
+		gap: 0.9rem;
+	}
+
+	.cardTableRowCollumB img {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		object-fit: cover;
+		background-color: var(--border-color, #d4d4d4);
+		flex-shrink: 0;
+	}
+
+	.avatarFallback {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background-color: var(--solid-button-background, #135184);
+		color: #fff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.8rem;
+		font-weight: bold;
+		flex-shrink: 0;
+	}
+
+	.cardTableRowCollumB p {
+		margin: 0;
+		font-size: 0.95rem;
+		color: var(--foreground, #111111);
+	}
+
+	.buttonsContainer {
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.75rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--panel-border-color, #d4d4d4);
+	}
+
+	.cancelButton,
+	.saveButton {
+		height: 36px;
+		padding: 0 1rem;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: all .2s;
+	}
+
+	.cancelButton {
+		background: transparent;
+		border: 1px solid var(--border-color, #d4d4d4);
+		color: var(--foreground, #111111);
+	}
+
+	.cancelButton:hover {
+		background: var(--combo-item-background_2, #f5f5f5);
+	}
+
+	.saveButton {
+		background: var(--solid-button-background, #135184);
+		border: none;
+		color: #fff;
+	}
+
+	.saveButton:hover {
+		filter: brightness(.95);
+	}

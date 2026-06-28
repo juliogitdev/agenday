@@ -16,8 +16,7 @@ import { LoadingClock } from "../components/Alerts/LoadingClock";
 import { BlackWindow } from "../components/Ui/BlackWindow";
 import { SuccessAlert } from "../components/Alerts/SuccessAlert";
 import { DeleteConfirmationModal } from "../components/Modal/DeleteConfirmationModal";
-import type { InputProps } from "../types/Inputs";
-import type { ComboBoxOption } from "../types/ComboBox";
+import { LinkProfessionalsOnServiceModal, type LinkS2pProfessionals } from "../components/Modal/LinkProfessionalsOnServiceModal";
 
 type Employers = {
 	professionalEstablishmentId: string,
@@ -30,6 +29,8 @@ export function Services() {
     const {api} = useContext(AuthContext);
     const errorAlert  = AlertHook();
     const sucessAlert = AlertHook();
+
+	const linkProfessionalModal  = ModalHook();
     const createForm  = ModalHook();
     const blackWidow  = ModalHook();
     const deletModal  = ModalHook();
@@ -43,7 +44,7 @@ export function Services() {
     const [establishments, setEstablishments] = useState<EstablishmentSummary[]>([]);
     const [selectedEstablishment, setSelectedEstablishment] = useState<EstablishmentSummary | null>(null);
     const NO_ESTABLISHMENTS = [{ label: "Nenhum estabelecimento encontrado", value: '' }];
-	
+	const [professionalsList, setProfessionalsList] = useState<Array<LinkS2pProfessionals>>([]);
     const [establshimentComboBoxState, setEstablishmentComboBoxState] = useState({
         value: {
             selectedValue: '',
@@ -233,7 +234,22 @@ export function Services() {
     }
 
 
-    const actionsHandler = (d:TableClickCallback) => {
+	async function getProfessionals(establishmentId: string | undefined,catalogItemId: string | null): Promise<LinkS2pProfessionals[]> {
+  		if (!establishmentId || !catalogItemId) { return [];}
+  		const body = { establishmentId, catalogItemId };
+		const response = await api.post("catalogItem/professionals-with-service-status",body);
+  		if (response.status !== 200) { return [];}
+
+		return response.data.map((e: any) => ({
+			professionalName: e.professionalName,
+			professionalAvatarUrl: e.professionalAvatarUrl || null,
+			professionalEstablishmentId: e.professionalEstablishmentId,
+			isLinkedToService: e.isLinkedToService
+		}));
+	}
+
+
+    const actionsHandler = async (d:TableClickCallback) => {
         if (d.action === 'delete' ) {
             blackWidow.show('');
             deletModal.show(d.serviceId)
@@ -252,7 +268,12 @@ export function Services() {
                 form.resetForm()
                 errorAlert.show("Error", "O serviço selecionado é inválido",4000);
             }
-        }
+        } else if (d.action == 'promotion' ) {
+			blackWidow.show('');
+			const profs = await getProfessionals(selectedEstablishment?.id,d.serviceId);
+			setProfessionalsList(profs);
+			linkProfessionalModal.show(d);
+		} 
     } 
 
     return (
@@ -318,6 +339,18 @@ export function Services() {
                     }}
                     onClick={()=>edit()}
                 />
+
+				<LinkProfessionalsOnServiceModal
+					isVisible={linkProfessionalModal.visible}
+					professionais={professionalsList}
+					catalogItemId={linkProfessionalModal.data?.serviceId}
+					customPrice={linkProfessionalModal.data?.price}
+					customDurationMinutes={linkProfessionalModal.data?.duration}
+					onClose={()=> {
+						blackWidow.hidden();
+						linkProfessionalModal.hidden()
+					}}		
+				/>
             </BlackWindow>
 
             <ErrorAlert isVisible={errorAlert.isVisible} title={errorAlert.title} message={errorAlert.message}/>
