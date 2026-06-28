@@ -9,6 +9,7 @@ interface BlackWindowProps {
 	isVisible: boolean;
 }
 
+// refatorar para Overlay
 export function BlackWindow({ children, isVisible }: BlackWindowProps) {
 	const [shouldRender, setShouldRender] = useState(isVisible);
 	const [isAnimated, setIsAnimated] = useState(false);
