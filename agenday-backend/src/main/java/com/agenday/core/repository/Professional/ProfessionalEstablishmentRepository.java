@@ -2,6 +2,8 @@ package com.agenday.core.repository.Professional;
 
 import com.agenday.core.domain.model.Professional.ProfessionalEstablishment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,4 +19,12 @@ public interface ProfessionalEstablishmentRepository extends JpaRepository<Profe
     boolean existsByEstablishmentIdAndProfessionalUserEmailAndIsActiveTrue(UUID establishmentId, String email);
 
     List<ProfessionalEstablishment> findByEstablishmentIdAndIsActiveTrue(UUID establishmentId);
+    @Query("SELECT pe FROM ProfessionalEstablishment pe " +
+            "JOIN FETCH pe.professional p " +
+            "JOIN FETCH p.user u " +
+            "WHERE pe.establishment.id = :establishmentId " +
+            "AND pe.isActive = true")
+    List<ProfessionalEstablishment> findByEstablishmentIdAndIsActiveTrueWithDetails(
+            @Param("establishmentId") UUID establishmentId
+    );
 }
