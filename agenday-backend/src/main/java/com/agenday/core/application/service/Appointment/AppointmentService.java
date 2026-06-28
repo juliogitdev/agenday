@@ -7,9 +7,11 @@ import com.agenday.core.application.dto.Appointment.AvailableSlotsRequest;
 import com.agenday.core.application.dto.Appointment.AvailableSlotsResponse;
 import com.agenday.core.domain.enums.AppointmentStatus;
 import com.agenday.core.domain.model.Appointment.Appointment;
+import com.agenday.core.domain.model.Professional.ProfessionalCatalogItem;
 import com.agenday.core.domain.model.catalogItem.CatalogItem;
 import com.agenday.core.domain.model.Professional.ProfessionalEstablishment;
 import com.agenday.core.domain.model.Professional.ProfessionalSchedule;
+import com.agenday.core.repository.Professional.ProfessionalCatalogItemRepository;
 import com.agenday.iam.domain.model.User;
 import com.agenday.core.mapper.Appointment.AppointmentMapper;
 import com.agenday.core.repository.Appointment.AppointmentRepository;
@@ -37,6 +39,8 @@ public class AppointmentService {
     private final ProfessionalEstablishmentRepository establishmentRepository;
     private final CatalogItemRepository catalogItemRepository;
     private final ProfessionalScheduleRepository scheduleRepository;
+    private final ProfessionalCatalogItemRepository professionalCatalogItemRepository;
+    private final ProfessionalEstablishmentRepository professionalEstablishmentRepository;
     private final UserRepository userRepository; // Para buscar o cliente logado
 
     // Constante: slots de 15 em 15 minutos
@@ -239,7 +243,6 @@ public class AppointmentService {
     @Transactional(readOnly = true)
     public List<AvailableSlotsResponse> getAvailableSlots(AvailableSlotsRequest request) {
 
-        // EXTRAÇÃO DOS VALORES DO DTO
         UUID professionalEstabId = request.professionalEstabId();
         LocalDate date = request.date();
         UUID catalogItemId = request.catalogItemId();
@@ -252,10 +255,34 @@ public class AppointmentService {
                         HttpStatus.NOT_FOUND
                 ));
 
+        // 2. Buscar o vínculo profissional-estabelecimento
+        ProfessionalEstablishment establishment = establishmentRepository
+                .findByIdAndIsActiveTrue(professionalEstabId)
+                .orElseThrow(() -> new BusinessException(
+                        "PROFESSIONAL_NOT_FOUND",
+                        "Profissional não está ativo neste estabelecimento.",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        // 3. NOVO: Verificar se o profissional está vinculado a este serviço
+        boolean isLinked = professionalCatalogItemRepository
+                .existsByProfessionalEstablishmentIdAndCatalogItemIdAndIsActiveTrue(
+                        professionalEstabId,
+                        catalogItemId
+                );
+
+        if (!isLinked) {
+            throw new BusinessException(
+                    "PROFESSIONAL_NOT_LINKED_TO_SERVICE",
+                    "Este profissional não está vinculado ao serviço selecionado.",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
         int serviceDurationMinutes = catalogItem.getDefaultDurationMinutes();
 
         // 2. Buscar o vínculo profissional-estabelecimento
-        ProfessionalEstablishment establishment = establishmentRepository
+        ProfessionalEstablishment professionalEstablishment = professionalEstablishmentRepository
                 .findByIdAndIsActiveTrue(professionalEstabId)
                 .orElseThrow(() -> new BusinessException(
                         "PROFESSIONAL_NOT_FOUND",
