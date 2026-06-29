@@ -113,7 +113,7 @@ public class ProfessionalEstablishmentService {
             link.setStatus(LinkStatus.ACTIVE);
             link.setLinkedAt(LocalDateTime.now());
         } else {
-            link.setStatus(LinkStatus.PENDING);
+            link.setStatus(LinkStatus.ACTIVE);
             link.setLinkedAt(null);
         }
 
