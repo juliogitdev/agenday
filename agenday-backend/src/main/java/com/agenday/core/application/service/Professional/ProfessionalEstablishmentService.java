@@ -1,8 +1,10 @@
 package com.agenday.core.application.service.Professional;
 
 import com.agenday.common.exception.BusinessException;
+import com.agenday.core.application.dto.Professional.InvitationActionRequest;
 import com.agenday.core.application.dto.Professional.ProfessionalEstablishmentRequest;
 import com.agenday.core.application.dto.Professional.ProfessionalEstablishmentResponse;
+import com.agenday.core.application.dto.Professional.ProfessionalInvitationResponse;
 import com.agenday.core.domain.enums.LinkStatus;
 import com.agenday.core.domain.model.Establishment.Establishment;
 import com.agenday.core.domain.model.Professional.Professional;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,15 +37,9 @@ public class ProfessionalEstablishmentService {
     @Transactional
     public ProfessionalEstablishmentResponse linkProfessional(ProfessionalEstablishmentRequest request, Authentication authentication) {
 
-        // Extrair os dados de segurança do Dono que está logado
         String loggedUserEmail = authentication.getName();
-        List<String> roles = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
 
-
-
-        // Verificar se o estabelecimento existe
+        // 1. Verificar se o estabelecimento existe
         Establishment establishment = establishmentRepository.findById(request.establishmentId())
                 .orElseThrow(() -> new BusinessException(
                         "ESTABLISHMENT_NOT_FOUND",
@@ -50,8 +47,7 @@ public class ProfessionalEstablishmentService {
                         HttpStatus.NOT_FOUND
                 ));
 
-        // VALIDAÇÃO DE DONO (Ownership Check)
-        // Verifica se o e-mail de quem está logado é idêntico ao e-mail do dono do salão no banco
+        // 2. VALIDAÇÃO DE DONO
         String establishmentOwnerEmail = establishment.getOwner().getEmail();
         if (!loggedUserEmail.equals(establishmentOwnerEmail)) {
             throw new BusinessException(
@@ -61,7 +57,7 @@ public class ProfessionalEstablishmentService {
             );
         }
 
-        // Verificar se o profissional que será convidado existe no sistema
+        // 3. Verificar se o profissional existe
         Professional professional = professionalRepository.findByUserEmail(request.emailProfessional())
                 .orElseThrow(() -> new BusinessException(
                         "PROFESSIONAL_NOT_FOUND",
@@ -69,39 +65,65 @@ public class ProfessionalEstablishmentService {
                         HttpStatus.NOT_FOUND
                 ));
 
-        // Trava de duplicidade
-        boolean alreadyLinked = linkRepository.existsByEstablishmentIdAndProfessionalUserEmailAndIsActiveTrue(
-                request.establishmentId(), request.emailProfessional()
-        );
+        // 4. VALIDAÇÃO DE VÍNCULO
+        Optional<ProfessionalEstablishment> existingLinkOpt = linkRepository
+                .findFirstByEstablishmentIdAndProfessionalUserEmailOrderByCreatedAtDesc(
+                        request.establishmentId(),
+                        request.emailProfessional()
+                );
 
-        if (alreadyLinked) {
-            throw new BusinessException(
-                    "ALREADY_LINKED",
-                    "Este profissional já possui um vínculo ativo ou pendente com este estabelecimento.",
-                    HttpStatus.CONFLICT
-            );
+        if (existingLinkOpt.isPresent()) {
+            ProfessionalEstablishment existingLink = existingLinkOpt.get();
+            LinkStatus currentStatus = existingLink.getStatus();
+
+            // Se estiver ATIVO (Aceito)
+            if (currentStatus == LinkStatus.ACTIVE) {
+                throw new BusinessException(
+                        "ALREADY_LINKED",
+                        "Este profissional já possui um vínculo ativo com este estabelecimento.",
+                        HttpStatus.CONFLICT
+                );
+            }
+
+            // Se estiver PENDENTE
+            if (currentStatus == LinkStatus.PENDING) {
+                throw new BusinessException(
+                        "PENDING_INVITATION_EXISTS",
+                        "Já existe um convite pendente para este profissional. Aguarde ele responder.",
+                        HttpStatus.CONFLICT
+                );
+            }
+
+            // Se estiver INATIVO (e não for REJECTED)
+            if (currentStatus != LinkStatus.REJECTED) {
+                throw new BusinessException(
+                        "INACTIVE_LINK",
+                        "Este profissional está inativo neste estabelecimento. Utilize o fluxo de reativação.",
+                        HttpStatus.CONFLICT
+                );
+            }
         }
 
-        // Construir e salvar o vínculo
+        // 5. Construir e salvar o NOVO vínculo
         ProfessionalEstablishment link = new ProfessionalEstablishment();
         link.setEstablishment(establishment);
         link.setProfessional(professional);
-        if(request.emailProfessional().equals(loggedUserEmail)){
+
+        if (request.emailProfessional().equals(loggedUserEmail)) {
             link.setStatus(LinkStatus.ACTIVE);
             link.setLinkedAt(LocalDateTime.now());
-        }else{
+        } else {
             link.setStatus(LinkStatus.PENDING);
             link.setLinkedAt(null);
         }
 
         ProfessionalEstablishment savedLink = linkRepository.save(link);
-
         return ProfessionalEstablishmentMapper.toDTO(savedLink);
     }
 
 
     @Transactional(readOnly = true)
-    public List<ProfessionalEstablishmentResponse> getSchedulesByEstablishment(UUID establishmentId, Authentication authentication) {
+    public List<ProfessionalEstablishmentResponse> getProfessionalsByEstablishment(UUID establishmentId, Authentication authentication) {
         // Verificar se o estabelecimento existe
         Establishment establishment = establishmentRepository.findById(establishmentId)
                 .orElseThrow(() -> new BusinessException(
@@ -125,6 +147,80 @@ public class ProfessionalEstablishmentService {
         return linkRepository.findByEstablishmentIdAndIsActiveTrue(establishmentId)
                 .stream()
                 .map(ProfessionalEstablishmentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+    /**
+     * ACEITAR OU REJEITAR CONVITE
+     * Permite ao profissional aceitar ou rejeitar um convite de estabelecimento
+     */
+    @Transactional
+    public ProfessionalEstablishmentResponse handleInvitation(
+            InvitationActionRequest request,
+            Authentication authentication) {
+
+        String professionalEmail = authentication.getName();
+
+        // 1. Buscar o vínculo
+        ProfessionalEstablishment link = linkRepository.findById(request.linkId())
+                .orElseThrow(() -> new BusinessException(
+                        "INVITATION_NOT_FOUND",
+                        "Convite não encontrado.",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        // 2. Validar se o profissional logado é o dono do convite
+        if (!link.getProfessional().getUser().getEmail().equals(professionalEmail)) {
+            throw new BusinessException(
+                    "FORBIDDEN_ACTION",
+                    "Você não tem permissão para responder a este convite.",
+                    HttpStatus.FORBIDDEN
+            );
+        }
+
+        // 3. Validar se o convite está pendente
+        if (link.getStatus() != LinkStatus.PENDING) {
+            throw new BusinessException(
+                    "INVALID_INVITATION_STATUS",
+                    "Este convite já foi respondido.",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        // 4. Processar a ação
+        if (Boolean.TRUE.equals(request.accepted())) {
+            link.setStatus(LinkStatus.ACTIVE);
+            link.setLinkedAt(LocalDateTime.now());
+        } else {
+            link.setStatus(LinkStatus.REJECTED);
+        }
+
+        ProfessionalEstablishment updatedLink = linkRepository.save(link);
+        return ProfessionalEstablishmentMapper.toDTO(updatedLink);
+    }
+
+    /**
+     * LISTAR CONVITES PENDENTES
+     * Retorna todos os convites pendentes para o profissional logado
+     */
+    @Transactional(readOnly = true)
+    public List<ProfessionalInvitationResponse> getPendingInvitations(Authentication authentication) {
+        String professionalEmail = authentication.getName();
+
+        List<ProfessionalEstablishment> invitations = linkRepository
+                .findPendingInvitationsByProfessionalEmail(professionalEmail, LinkStatus.PENDING);
+
+        return invitations.stream()
+                .map(invitation -> {
+                    Establishment establishment = invitation.getEstablishment();
+                    return new ProfessionalInvitationResponse(
+                            invitation.getId(),
+                            establishment.getId(),
+                            establishment.getName(),
+                            establishment.getAddress(),
+                            invitation.getStatus(),
+                            invitation.getCreatedAt() // Data em que foi criado
+                    );
+                })
                 .collect(Collectors.toList());
     }
 }
