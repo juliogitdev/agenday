@@ -1,7 +1,9 @@
 package com.agenday.core.interfaces.controller.Professional;
 
+import com.agenday.core.application.dto.Professional.InvitationActionRequest;
 import com.agenday.core.application.dto.Professional.ProfessionalEstablishmentRequest;
 import com.agenday.core.application.dto.Professional.ProfessionalEstablishmentResponse;
+import com.agenday.core.application.dto.Professional.ProfessionalInvitationResponse;
 import com.agenday.core.application.service.Professional.ProfessionalEstablishmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +38,28 @@ public class ProfessionalEstablishmentController {
             @PathVariable UUID establishmentId,
             Authentication authentication) {
 
-        List<ProfessionalEstablishmentResponse> response = establishmentService.getSchedulesByEstablishment(establishmentId, authentication);
+        List<ProfessionalEstablishmentResponse> response = establishmentService.getProfessionalsByEstablishment(establishmentId, authentication);
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * PATCH /api/v1/professional-establishments/invitations/action
+     * Aceita ou rejeita um convite de estabelecimento
+     */
+    @PatchMapping("/invitations/action")
+    public ResponseEntity<ProfessionalEstablishmentResponse> handleInvitation(
+            @RequestBody @Valid InvitationActionRequest request,
+            Authentication authentication) {
+
+        ProfessionalEstablishmentResponse response = establishmentService.handleInvitation(request, authentication);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/invitations")
+    public ResponseEntity<List<ProfessionalInvitationResponse>> getPendingInvitations(
+            Authentication authentication) {
+
+        List<ProfessionalInvitationResponse> invitations = establishmentService.getPendingInvitations(authentication);
+        return ResponseEntity.ok(invitations);
     }
 }

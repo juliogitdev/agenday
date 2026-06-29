@@ -1,5 +1,6 @@
 package com.agenday.core.repository.Professional;
 
+import com.agenday.core.domain.enums.LinkStatus;
 import com.agenday.core.domain.model.Professional.ProfessionalEstablishment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +16,7 @@ public interface ProfessionalEstablishmentRepository extends JpaRepository<Profe
 
     Optional<ProfessionalEstablishment> findByIdAndIsActiveTrue(UUID id);
 
-    // Evita duplicar o mesmo vínculo ativo ou pendente no salão
+
     boolean existsByEstablishmentIdAndProfessionalUserEmailAndIsActiveTrue(UUID establishmentId, String email);
 
     List<ProfessionalEstablishment> findByEstablishmentIdAndIsActiveTrue(UUID establishmentId);
@@ -26,5 +27,26 @@ public interface ProfessionalEstablishmentRepository extends JpaRepository<Profe
             "AND pe.isActive = true")
     List<ProfessionalEstablishment> findByEstablishmentIdAndIsActiveTrueWithDetails(
             @Param("establishmentId") UUID establishmentId
+    );
+
+    @Query("SELECT pe FROM ProfessionalEstablishment pe " +
+            "JOIN FETCH pe.establishment e " +
+            "WHERE pe.professional.user.email = :email " +
+            "AND pe.status = :status")
+    List<ProfessionalEstablishment> findPendingInvitationsByProfessionalEmail(
+            @Param("email") String email,
+            @Param("status") LinkStatus status
+    );
+
+    //Verificar se existe convite pendente
+    boolean existsByEstablishmentIdAndProfessionalUserEmailAndStatus(
+            UUID establishmentId,
+            String email,
+            LinkStatus status
+    );
+
+    Optional<ProfessionalEstablishment> findFirstByEstablishmentIdAndProfessionalUserEmailOrderByCreatedAtDesc(
+            UUID establishmentId,
+            String professionalEmail
     );
 }
