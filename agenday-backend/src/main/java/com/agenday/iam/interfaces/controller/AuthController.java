@@ -1,10 +1,6 @@
 package com.agenday.iam.interfaces.controller;
 
-import com.agenday.iam.application.dto.AuthResponse;
-import com.agenday.iam.application.dto.GoogleLoginRequest;
-import com.agenday.iam.application.dto.LoginRequest;
-import com.agenday.iam.application.dto.RegisterRequest;
-import com.agenday.iam.application.dto.UserResponse;
+import com.agenday.iam.application.dto.*;
 import com.agenday.iam.application.service.UserService;
 import com.agenday.iam.infrastructure.security.GoogleTokenVerifier;
 import com.agenday.iam.infrastructure.security.JwtService;
@@ -171,5 +167,22 @@ public class AuthController {
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(
+            @RequestBody @Valid ForgotPasswordRequest request
+    ) {
+        userService.requestPasswordReset(request);
+        // Sempre retorna 200 para não vazar se o email existe ou não (segurança)
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(
+            @RequestBody @Valid ResetPasswordRequest request
+    ) {
+        userService.resetPassword(request);
+        return ResponseEntity.ok().build();
     }
 }
