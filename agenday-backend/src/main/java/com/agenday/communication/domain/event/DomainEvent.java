@@ -1,21 +1,27 @@
 package com.agenday.communication.domain.event;
 
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 import java.util.UUID;
 
-@Data
+@ToString
+@Getter
+@EqualsAndHashCode
+@SuperBuilder
 public abstract class DomainEvent {
 
-    private final UUID eventId;
+    @Builder.Default
+    private final UUID eventId = UUID.randomUUID();
 
-    private final Instant occurredAt;
+    @Builder.Default
+    private final Instant occurredAt = Instant.now();
 
-    private final Integer version;
+    private final Integer version = 1;
 
     private final UUID correlationId;
-
+    
     public String getEventType() {
 
         EventType annotation = getClass().getAnnotation(EventType.class);
