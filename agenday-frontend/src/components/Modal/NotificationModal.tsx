@@ -7,11 +7,13 @@ import { BlackWindow } from '../Ui/BlackWindow';
 import { CancelAppointmentModal } from './CancelAppointmentModal';
 
 export type NotificationModalProps = {
-	onClose: () => void; // Define any props you want to pass to the NotificationModal here
+	onClose: () => void; 
+	isVisible: boolean;
 }
 
-export function NotificationModal({ onClose }: NotificationModalProps) {
+export function NotificationModal({ onClose, isVisible }: NotificationModalProps) {
 	const blackWidow  = ModalHook();
+	if (!isVisible) return null;
 
   	return (
 		<div className={styles.notifications}>

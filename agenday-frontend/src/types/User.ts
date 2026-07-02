@@ -3,6 +3,7 @@ export type User = {
   	token: number;
   	name: string;
   	email: string;
+	image: string,
   	fullName: string;
 	numberPhone: string;
 };

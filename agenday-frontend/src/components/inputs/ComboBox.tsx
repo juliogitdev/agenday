@@ -8,7 +8,7 @@ import type { ComboBoxOption, ComboBoxOptionItem } from '../../types/ComboBox';
 
 export function ComboBox({onChangeField, label, initialValue}:InputProps<ComboBoxOption>){
 	const [showOption, setShowOption] = useState(false);
-	const [selectedLabel, setSelectedLabel] = useState(initialValue.value?.selectedLabel || 'Selecione uma opção');
+	const [selectedLabel, setSelectedLabel] = useState(initialValue.value?.selectedLabel || 'Nada selecionado');
 
 	const updateValues = (option: ComboBoxOptionItem) => {		
 		onChangeField?.({

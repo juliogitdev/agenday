@@ -1,0 +1,88 @@
+
+.table {
+	position: relative;
+    display: flex;
+	width: 100%;
+	height: 700px;
+    flex-direction: column;
+}
+	.tableHeader, .tableData {
+		display: grid;
+		grid-template-columns: 40% 20% 15% 15%;
+		border-radius: 6px;
+		margin-bottom: 10px;
+		border: 2px solid var(--establishment-table-header-border-color);
+		background-color: var(--establishment-table-header-background);
+		box-shadow: var(--establishment-table-shadow);
+	}
+		.tableHeaderCollumn, .tableDataCollumn {
+			font-family: "Poppins", sans-serif;
+			font-weight: 600;
+			font-size: .75rem;
+			line-height: 20px;
+			color: var(--establishment-table-header-color);
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+			padding: 4px 16px;
+			border-left: 2px solid var(--establishment-table-header-border-color);
+		}
+			.tableDataCollumn {color: var(--text-secondary); font-weight: 400;}
+
+	.tableDataServiceTitle {
+		width: 100%;
+		font-size: .85rem;
+		color: var(--establishment-table-header-color);
+		display: block;
+	}
+
+
+.tableDataSttsAccept {
+	background-color: #bee7ba;
+	font-size: .75rem;
+	font-weight: 600;
+	padding: 2px 8px;
+	border-radius: 4px;
+	color: green;
+}
+
+.tableDataSttsRecused {
+	background-color: #f8d7da;
+	font-size: .75rem;
+	font-weight: 600;
+	padding: 2px 8px;
+	border-radius: 4px;
+	color: red;
+}
+
+.tableDataSttsFinished {
+	background-color: #cce5ff;
+	color: #004085;
+	font-size: .75rem;
+	font-weight: 600;
+	padding: 2px 8px;
+	border-radius: 4px;
+	color: blue;
+}
+
+.appointmentsVoidTable {
+	display: flex;
+	height: 67vh;
+	overflow-y: auto;
+	flex-direction: column;
+	background-color: var(--establishment-table-background);
+	border-radius: 6px;
+	box-shadow: var(--establishment-table-shadow);
+	list-style: none;
+	justify-content: center;
+	align-items: center;
+	pointer-events: none;
+	user-select: none;
+}
+	.appointmentsVoidTable img { width: 66px;opacity: .6;}
+	.appointmentsVoidTable p {
+		font-family: 'Poppins', sans-serif;
+		font-size: .75rem;
+		color: #d4d4d4;
+		margin-top: 15px;
+	}	
