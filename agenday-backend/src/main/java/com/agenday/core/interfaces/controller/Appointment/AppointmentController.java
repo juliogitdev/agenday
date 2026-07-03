@@ -79,7 +79,7 @@ public class AppointmentController {
 
     @GetMapping("/available-slots")
     public ResponseEntity<List<AvailableSlotsResponse>> getAvailableSlots(
-            @RequestBody @Valid AvailableSlotsRequest request) {
+            @ModelAttribute @Valid AvailableSlotsRequest request) {
 
         List<AvailableSlotsResponse> slots = appointmentService.getAvailableSlots(request);
         return ResponseEntity.ok(slots);

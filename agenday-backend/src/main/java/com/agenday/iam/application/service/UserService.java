@@ -1,11 +1,11 @@
 package com.agenday.iam.application.service;
 
 import com.agenday.common.exception.BusinessException;
-import com.agenday.iam.application.dto.LoginRequest;
-import com.agenday.iam.application.dto.RegisterRequest;
-import com.agenday.iam.application.dto.UserResponse;
+import com.agenday.iam.application.dto.*;
+import com.agenday.iam.domain.model.PasswordResetToken;
 import com.agenday.iam.domain.model.Role;
 import com.agenday.iam.domain.model.User;
+import com.agenday.iam.repository.PasswordResetTokenRepository;
 import com.agenday.iam.repository.RoleRepository;
 import com.agenday.iam.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     public User register(RegisterRequest request) {
         // Substituído UserAlreadyExistsException por BusinessException (409 Conflict)
@@ -157,5 +162,77 @@ public class UserService {
                         "Usuário não encontrado.",
                         HttpStatus.NOT_FOUND
                 ));
+    }
+
+    @Transactional
+    public void requestPasswordReset(ForgotPasswordRequest request) {
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new BusinessException(
+                        "USER_NOT_FOUND",
+                        "E-mail não encontrado no sistema.",
+                        HttpStatus.NOT_FOUND
+                ));
+
+        // Validação: Usuário Google não pode resetar senha local
+        if (!"LOCAL".equals(user.getAuthProvider())) {
+            throw new BusinessException(
+                    "GOOGLE_USER_CANNOT_RESET_PASSWORD",
+                    "Usuários cadastrados via Google não podem redefinir a senha pelo sistema.",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        // Invalida tokens anteriores (opcional, mas recomendado)
+        passwordResetTokenRepository.deleteByUserId(user.getId());
+
+        // Gera novo token
+        String token = UUID.randomUUID().toString();
+        PasswordResetToken resetToken = new PasswordResetToken();
+        resetToken.setToken(token);
+        resetToken.setUser(user);
+        resetToken.setExpiresAt(LocalDateTime.now().plusHours(1)); // Expira em 1 hora
+        passwordResetTokenRepository.save(resetToken);
+
+        // TODO: Enviar email com o token
+        // Por enquanto apenas log
+        log.info("========================================");
+        log.info("TOKEN DE RESET DE SENHA PARA: {}", user.getEmail());
+        log.info("TOKEN: {}", token);
+        log.info("Expira em: 1 hora");
+        log.info("========================================");
+    }
+
+    @Transactional
+    public void resetPassword(ResetPasswordRequest request) {
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(request.token())
+                .orElseThrow(() -> new BusinessException(
+                        "INVALID_TOKEN",
+                        "Token inválido ou não encontrado.",
+                        HttpStatus.BAD_REQUEST
+                ));
+
+        if (resetToken.isUsed()) {
+            throw new BusinessException(
+                    "TOKEN_ALREADY_USED",
+                    "Este token já foi utilizado.",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        if (resetToken.isExpired()) {
+            throw new BusinessException(
+                    "TOKEN_EXPIRED",
+                    "Este token expirou. Solicite um novo.",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        User user = resetToken.getUser();
+        user.setPasswordHash(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
+
+        // Marca o token como usado
+        resetToken.setUsedAt(LocalDateTime.now());
+        passwordResetTokenRepository.save(resetToken);
     }
 }
