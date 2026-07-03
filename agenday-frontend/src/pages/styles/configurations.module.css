@@ -138,6 +138,18 @@
 		gap: 1rem;
 		margin: 20px 0;
 	}
+
+	.plansInfoUser {
+		opacity: 0.5;
+		user-select: none;
+		pointer-events: none;
+		filter: grayscale(100%);
+		border-radius: 4px;
+		padding: 1rem;
+		gap: 1rem;
+		margin: 20px 0;
+	}
+
 		.plansInfoHeader {
 			display: flex;
 			justify-content: space-between;
