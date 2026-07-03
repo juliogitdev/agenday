@@ -22,6 +22,7 @@ public class EstablishmentMapper {
             establishment.getImageUrl(),
             establishment.getSlogan(),
             owner != null ? owner.getFullName() : null,
+            establishment.getSlug(),
             establishment.getTemplate(),
             establishment.getPalette(),
             establishment.getNumberPhone(),
@@ -39,6 +40,7 @@ public class EstablishmentMapper {
         establishment.setTemplate(request.template());
         establishment.setPalette(request.palette());
         establishment.setCategory(request.category());
+
 
         if (request.addressRequest() != null)
             establishment.setAddress(AddressMapper.toEntity(request.addressRequest()));

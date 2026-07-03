@@ -41,6 +41,9 @@ public class Establishment extends BaseEntity {
     @Column(name = "category")
     private EstablishmentCategory category;
 
+    @Column(name = "slug", unique = true, nullable = false)
+    private String slug;
+
     @Column(name = "image_url") private String imageUrl;
     @Embedded private Address address;
     @Column(nullable = false) private Short template = 1;

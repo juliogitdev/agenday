@@ -24,4 +24,8 @@ public interface EstablishmentRepository extends JpaRepository<Establishment, UU
 
     Optional<Establishment> findByIdAndIsActiveTrue(UUID id);
 
+    Optional<Establishment> findBySlugAndIsActiveTrue(String slug);
+
+    boolean existsBySlug(String slug);
+
 }
