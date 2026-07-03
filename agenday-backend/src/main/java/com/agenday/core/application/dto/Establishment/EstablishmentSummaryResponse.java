@@ -8,5 +8,6 @@ public record EstablishmentSummaryResponse(
         UUID id,
         String name,
         String slogan,
+        String slug,
         String imageUrl
 ) {}

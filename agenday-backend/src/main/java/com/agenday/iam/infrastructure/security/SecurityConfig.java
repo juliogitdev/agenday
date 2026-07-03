@@ -39,17 +39,18 @@ public class SecurityConfig {
                         "/swagger-ui.html"
                     ).permitAll()
                     .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                    .requestMatchers(
-                            "/api/v1/auth/register",
-                            "/api/v1/auth/login",
-                            "/api/v1/auth/google",
-                            "/api/v1/auth/refresh",
-                            "/api/v1/auth/forgot-password",
-                            "/api/v1/auth/reset-password",
-                            "/api/v1/plans",
-                            "/api/v1/plans/*",
-                            "/api/v1/plans/*/limits"
-                    ).permitAll()
+                        .requestMatchers(
+                                "/api/v1/auth/register",
+                                "/api/v1/auth/login",
+                                "/api/v1/auth/google",
+                                "/api/v1/auth/refresh",
+                                "/api/v1/auth/forgot-password",
+                                "/api/v1/auth/reset-password",
+                                "/api/v1/plans",
+                                "/api/v1/plans/*",
+                                "/api/v1/plans/*/limits",
+                                "/api/v1/establishment/public/**"
+                        ).permitAll()
                     .requestMatchers("/api/v1/auth/me").authenticated()
                     .anyRequest().authenticated()
             )

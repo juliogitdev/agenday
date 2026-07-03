@@ -1,21 +1,22 @@
 package com.agenday.core.application.service.Establishment;
 
 import com.agenday.common.exception.BusinessException;
-import com.agenday.core.application.dto.Establishment.EstablishmentRequest;
-import com.agenday.core.application.dto.Establishment.EstablishmentResponse;
-import com.agenday.core.application.dto.Establishment.EstablishmentSummaryResponse;
-import com.agenday.core.application.dto.Establishment.GetPresignedUploadUrlResponse;
+import com.agenday.common.utils.SlugUtils;
+import com.agenday.core.application.dto.Establishment.*;
 import com.agenday.core.application.dto.Professional.ProfessionalEstablishmentRequest;
 import com.agenday.core.application.service.Professional.ProfessionalEstablishmentService;
 import com.agenday.core.domain.model.Establishment.Establishment;
 import com.agenday.core.domain.model.Plan.Plan;
 import com.agenday.core.domain.model.Plan.PlanLimit;
 import com.agenday.core.domain.model.Professional.Professional;
+import com.agenday.core.domain.model.Professional.ProfessionalCatalogItem;
 import com.agenday.core.domain.model.Professional.ProfessionalEstablishment;
 import com.agenday.core.domain.model.Professional.ProfessionalSubscription;
+import com.agenday.core.mapper.Establishment.EstablishmentDetailsMapper;
 import com.agenday.core.mapper.Establishment.EstablishmentMapper;
 import com.agenday.core.mapper.Establishment.EstablishmentSummaryMapper;
 import com.agenday.core.repository.Establishment.EstablishmentRepository;
+import com.agenday.core.repository.Professional.ProfessionalCatalogItemRepository;
 import com.agenday.core.repository.Professional.ProfessionalEstablishmentRepository;
 import com.agenday.core.repository.Professional.ProfessionalRepository;
 import com.agenday.core.repository.Professional.ProfessionalSubscriptionRepository;
@@ -42,6 +43,8 @@ public class EstablishmentService {
     private final ProfessionalSubscriptionRepository subscriptionRepository;
     private final MinioStorageService minioStorageService;
     private final ProfessionalEstablishmentService professionalEstablishmentService;
+    private final ProfessionalCatalogItemRepository professionalCatalogItemRepository;
+
 
 
     public EstablishmentResponse createEstablishment(EstablishmentRequest establishmentRequest,
@@ -63,7 +66,6 @@ public class EstablishmentService {
                         HttpStatus.FORBIDDEN)
                 );
 
-        // Corrigido para a query customizada que traz o plano e os limites juntos (Evita o Lazy-no session)
         ProfessionalSubscription subscription = subscriptionRepository.findByProfessionalWithPlanAndLimits(professional)
                 .orElseThrow(() -> new BusinessException(
                         "PLAN_NOT_FOUND",
@@ -104,6 +106,7 @@ public class EstablishmentService {
 
         Establishment newEstablishment = EstablishmentMapper.toEntity(establishmentRequest);
         newEstablishment.setOwner(user);
+        newEstablishment.setSlug(generateUniqueSlug(newEstablishment.getName()));
         newEstablishment = establishmentRepository.save(newEstablishment);
 
         //Cria vínculo entre o estabelecimento e o dono
@@ -227,4 +230,32 @@ public class EstablishmentService {
 
         establishment.setIsActive(false);
     }
+
+    @Transactional
+    public EstablishmentDetailsResponse getDetailsBySlug(String slug) {
+        Establishment establishment = establishmentRepository.findBySlugAndIsActiveTrue(slug)
+                .orElseThrow(() -> new BusinessException(
+                        "ESTABLISHMENT_NOT_FOUND",
+                        "Estabelecimento não encontrado.",
+                        HttpStatus.NOT_FOUND)
+                );
+
+        List<ProfessionalCatalogItem> items =
+                professionalCatalogItemRepository.findActiveByEstablishmentId(establishment.getId());
+
+        return EstablishmentDetailsMapper.toDTO(establishment, items);
+    }
+
+    private String generateUniqueSlug(String name) {
+        String baseSlug = SlugUtils.toSlug(name);
+        String slug = baseSlug;
+        int suffix = 1;
+
+        while (establishmentRepository.existsBySlug(slug)) {
+            slug = baseSlug + "-" + suffix++;
+        }
+        return slug;
+    }
+
+
 }
