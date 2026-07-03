@@ -9,6 +9,7 @@ public record EstablishmentResponse(
     String name,
     String imageUrl,
     String slogan,
+    String slug,
     String nameOwner,
     Short template,
     String palette,

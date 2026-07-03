@@ -14,6 +14,7 @@ public class EstablishmentSummaryMapper {
                 establishment.getId(),
                 establishment.getName(),
                 establishment.getSlogan(),
+                establishment.getSlug(),
                 establishment.getImageUrl()
 
         );
