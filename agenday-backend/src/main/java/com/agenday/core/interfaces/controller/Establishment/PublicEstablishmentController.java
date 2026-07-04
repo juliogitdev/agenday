@@ -3,6 +3,9 @@ package com.agenday.core.interfaces.controller.Establishment;
 import com.agenday.core.application.dto.Establishment.EstablishmentDetailsResponse;
 import com.agenday.core.application.service.Establishment.EstablishmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,5 +20,13 @@ public class PublicEstablishmentController {
     @GetMapping("/slug/{slug}")
     public ResponseEntity<EstablishmentDetailsResponse> getDetailsBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(establishmentService.getDetailsBySlug(slug));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<EstablishmentDetailsResponse>> listEstablishments(
+            @RequestParam(required = false) String name,
+            @PageableDefault(size = 20, sort = "name") Pageable pageable) {
+
+        return ResponseEntity.ok(establishmentService.listPublicEstablishments(name, pageable));
     }
 }
