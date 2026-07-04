@@ -1,7 +1,8 @@
+
 .modalContainer {
 	background-color: var(--white);
 	border-radius: 4px;
-	width: 690px;
+	width: 900px;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 	padding: 24px;
 	gap: 24px;
@@ -10,129 +11,194 @@
 	position: relative;
 }
 
-.modalContainer header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	width: 100%;
-	border-bottom: 2px solid var(--blue);
-	margin-bottom: 20px;
-	padding-bottom: 20px;
+	.modalContainer header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		border-bottom: 2px solid var(--blue);
+		margin-bottom: 20px;
+		padding-bottom: 20px;
 }
 
-header h1 {
-	color: var(--blue-text);
-	font-size: .86rem;
-	font-family: 'Poppins', sans-serif;
-	font-weight: 400;
-	text-transform: uppercase;
-	margin: 0;
-}
+		header h1 {
+			color: var(--blue-text);
+			font-size: .86rem;
+			font-family: 'Poppins', sans-serif;
+			font-weight: 400;
+			text-transform: uppercase;
+			margin: 0;
+		}
 
-header button {
-	background: none;
-	border: none;
-	font-weight: 700;
-	color: var(--blue);
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 2px;
-}
+		header button {
+			background: none;
+			border: none;
+			font-weight: 700;
+			color: var(--blue);
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 2px;
+		}
 
-.modalContent {
-	display: flex;
-	gap: 24px;
-	width: 100%;
-}
+	.modalContent {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		width: 100%;
+	}
 
-.modalLeft {
-	flex: 1.6;
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
-}
+		.modalLeft {
+			width: 97%;
+		}
+			.modalLeftTitle {
+				font-family: "Poppins", sans-serif;
+				font-weight: 500;
+				font-size: .8rem;
+				color: var(--email-label);
+				margin-bottom: 5px;
+			}
+			.modalInputBox {
+				display: flex;
+				align-items: center;
+				border: 1px solid var(--email-input-border);
+				border-radius: 5px;
+				font-size: 1rem;
+				padding: 10px;
+				background: var(--email-input-background);
+				outline: var(--email-input-border);
+				color: var(--email-input-foreground);
+			}
+				.modalInput {
+					border: none;
+					margin-left: 6px;
+					flex: 1;
+					outline: none;
+					font-family: "Poppins", sans-serif;
+					font-size: .8rem;
+				}
+			.modalTableBox {
+				margin-top: 10px;
+				border-radius: 4px;
+				border: 1px solid var(--email-input-border);
+				
+			}
+				.modalTableBoxTitle {
+					font-family: "Poppins", sans-serif;
+					font-weight: 700;
+					font-size: .8rem;
+					border-bottom: 1px solid var(--email-input-border);
+					color: var(--email-label);
+					margin-bottom: 5px;
+					padding: 10px;
+					background-color: var(--background-cards);
+				}
+				.modalTableList {
+					list-style: none;
+					height: 339px;  /* CONTROLA O HEIGHT DO MODAL*/
+					overflow: auto;
+				}
+					.modalTableListItems {
+						display: flex;
+						border-bottom: 1px solid var(--border-color);
+						padding: 10px;
+					}
+					.modalTableListItems:hover {
+						background-color: var(--solid-button-border-hover-color);
+						cursor: pointer;
+					}
+						.modalTableListImg {
+							width: 32px;
+							height: 32px;
+							border: 1px solid var(--border-color);
+							object-fit: cover;
+							border-radius: 100%;
+						}
+						.modalTableListDetails {	
+							display: flex;
+							flex-direction: column;
+						}
+							.modalTableListDatailsName {
+								border: none;
+								margin-left: 6px;
+								flex: 1;
+								outline: none;
+								font-family: "Poppins", sans-serif;
+								font-size: .8rem;
+								color: var(--email-label);
+							}
+							.modalTableListDatailsAdrs {
+								border: none;
+								margin-left: 6px;
+								flex: 1;
+								outline: none;
+								font-family: "Poppins", sans-serif;
+								font-size: .8rem;
+								color: var(--gray-text);
+							}
+							.modalTableListDatailsIcon {align-self: center; margin-left: auto;}
 
-.inputGrid {
-	display: flex;
-	gap: 16px;
-	width: 100%;
-	margin-bottom: 6px;
-}
 
-.inputGrid>div,
-.formRow>div {
-	flex: 1;
-}
+		.modalMiddle {
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+		}
 
-.formRow {
-	display: flex;
-	gap: 16px;
-	width: 100%;
-}
+			.modalMiddle2collumns {
+				display: grid;
+				grid-template-columns: 49% 49%;
+				gap: 5px;
+				width: 100%;
+				margin-bottom: 6px;
+			}
 
-.formGroup {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-}
+				.formGroup {
+					display: flex;
+					flex-direction: column;
+					gap: 6px;
+				}
 
-.formGroup span {
-	font-family: "Poppins", sans-serif;
-	font-weight: 500;
-	font-size: .8rem;
-	color: var(--email-label);
-	margin-bottom: 5px;
-}
+				.formGroup span {
+					font-family: "Poppins", sans-serif;
+					font-weight: 500;
+					font-size: .8rem;
+					color: var(--email-label);
+					margin-bottom: 5px;
+				}
 
-.formGroup input[type="date"],
-.formGroup input[type="time"] {
-	width: 100%;
-	height: 42px;
-	padding: 0 12px;
-	border-radius: 6px;
-	border: 1.5px solid var(--blue);
-	background-color: var(--white);
-	color: var(--foreground);
-	font-size: 14px;
-	outline: none;
-	box-sizing: border-box;
-}
+				.formGroup input[type="date"],
+				.formGroup input[type="time"] {
+					width: 100%;
+					height: 42px;
+					padding: 0 12px;
+					border-radius: 6px;
+					border: 1.5px solid var(--blue);
+					background-color: var(--white);
+					color: var(--foreground);
+					font-size: 14px;
+					outline: none;
+					box-sizing: border-box;
+				}
 
-.formGroup input:disabled {
-	background-color: var(--background);
-	color: var(--gray-text);
-	cursor: not-allowed;
-	border-color: var(--border-color);
-}
-
-.modalRight {
-	flex: 0.6;
-	background-color: var(--blue);
-	border-radius: 4px;
-	padding: 40px 24px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	gap: 32px;
-	color: var(--white);
-	box-sizing: border-box;
-}
-
-.modalRight p {
-	margin: 0;
-	font-size: .75rem;
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-}
-
-.modalRight p span {
-	font-size: 1.25rem;
-	font-weight: 800;
-	text-transform: none;
-}
+				.formGroup input:disabled {
+					background-color: var(--background);
+					color: var(--gray-text);
+					cursor: not-allowed;
+					border-color: var(--border-color);
+				}
+				.modalMiddleFooter { margin-top: auto;}
+					.modalMiddleFooterStatus {
+						display: flex;
+						padding: 10px;
+						margin: 10px 0;
+						justify-content: space-between;
+						border-radius: 4px;
+						border: 1px solid var(--border-color);
+						font-family: "Poppins", sans-serif;
+						font-size: .8rem;
+					}
+						.modalMiddleFooterStatus p span {
+							font-weight: 700;
+							color: var(--blue);
+						}

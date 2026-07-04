@@ -1,5 +1,5 @@
 
-import { X } from "lucide-react";
+import { CircleCheck, Search, X } from "lucide-react";
 import { ComboBox } from "../inputs/ComboBox";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
@@ -124,14 +124,32 @@ export function NewAppointmentModal({isVisible,establishmentId, onClose}:props) 
 				<button onClick={onClose}><X size={16}/></button>
 			</header>
 			<div className={styles.modalContent}>
-				<div className={styles.modalLeft}>
-					{!establishmentId && <ComboBox 
-						label="Selecione um Estabelecimento"
-						initialValue={establishmentsList}
-						onChangeField={(e:any)=>{ setSelectedEstablishment(e.value.selectedValue);}}
-					/>}
 
-					<div className={styles.inputGrid}>
+				<div className={styles.modalLeft}>
+					<p className={styles.modalLeftTitle} >Selecione um estabelecimento</p>
+					<div className={styles.modalInputBox}> 
+						<Search size="18" color="gray"/>
+						<input className={styles.modalInput} type="text" placeholder="Buscar estabelecimentos"/>
+					</div>
+					<div className={styles.modalTableBox}>
+						<p className={styles.modalTableBoxTitle} >ESTABELECIMENTOS</p>
+						<ul className={styles.modalTableList}>
+
+							<li className={styles.modalTableListItems}> 
+								<img src="/" className={styles.modalTableListImg}/> 
+								<div className={styles.modalTableListDetails}>
+									<span className={styles.modalTableListDatailsName}>nome</span>
+									<span className={styles.modalTableListDatailsAdrs}>endereço</span>
+								</div>
+								<CircleCheck size={18} className={styles.modalTableListDatailsIcon} />
+							</li>
+
+						</ul>
+					</div>
+				</div>
+
+				<div className={styles.modalMiddle}>
+					<div className={styles.modalMiddle2collumns}>
 						<ComboBox 
 							label="Selecione um serviço"
 							initialValue={servicesList}
@@ -149,7 +167,7 @@ export function NewAppointmentModal({isVisible,establishmentId, onClose}:props) 
 							}}
 						/>
 					</div>
-					<div className={styles.formRow}>
+					<div className={styles.modalMiddle2collumns}>
 						<div className={styles.formGroup}>
 							<span>Selecione uma data</span>
 							<input 
@@ -177,22 +195,23 @@ export function NewAppointmentModal({isVisible,establishmentId, onClose}:props) 
 						initialValue={''}
 						label="Observações" 
 						placeholder="Digite aqui alguma observação para o profissional" 
-						_height={120}
+						_height={140}
 						onChangeField={(d)=>{setSelectedDescription(d.value)}} 
 					/>
-					<SolidButton 
-						text={"Agendar"} 
-						isActive={false} 
-						onClick={function (): void {
-							throw new Error("Function not implemented.");
-						}} 
-						isLoading={false} 
-					/>
-				</div>
-
-				<div className={styles.modalRight}>
-					<p>duração <span>45 min</span></p>
-					<p>Valor Estimado <span>R$ 45,99</span></p>
+					<div className={styles.modalMiddleFooter}>
+						<SolidButton 
+							text={"Agendar"} 
+							isActive={false} 
+							onClick={function (): void {
+								throw new Error("Function not implemented.");
+							}} 
+							isLoading={false} 
+						/>
+						<div className={styles.modalMiddleFooterStatus}>
+							<p>valor do serviço: <span>56,55 R$</span></p>
+							<p>tempo estimado: <span> 60 m</span></p>
+						</div>
+					</div>
 				</div>
 			</div>	
 		</div>
