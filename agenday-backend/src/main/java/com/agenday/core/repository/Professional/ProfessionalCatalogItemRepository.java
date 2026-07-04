@@ -36,4 +36,15 @@ public interface ProfessionalCatalogItemRepository extends JpaRepository<Profess
           AND ci.isActive = true
         """)
     List<ProfessionalCatalogItem> findActiveByEstablishmentId(@Param("establishmentId") UUID establishmentId);
+
+    @Query("""
+    SELECT pci FROM ProfessionalCatalogItem pci
+    JOIN FETCH pci.professionalEstablishment pe
+    JOIN FETCH pe.professional p
+    JOIN FETCH pci.catalogItem ci
+    WHERE pe.establishment.id IN :establishmentIds
+      AND pe.isActive = true
+      AND ci.isActive = true
+    """)
+    List<ProfessionalCatalogItem> findActiveByEstablishmentIds(@Param("establishmentIds") List<UUID> establishmentIds);
 }

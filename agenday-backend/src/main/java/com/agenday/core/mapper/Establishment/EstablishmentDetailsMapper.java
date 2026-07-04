@@ -45,6 +45,9 @@ public class EstablishmentDetailsMapper {
                 establishment.getId(),
                 establishment.getName(),
                 establishment.getImageUrl(),
+                establishment.getTemplate(),
+                establishment.getSlogan(),
+                establishment.getAddress(),
                 catalogs
         );
     }
