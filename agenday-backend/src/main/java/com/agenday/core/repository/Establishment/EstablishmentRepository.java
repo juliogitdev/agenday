@@ -1,6 +1,8 @@
 
 package com.agenday.core.repository.Establishment;
 import com.agenday.core.domain.model.Establishment.Establishment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,4 +30,7 @@ public interface EstablishmentRepository extends JpaRepository<Establishment, UU
 
     boolean existsBySlug(String slug);
 
+    Page<Establishment> findByIsActiveTrue(Pageable pageable);
+
+    Page<Establishment> findByIsActiveTrueAndNameContainingIgnoreCase(String name, Pageable pageable);
 }

@@ -10,26 +10,28 @@ import com.agenday.core.domain.model.Plan.Plan;
 import com.agenday.core.domain.model.Plan.PlanLimit;
 import com.agenday.core.domain.model.Professional.Professional;
 import com.agenday.core.domain.model.Professional.ProfessionalCatalogItem;
-import com.agenday.core.domain.model.Professional.ProfessionalEstablishment;
 import com.agenday.core.domain.model.Professional.ProfessionalSubscription;
 import com.agenday.core.mapper.Establishment.EstablishmentDetailsMapper;
 import com.agenday.core.mapper.Establishment.EstablishmentMapper;
 import com.agenday.core.mapper.Establishment.EstablishmentSummaryMapper;
 import com.agenday.core.repository.Establishment.EstablishmentRepository;
 import com.agenday.core.repository.Professional.ProfessionalCatalogItemRepository;
-import com.agenday.core.repository.Professional.ProfessionalEstablishmentRepository;
 import com.agenday.core.repository.Professional.ProfessionalRepository;
 import com.agenday.core.repository.Professional.ProfessionalSubscriptionRepository;
 import com.agenday.iam.domain.model.User;
 import com.agenday.iam.infrastructure.Store.MinioStorageService;
 import com.agenday.iam.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -244,6 +246,41 @@ public class EstablishmentService {
                 professionalCatalogItemRepository.findActiveByEstablishmentId(establishment.getId());
 
         return EstablishmentDetailsMapper.toDTO(establishment, items);
+    }
+
+    @Transactional
+    public Page<EstablishmentDetailsResponse> listPublicEstablishments(String name, Pageable pageable) {
+
+        Page<Establishment> establishmentsPage = (name == null || name.isBlank())
+                ? establishmentRepository.findByIsActiveTrue(pageable)
+                : establishmentRepository.findByIsActiveTrueAndNameContainingIgnoreCase(name, pageable);
+
+        List<Establishment> establishments = establishmentsPage.getContent();
+
+        if (establishments.isEmpty()) {
+            return Page.empty(pageable);
+        }
+
+        List<UUID> establishmentIds = establishments.stream()
+                .map(Establishment::getId)
+                .toList();
+
+        List<ProfessionalCatalogItem> allItems =
+                professionalCatalogItemRepository.findActiveByEstablishmentIds(establishmentIds);
+
+        Map<UUID, List<ProfessionalCatalogItem>> itemsByEstablishment = allItems.stream()
+                .collect(Collectors.groupingBy(
+                        pci -> pci.getProfessionalEstablishment().getEstablishment().getId()
+                ));
+
+        List<EstablishmentDetailsResponse> content = establishments.stream()
+                .map(establishment -> EstablishmentDetailsMapper.toDTO(
+                        establishment,
+                        itemsByEstablishment.getOrDefault(establishment.getId(), List.of())
+                ))
+                .toList();
+
+        return new PageImpl<>(content, pageable, establishmentsPage.getTotalElements());
     }
 
     private String generateUniqueSlug(String name) {
