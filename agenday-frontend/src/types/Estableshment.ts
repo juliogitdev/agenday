@@ -110,4 +110,3 @@ export type BestServicesEstablishmentCardType = {
 	monthlyAverageOfAchievements: number;
 	amount: number;
 };
-

@@ -15,7 +15,8 @@ export function ComboBox({onChangeField, label, initialValue}:InputProps<ComboBo
 			value: {
 				...initialValue,
 				selectedLabel: option.label,
-				selectedValue: option.value
+				selectedValue: option.value,
+				data: option.data
 			},
 			errorMessage: null,
 			isValid: true

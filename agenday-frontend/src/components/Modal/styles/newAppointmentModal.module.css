@@ -95,21 +95,25 @@
 				}
 				.modalTableList {
 					list-style: none;
-					height: 339px;  /* CONTROLA O HEIGHT DO MODAL*/
+					height: 414px;  /* CONTROLA O HEIGHT DO MODAL*/
 					overflow: auto;
 				}
-					.modalTableListItems {
+					.modalTableListItems, .modalTableListItemsSelected {
 						display: flex;
 						border-bottom: 1px solid var(--border-color);
 						padding: 10px;
 					}
-					.modalTableListItems:hover {
+
+
+					.modalTableListItems:hover, .modalTableListItemsSelected {
 						background-color: var(--solid-button-border-hover-color);
 						cursor: pointer;
 					}
+						.modalTableListItemsSelected >  .modalTableListDetails > span {color: white;}
+						.modalTableListItemsSelected >  .modalTableListDatailsIcon {color: white;}
 						.modalTableListImg {
-							width: 32px;
-							height: 32px;
+							width: 42px;
+							height: 42px;
 							border: 1px solid var(--border-color);
 							object-fit: cover;
 							border-radius: 100%;

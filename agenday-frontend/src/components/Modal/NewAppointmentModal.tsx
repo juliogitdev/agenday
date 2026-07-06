@@ -7,6 +7,15 @@ import type {ComboBoxOptionItem } from "../../types/ComboBox";
 import { TextInput } from "../inputs/TextInput";
 import styles from "./styles/newAppointmentModal.module.css"
 import { SolidButton } from "../buttons/SolidButton";
+import { BallName } from "../Ui/BallName";
+import { buildIsoZ } from "../../utils/Date";
+import { BlackWindow } from "../Ui/BlackWindow";
+import { LoadingClock } from "../Alerts/LoadingClock";
+import { ModalHook } from "../../hooks/ModalHook";
+import { ErrorAlert } from "../Alerts/ErrorAlert";
+import { SuccessAlert } from "../Alerts/SuccessAlert";
+import { AlertHook } from "../../hooks/AlertsHook";
+
 
 
 type props = {
@@ -15,36 +24,31 @@ type props = {
   	onClose: () => void;
 }
 
-interface ServiceOption {
-  label: string;
-  value: string | number;
-  price: number;
-  time: number;
-}
-
-
 export function NewAppointmentModal({isVisible,establishmentId, onClose}:props) {
 	if (!isVisible) return null;
-
 	const {api} = useContext(AuthContext);
-	const [serviceOptions, setServiceOptions] = useState<ServiceOption[]>([]);
+	const image_url = import.meta.env.VITE_STORAGE_BASE_URL+/agenday-images/;
+	const [catalogOptions, setCatalogOptions]   = useState<ComboBoxOptionItem[]>([]);
+	const [selectedCatalog, setSelectedCatalog] = useState<ComboBoxOptionItem>();
 	const [professionalsOptions, setProfessionalsOptions] = useState<ComboBoxOptionItem[]>([]);
-	const [establishmentOptions, setEstablishmentOptions] = useState<ComboBoxOptionItem[]>([]);
-
-	const [selectedService, setSelectedService ] = useState<string>();
-	const [selectedProfess, setSelectedProfess ] = useState<string>();
-	const [selectedEstablishment, setSelectedEstablishment] = useState<string>();
-
+	const [selectedProfessional, setSelectedProfessional] = useState<string>();
+	const [establishmentsList, setStablishmentList] = useState<any[]>([]);
+	const [selectedEstablishment,setSelectedEstablishment] = useState<string>('');
 	const today = new Date().toISOString().split("T")[0];
 	const [selectedDate, setSelectedDate] = useState<string>(today);
 	const [selectedTime, setSelectedTime] = useState<string>();
-	const [selectedDescription, setSelectedDescription] = useState<string>();
+	const [description, setDescription] = useState<string>();
 
-	const servicesList = {
+	const blackWindow  = ModalHook();
+	const isLoadingMd  = ModalHook();
+	const erroAlert    = AlertHook();
+	// const successAlert = AlertHook();
+
+	const catalogList = {
 		value: {
 			selectedValue: "",
 			selectedLabel: "",
-			options: serviceOptions
+			options: catalogOptions
 		},
 		errorMessage: null,
 		isValid: null,
@@ -60,61 +64,108 @@ export function NewAppointmentModal({isVisible,establishmentId, onClose}:props) 
 		isValid: null,
 	};
 
-	const establishmentsList = {
-		value: {
-			selectedValue: "",
-			selectedLabel: "",
-			options: establishmentOptions
-		},
-		errorMessage: null,
-		isValid: null,
-	};
+	useEffect(() => {
+  		let active = true;
+  		const loadEstablishments = async () => {
+				if (establishmentId != null) return;
+				const r = await api.get("establishment/public", { params: {page: 0, size: 10, sort: "name,asc", name: ""}});
+				if (!active) return;
+				if (r.status === 200) {
+					setStablishmentList(r.data?.content ?? []);
+				}
+  		};
+  		loadEstablishments();
+  		return () => { active = false;};
+	}, [establishmentId]);
+
+	useEffect(() => {
+  		if (!selectedCatalog?.data) {
+    		setProfessionalsOptions([]);
+    		return;
+  		}
+  		const list = selectedCatalog.data.professionals.map((p) => ({ label: p.name, value: p.professionalEstablishmentId}));
+  		setProfessionalsOptions(list);
+	}, [selectedCatalog]);
 
 
-	useEffect(()=>{
-		let active:boolean = true;
-		const getServices = async() => {
-			const r = await api.get(`catalogItem/establishment/${establishmentId}`);
-			const optionsTmp: ServiceOption[] = [];
+	useEffect(() => {
+  		const selected = establishmentsList.find((e) => e.establishmentId === selectedEstablishment);
+  		const catalogs = selected?.catalogs;
+  		setCatalogOptions([]);
+  		setProfessionalsOptions([]);
+  		if (!catalogs?.length) return;
+		const catalogList: ComboBoxOptionItem[] = catalogs.map((d:any) => ({
+			label: d.name,
+			value: d.catalogItemId,
+			data: {
+				price: d.price,
+				time: d.duration,
+				professionals: d.professionals,
+			},
+		}));
 
-			if (r.status == 200) {
-				r.data.forEach((d: any)=>optionsTmp.push({label: d.name, value: d.id, price: d.defaultPrice, time: d.defaultDurationMinutes}));
-				setServiceOptions(optionsTmp);
-			} 
-		}
-
-		getServices();
-		return ()=>{active=false}
-	},[]);
-
-	const updateProfessionalsList = async(catalogId:string) => {
-		const body = {
-			establishmentId: establishmentId,
-  			catalogItemId: catalogId
-		}
-
-		const r = await api.post('catalogItem/professionals-with-service-status',body);
-		const optionsTmp:ComboBoxOptionItem[] = [];
-
-		if (r.status == 200) {
-			r.data.forEach((d: any)=>optionsTmp.push({label: d.professionalName, value: d.professionalEstablishmentId}));
-			setProfessionalsOptions(optionsTmp);
-		} 
-	}
+		setCatalogOptions(catalogList);
+	}, [selectedEstablishment, establishmentsList]);
 
 	const onSelectDate = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newDate = e.target.value;
 		setSelectedDate(newDate);
-		const r = await api.get('appointments/available-slots',{
-			params: {
-				professionalEstabId: selectedProfess,
-				catalogItemId: selectedService,
-				date: selectedDate
-			}
-		});
 		
-		if (r.status == 200 ) { console.log(r.data)}
-		return 0;
+		if (selectedCatalog && selectedProfessional) {
+			const r = await api.get('appointments/available-slots',{
+				params: {
+					professionalEstabId: selectedProfessional,
+					catalogItemId: selectedCatalog?.selectedValue,
+					date: selectedDate
+				}
+			});
+
+			if (r.status == 200 ) { console.log(r.data)}
+		}
+	}
+
+	const createAppointment = () => {
+  		blackWindow.show();
+  		isLoadingMd.show();
+
+  		if (
+    		!selectedCatalog?.selectedValue ||
+    		!selectedEstablishment ||
+    		!selectedDate ||
+    		!selectedTime ||
+    		!selectedProfessional
+  		) {
+			isLoadingMd.hidden();
+			blackWindow.hidden();	
+    		erroAlert.show("Erro", "Verifique as informações preenchdias.", 4000);
+    		return;
+  		}
+
+		setTimeout(async () => {
+			try {
+				const userSelectedDate = buildIsoZ(selectedDate, selectedTime);
+				const body = {
+					professionalEstablishmentId: selectedProfessional,
+					catalogItemId: selectedCatalog.selectedValue,
+					startTime: userSelectedDate,
+					notes: description ?? "",
+				};
+
+				const r = await api.post("appointments", body);
+				if (r.status === 200) console.log(r.data);
+			} catch (error: any) {
+				isLoadingMd.hidden();
+				blackWindow.hidden();
+				const errorMsg = error?.response?.data?.message || "Desculpe, ouve um erro durante o processo..";
+				erroAlert.show("Erro", errorMsg, 4000);
+			}
+		}, 1000);
+	};
+
+
+	function formatAddress(address:any) {
+ 	 	const full = `${address.street}, ${address.number} • ${address.neighborhood} • ${address.city}/${address.state} • CEP ${address.cep}`;
+  		return full.length > 70 ? `${full.slice(0, 70)}...` : full;
 	}
 
 	return (
@@ -133,40 +184,56 @@ export function NewAppointmentModal({isVisible,establishmentId, onClose}:props) 
 					</div>
 					<div className={styles.modalTableBox}>
 						<p className={styles.modalTableBoxTitle} >ESTABELECIMENTOS</p>
-						<ul className={styles.modalTableList}>
+						<ul className={styles.modalTableList}> {establishmentsList.length ? (
+							establishmentsList.map((e) => {
+								const formattedAddress = formatAddress(e.address);
+								const isSelected = e.establishmentId === selectedEstablishment;
+								const itemClass = isSelected ? styles.modalTableListItemsSelected : styles.modalTableListItems;
+								return (
+									<li
+										key={e.establishmentId}
+										className={itemClass}
+										onClick={() => setSelectedEstablishment(e.establishmentId)}
+									>
+										{e.imageUrl ? (
+											<img
+												className={styles.modalTableListImg}
+												src={`${image_url}/${e.imageUrl}`}
+												alt={e.name}
+											/>
+										) : ( <BallName name={e.name} />)}
 
-							<li className={styles.modalTableListItems}> 
-								<img src="/" className={styles.modalTableListImg}/> 
-								<div className={styles.modalTableListDetails}>
-									<span className={styles.modalTableListDatailsName}>nome</span>
-									<span className={styles.modalTableListDatailsAdrs}>endereço</span>
-								</div>
-								<CircleCheck size={18} className={styles.modalTableListDatailsIcon} />
-							</li>
-
-						</ul>
+										<div className={styles.modalTableListDetails}>
+											<span className={styles.modalTableListDatailsName}>{e.name}</span>
+											<span className={styles.modalTableListDatailsAdrs}>
+											{formattedAddress}
+											</span>
+										</div>
+										<CircleCheck size={15} className={styles.modalTableListDatailsIcon} />
+									</li>
+								);
+							})
+						) : (
+							<p>Nenhum estabelecimento encontrado para seu endereço!</p>
+						)}
+						</ul>	
 					</div>
 				</div>
 
 				<div className={styles.modalMiddle}>
-					<div className={styles.modalMiddle2collumns}>
-						<ComboBox 
-							label="Selecione um serviço"
-							initialValue={servicesList}
-							onChangeField={(e:any)=>{
-								setSelectedService(e.value.selectedValue);
-								updateProfessionalsList(e.value.selectedValue);
-							}}
-						/>
+					<ComboBox 
+						label="Selecione um serviço"
+						initialValue={catalogList}
+						onChangeField={(e:any)=>{  setSelectedCatalog(e.value);}}
+					/>
 
-						<ComboBox 
-							label="Selecione um Profissional"
-							initialValue={professionalsList}
-							onChangeField={(e:any)=>{
-								setSelectedProfess(e.value.selectedValue);
-							}}
-						/>
-					</div>
+					<ComboBox 
+						label="Selecione um Profissional"
+						initialValue={professionalsList}
+						onChangeField={(e:any)=> {
+							setSelectedProfessional(e.value.selectedValue);
+						}}
+					/>
 					<div className={styles.modalMiddle2collumns}>
 						<div className={styles.formGroup}>
 							<span>Selecione uma data</span>
@@ -196,24 +263,31 @@ export function NewAppointmentModal({isVisible,establishmentId, onClose}:props) 
 						label="Observações" 
 						placeholder="Digite aqui alguma observação para o profissional" 
 						_height={140}
-						onChangeField={(d)=>{setSelectedDescription(d.value)}} 
+						onChangeField={(d)=>{setDescription(d.value)}} 
 					/>
 					<div className={styles.modalMiddleFooter}>
 						<SolidButton 
 							text={"Agendar"} 
-							isActive={false} 
-							onClick={function (): void {
-								throw new Error("Function not implemented.");
-							}} 
+							isActive={true} 
+							onClick={function (): void { createAppointment();}} 
 							isLoading={false} 
 						/>
 						<div className={styles.modalMiddleFooterStatus}>
-							<p>valor do serviço: <span>56,55 R$</span></p>
-							<p>tempo estimado: <span> 60 m</span></p>
+							<p>valor do serviço: <span>{selectedCatalog?.data?.price || 0.00 } R$</span></p>
+							<p>tempo estimado: <span>{selectedCatalog?.data?.time || 0} m</span></p>
 						</div>
 					</div>
 				</div>
-			</div>	
+			</div>
+
+			<BlackWindow isVisible={blackWindow.visible}>
+				<LoadingClock 
+					isLoading={isLoadingMd.visible} 
+					text='Solicitando agendamento, por favor aguarde'
+				/>
+			</BlackWindow>
+			<ErrorAlert   isVisible={erroAlert.isVisible} title={erroAlert.title} message={erroAlert.message}/>
+			{/* <SuccessAlert isVisible={successAlert.isVisible} title={successAlert.title} message={successAlert.message}/> */}
 		</div>
 	);
 
