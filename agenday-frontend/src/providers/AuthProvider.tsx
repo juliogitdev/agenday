@@ -2,7 +2,6 @@
 import React from "react";
 import type { UserLogged, UserLogin, UserSignup } from "../types/User";
 import AuthContext from "../context/AuthContext";
-import { jwtDecode } from "jwt-decode";
 import axios, { type AxiosInstance } from "axios";
 
 export function AuthProvider({children}: {children: React.ReactNode}) {
@@ -49,9 +48,26 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 			} catch {return 0}
 
 			if (response.ok && response.status === 200 ) {
-				const data = await response.json();
-				setUser({ accessToken: data.accessToken, type: data.type});
-                setApi(()=>createAxioInstance(data.accessToken));
+				const loginData = await response.json();  // get acesso informations
+
+				const res = await fetch(`${API_URL}auth/me`,{
+					method: 'GET',
+					credentials: "include",
+					headers: { 
+            			'Content-Type': 'application/json',
+            			'Authorization': `Bearer ${loginData.accessToken}` // <-- Token sendo enviado aqui
+        			},
+				})
+
+				if (res.ok ) {
+					const userInformations = await res.json(); // get user informations
+					setUser({ 
+						accessToken: loginData.accessToken, 
+						type: loginData.type,
+						userInformations
+					});
+                	setApi(()=>createAxioInstance(loginData.accessToken));
+				} else {/*se der erro no /me*/}
 			}
  
 			return response.status;
@@ -70,9 +86,25 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 			} catch { return 0;}
 
 			if (response.ok && response.status === 200 ) {
-				const data = await response.json();
-				setUser({ accessToken: data.accessToken, type: data.type});
-                setApi(()=>createAxioInstance(data.accessToken));
+				const loginData = await response.json();
+
+				const res = await fetch(`${API_URL}auth/me`,{
+					method: 'GET',
+					credentials: "include",
+					headers: { 
+            			'Content-Type': 'application/json',
+            			'Authorization': `Bearer ${loginData.accessToken}` // <-- Token sendo enviado aqui
+        			},
+				})
+				if (res.ok ) {
+					const userInformations = await res.json(); // get user informations
+					setUser({ 
+						accessToken: loginData.accessToken, 
+						type: loginData.type,
+						userInformations
+					});
+                	setApi(()=>createAxioInstance(loginData.accessToken));
+				}else {}
 			} 
 			return response.status;
 		}
@@ -123,7 +155,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 
 			if (response.ok && response.status === 200 ) {
 				const data = await response.json();
-				setUser({ accessToken: data.accessToken, type: data.type});
+				setUser({ accessToken: data.accessToken, type: data.type, userInformations: null});
                 setApi(()=>createAxioInstance(data.accessToken));
 			} 
 			return response.status;
@@ -139,11 +171,22 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
         	const response = await fetch(`${API_URL}auth/refresh`,{method: 'POST',credentials: 'include'});
         	if (!response.ok) { setUser(null); return false;}
         	const data = await response.json();
-
 			
-        	setUser(prev => ({ ...prev, accessToken: data.accessToken, type: data.type}));
-            setApi(()=>createAxioInstance(data.accessToken));
-        	return true;
+			const res = await fetch(`${API_URL}auth/me`,{
+				method: 'GET',
+				credentials: "include",
+				headers: { 
+            		'Content-Type': 'application/json',
+            		'Authorization': `Bearer ${data.accessToken}` // <-- Token sendo enviado aqui
+        		},
+			})
+			
+			if (res.ok) {
+				const userInformations = await res.json(); // get user informations
+        		setUser(prev => ({ ...prev, accessToken: data.accessToken, type: data.type, userInformations}));
+            	setApi(()=>createAxioInstance(data.accessToken));
+        		return true;
+			} {throw new Error}
     	} catch (error) { setUser(null); return false;}
 	};
 

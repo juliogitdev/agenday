@@ -106,6 +106,7 @@
 					font-weight: 500;
 					color: var(--establishment-table-text-color);
 					flex-direction: column;
+					overflow: hidden;
 				}
 				.establishmentInfo small {
 					font-size: .8rem;
@@ -131,6 +132,10 @@
 				.actions button:hover {color: var(--establishment-table-action-button-edit-hover-color);}
 				.actions button:last-child {color: var(--establishment-table-action-button-delete-color);}
 				.actions button:last-child:hover {color: var(--establishment-table-action-button-delete-hover-color);}
+				.actions button:disabled {
+					opacity: .3;
+					cursor: not-allowed;
+				}
 
 		.establishmentTableRow:hover {
 			cursor: pointer;

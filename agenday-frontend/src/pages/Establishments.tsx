@@ -21,6 +21,7 @@ import { AlertHook } from "../hooks/AlertsHook";
 import { EstablishmentFormStore } from "../store/EstablishmentFormStore";
 import type { EstablishmenteDashboardCardType } from "../types/Estableshment";
 import { InviteProfessionalModal } from "../components/Modal/InviteProfessionalModal";
+import { ProfessionalScheduleManager } from "../components/Modal/ProfessionalScheduleManager";
 
 
 export function Establishments() {
@@ -34,6 +35,7 @@ export function Establishments() {
 	const formModal    = ModalHook();
 	const deleteModal  = ModalHook();
 	const inviteProfissionalModal  = ModalHook();
+	const professionalScheduleManagerModal = ModalHook();
 	
 
 	const [updateTable, setUpdateTable] = useState(0);
@@ -202,7 +204,10 @@ export function Establishments() {
 			blackWindow.show();
 			formModal.show(establishment);
 			fillEstablishmentForm(establishment);
-		}else if (action === 'invite') {
+		} else if (action === 'EditTeam') {
+			blackWindow.show();
+			professionalScheduleManagerModal.show(establishment.id);
+		} else if (action === 'invite') {
 			blackWindow.show();
 			inviteProfissionalModal.show(establishment.id);
 		}
@@ -260,6 +265,15 @@ export function Establishments() {
 						blackWindow.hidden();
 						inviteProfissionalModal.hidden();
 					} } 
+				/>
+
+				<ProfessionalScheduleManager 
+					establishmentId={professionalScheduleManagerModal.data} 
+					isVisible={professionalScheduleManagerModal.visible} 
+					onClose={()=>{
+						blackWindow.hidden();
+						professionalScheduleManagerModal.hidden();
+					}}			
 				/>
 
 				<DeleteConfirmationModal 

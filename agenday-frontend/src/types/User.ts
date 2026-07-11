@@ -1,15 +1,14 @@
 
 export type User = {
-  	token: number;
-  	name: string;
+  	uuid: number;
   	email: string;
-	image: string,
   	fullName: string;
-	numberPhone: string;
+	profileImageUrl: string
 };
 
 export type UserLogged = {
   	accessToken: string;
+	userInformations: User | null;
     type: string;
 };
 

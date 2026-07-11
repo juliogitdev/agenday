@@ -1,11 +1,12 @@
 
+
 .modalBox {
 	background-color: var(--multistep-form-background);
 	border: 1px solid var(--multistep-form-border-color);
 	box-shadow: var(--multistep-form-shadow);
 	border-radius: var(--delete-modal-border-radius-standard);
 	width: 100%;
-	max-width: 530px;
+	max-width: 500px;
 	padding: 2rem;
 	position: relative;
 	box-sizing: border-box;
@@ -22,231 +23,88 @@
 		cursor: pointer;
 	}
 
-	.closeTop:hover {  color: var(--chose-plan-close-button-hover-color);}
-	.brandingHeader { 
-		margin-bottom: 1.5rem;
-	}
+		.closeTop:hover { color: var(--chose-plan-close-button-hover-color);}
+		.brandingHeader { margin-bottom: 1.5rem;}
+
 		.brandingHeader h2 {
-			font-family: "Poppins", sans-serif;
 			color: var(--branding-primary);
 			font-size: 1rem;
 			margin: 0 0 0.5rem 0;
 		}
 
 		.brandingHeader p {
-			font-family: "Poppins", sans-serif;
 			color: var(--branding-secondary);
 			font-size: 0.8rem;
 			margin: 0;
 			padding-bottom: 0.4rem;
 			border-bottom: 1px solid var(--border-color);
+
 		}
 
-	.form {
-		display: flex;
-		flex-direction: column;
-	}
+		.form {
+			display: flex;
+			flex-direction: column;
+		}
+
+			.radioGroupContainer { margin: 1.2rem 0;}
+			.radioLabelSection {
+				font-size: 0.8rem;
+				font-weight: 600;
+				color: var(--email-label);
+				display: block;
+				margin-bottom: 0.5rem;
+			}
+
+			.radioOptions {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 0.5rem;
+			}
+
+			.radioCard {
+				border: 1px solid var(--email-input-border);
+				background-color: var(--email-input-background);
+				padding: 0.75rem;
+				border-radius: var(--delete-modal-border-radius-standard);
+				display: flex;
+				align-items: center;
+				gap: 0.4rem;
+				cursor: pointer;
+				transition: border-color 0.2s ease;
+			}
+
+			.radioCard input[type="radio"] { accent-color: var(--solid-button-background);}
+			.radioCardActive {
+				border-color: var(--solid-button-background);
+				background-color: rgba(19, 81, 132, 0.04);
+			}
+
+			.radioText {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.radioText strong {
+				font-size: 0.8rem;
+				color: var(--foreground);
+			}
+
+			.radioText span {
+				font-size: 0.75rem;
+				color: var(--text-secondary);
+			}
+
 		.dynamicFieldsSection {
 			background-color: var(--background-cards);
 			padding: 1rem;
 			border-radius: var(--delete-modal-border-radius-standard);
 			margin-bottom: 1.5rem;
-			border: 1px solid var(--email-input-border);
-		}
-			.sectionHeaderRow {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				border-bottom: 1px solid var(--email-input-border);
-				padding-bottom: 5px;
-			}
-				.radioLabelSection {
-					font-size: 0.7rem;
-					font-family: "Poppins", sans-serif;
-					font-weight: 600;
-					color: var(--email-label);
-					display: block;
-					margin-bottom: 0.5rem;
-					text-transform: uppercase;
-				}
-				.replicateBtn {
-					background: none;
-					font-family: "Poppins", sans-serif;
-					border: 1px solid var(--solid-button-background);
-					color: var(--solid-button-background);
-					padding: 4px 8px;
-					border-radius: 4px;
-					font-size: 0.75rem;
-					font-weight: 500;
-					cursor: pointer;
-					transition: all 0.2s ease;
-				}
-
-					.replicateBtn:hover {
-						background-color: var(--solid-button-background);
-						color: white;
-					}
-
-
-		.scheduleListGrid {
-			height: 200px;
-			overflow: auto;
-		}
-			.scheduleRowItem {
-				display: flex;
-				align-items: center;
-				padding: 10px 0;
-				border-bottom: 1px solid var(--email-input-border);
-			}
-				.scheduleDayName {
-					display: flex;
-					align-items: center;
-					gap: 10px;
-					font-family: "Poppins", sans-serif;
-					font-size: .85rem;
-				}
-				.scheduleInputsGroup {
-					display: flex;
-					align-items: center;
-					gap: 20px;
-					margin-left: auto;
-					
-				}
-					.scheduleInputsGroup input{
-						background: none;
-						border: none;
-						outline: none;
-					}
-
-
-		.radioGroupContainer { 
-			margin: 1.2rem 0;
 		}
 
-
-
-.radioOptions {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 0.5rem;
-}
-
-.radioCard {
-	border: 1px solid var(--email-input-border);
-	background-color: var(--email-input-background);
-	padding: 0.75rem;
-	border-radius: var(--delete-modal-border-radius-standard);
-	display: flex;
-	align-items: center;
-	gap: 0.4rem;
-	cursor: pointer;
-	transition: border-color 0.2s ease;
-}
-
-.radioCard input[type="radio"] { 
-	accent-color: var(--solid-button-background);
-}
-
-.radioCardActive {
-	border-color: var(--solid-button-background);
-	background-color: rgba(19, 81, 132, 0.04);
-}
-
-.radioText {
-	display: flex;
-	flex-direction: column;
-}
-
-.radioText strong {
-	font-size: 0.8rem;
-	color: var(--foreground);
-}
-
-.radioText span {
-	font-size: 0.75rem;
-	color: var(--text-secondary);
-}
-
-
-
-.scheduleHeaderRow {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 0.75rem;
-	border-bottom: 1px solid var(--border-color);
-	padding-bottom: 0.5rem;
-}
-
-.scheduleHeaderRow .radioLabelSection {
-	margin-bottom: 0;
-}
-
-
-.scheduleListContainer {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-	max-height: 180px; 
-	overflow-y: auto;
-	padding-right: 4px;
-}
-
-.scheduleRowInline {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 0.4rem 0.5rem;
-	background-color: var(--email-input-background);
-	border-radius: var(--delete-modal-border-radius-small);
-	border: 1px solid transparent;
-	transition: border-color 0.2s ease;
-}
-
-.scheduleRowInline:hover {
-	border-color: var(--email-input-border);
-}
-
-.dayLabelInline {
-	font-size: 0.8rem;
-	font-weight: bold;
-	color: var(--foreground);
-	text-transform: capitalize;
-}
-
-.inputsRowInline {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-}
-
-.inputWrapperInline input {
-	padding: 4px 6px;
-	border: 1px solid var(--email-input-border);
-	border-radius: 4px;
-	background-color: var(--multistep-form-background);
-	color: var(--email-input-foreground);
-	font-size: 0.85rem;
-	width: 85px;
-	text-align: center;
-	outline: none;
-}
-
-.inputWrapperInline input:focus {
-	border-color: var(--solid-button-background);
-}
-
-.rangeSeparator {
-	font-size: 0.75rem;
-	color: var(--branding-secondary);
-}
-
-/* --- CAMPOS PADRÃO --- */
 .rowFields {
 	display: grid;
-	grid-template-columns: 1fr;
+	grid-template-columns: 1fr 1fr;
 	gap: 1rem;
-	margin-bottom: 1.5rem;
 }
 
 .inputWrapper {
@@ -275,7 +133,6 @@
 	border-color: var(--solid-button-background);
 }
 
-/* --- AÇÕES --- */
 .actions {
 	display: flex;
 	justify-content: flex-end;

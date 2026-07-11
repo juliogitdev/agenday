@@ -2,15 +2,14 @@
 import { Pen, TriangleAlert } from "lucide-react";
 import { SolidButton } from "../components/buttons/SolidButton";
 import styles from "./styles/configurations.module.css";
-import type { User } from "../types/User";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import type { AgendaJwt } from "../types/Jwt";
+import { BallName } from "../components/Ui/BallName";
 
 export function Configurations() {
-	const [requestUser, setRequestUser] = useState<User>()
-	const {api, user} = useContext(AuthContext);
+	const {user} = useContext(AuthContext);
 	let userRoles: string[] = [];
 
 	if (user != null) {
@@ -18,32 +17,15 @@ export function Configurations() {
 		userRoles = userData.roles ?? []; 
 	}
 
-	console.log("User Roles:", userRoles); // Log the user roles to the console for debugging
-
-	useEffect(()=> {
-		let active:boolean = true;
-		const getUserDetails = async ()=> {
-			const r = await api.get('auth/me');
-			if (r.status == 200 ) {
-				setRequestUser({
-					token: 0,
-					name: '',
-					email: r.data.email,
-					image: r.data.profileImageUrl,
-					fullName: r.data.fullName,
-					numberPhone: ''
-				})
-			}
-		}
-		getUserDetails();
-		return ()=>{active=false}
-	},[api]);
-
 	return (
 		<section className={styles.configurations}> 
 			<header className={styles.configurationsHeader}>
 				<div className={styles.configurationsHeaderImage}>
-					<img src={requestUser?.image ? requestUser.image : "https://randomuser.me/api/portraits/lego/4.jpg"} alt="Profile Image"/>
+					{user?.userInformations?.profileImageUrl ? (
+						<img src={user?.userInformations?.profileImageUrl} alt="Profile Image" />
+						) : (
+							<BallName size={52} name={user?.userInformations?.fullName || "Sem Nome"} />
+					)}
 					<button><Pen size="18"/></button>
 				</div>
 				<div className={styles.configurationsHeaderText}>
@@ -55,9 +37,9 @@ export function Configurations() {
 			<div className={styles.accountInfo}>
 				<h1 className={styles.accountInfoTitle}>Informações da Conta</h1>
 				<div className={styles.fourColumns}>
-					<label className={styles.fourColumnsInputs}>  NOME COMPLETO <span>{requestUser?.fullName || 'Nome completo' } <Pen size="18" className={styles.editIcon}/> </span></label>
-					<label className={styles.fourColumnsInputs}>  EMAIL <span>{requestUser?.email || 'Email' } <Pen size="18" className={styles.editIcon}/> </span></label>
-					<label className={styles.fourColumnsInputs}>  NÚMERO DE CELULAR <span>{requestUser?.numberPhone || 'Número de celular' } <Pen size="18" className={styles.editIcon}/> </span></label>
+					<label className={styles.fourColumnsInputs}>  NOME COMPLETO <span>{user?.userInformations?.fullName || 'Nome completo' } <Pen size="18" className={styles.editIcon}/> </span></label>
+					<label className={styles.fourColumnsInputs}>  EMAIL <span>{user?.userInformations?.email || 'Email' } <Pen size="18" className={styles.editIcon}/> </span></label>
+					<label className={styles.fourColumnsInputs}>  NÚMERO DE CELULAR <span>{'Número de celular' } <Pen size="18" className={styles.editIcon}/> </span></label>
 					<label className={styles.fourColumnsInputs}>  SENHA <span>•••••••• <Pen size="18" className={styles.editIcon}/> </span></label>
 				</div>
 				<div className={styles.twoColumns}>

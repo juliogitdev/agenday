@@ -23,12 +23,12 @@
 			align-items: center;
 			gap: 1rem;
 			border-radius: 100%;
-			border: 2px solid var(--card-background);
 		}
 			.configurationsHeaderImage img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
+				border: 2px solid var(--card-background);
 				border-radius: 100%;
 			}
 
