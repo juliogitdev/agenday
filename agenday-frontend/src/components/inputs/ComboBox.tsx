@@ -6,7 +6,7 @@ import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useState } from 'react';
 import type { ComboBoxOption, ComboBoxOptionItem } from '../../types/ComboBox';
 
-export function ComboBox({onChangeField, label, initialValue}:InputProps<ComboBoxOption>){
+export function ComboBox({onChangeField, label,disabled = false, initialValue}:InputProps<ComboBoxOption>){
 	const [showOption, setShowOption] = useState(false);
 	const [selectedLabel, setSelectedLabel] = useState(initialValue.value?.selectedLabel || 'Nada selecionado');
 
@@ -26,7 +26,7 @@ export function ComboBox({onChangeField, label, initialValue}:InputProps<ComboBo
 		setShowOption(false);
 	};
 	return (
-		<div className={styles.comboBox}>
+		<div className={ !disabled ? styles.comboBox : styles.comboBoxDisabled}>
 			<label className={styles.comboLabel}> {label}</label>
 			<div className={styles.comboField} onClick={() => setShowOption(!showOption)}>
 				<span className={styles.selectedOption}>{selectedLabel}</span>

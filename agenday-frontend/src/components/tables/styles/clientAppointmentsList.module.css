@@ -1,0 +1,16 @@
+.cardsList {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 16px;
+	height: 700px;
+	overflow: auto;
+	width: 80%;
+	padding-right: 10px;
+}
+	.cardsList::-webkit-scrollbar {width: 4px; height: 4px;}
+	.cardsList::-webkit-scrollbar-track {background: transparent;}
+	.cardsList::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 999px;}
+	.cardsList::-webkit-scrollbar-thumb:hover { filter: brightness(0.9);}
+	.cardsList::-webkit-scrollbar { width: 4px; height: 4px;}
+	.cardsList::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 999px;}

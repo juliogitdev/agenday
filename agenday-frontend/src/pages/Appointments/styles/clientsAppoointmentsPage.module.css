@@ -45,3 +45,10 @@
 						color: var(--service-page-header-title);	
 					}
 		.pageHeaderButtonWrapper {width: 20%;}
+	
+	.pageContent {
+		gap: 10px;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+	}

@@ -1,0 +1,188 @@
+
+/* 100% vipe code */
+.card {
+	background-color: var(--establishment-table-background);
+	border: 1px solid var(--establishment-table-header-border-color);
+	border-radius: 4px;
+	box-shadow: var(--establishment-table-shadow);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	width: 32%;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+	cursor: pointer;
+}
+
+	.card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+	}
+
+	.statusBar {
+		height: 3px;
+		width: 100%;
+	}
+
+		.statusBar.approved { background-color: var(--green); }
+		.statusBar.recused { background-color: var(--red); }
+		.statusBar.finished { background-color: var(--blue); }
+		.statusBar.pending { background-color: var(--yellow); }
+
+	.header {
+		padding: 16px 16px 12px 16px;
+		border-bottom: 1px solid var(--establishment-table-header-border-color);
+	}
+
+		.serviceTitle {
+			font-family: "Poppins", sans-serif;
+			font-size: 1rem;
+			font-weight: 600;
+			color: var(--establishment-table-header-color);
+			margin: 0 0 4px 0;
+			line-height: 1.3;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+
+		.subtitle {
+			font-family: "Poppins", sans-serif;
+			font-size: 0.8125rem;
+			color: var(--text-secondary);
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			line-height: 1.3;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+
+
+	.body {
+		padding: 12px 16px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		flex: 1;
+	}
+
+		.infoRow {
+			display: flex;
+			line-height: 1.3;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			align-items: center;
+			gap: 8px;
+			font-family: "Poppins", sans-serif;
+			font-size: 0.8125rem;
+			color: var(--establishment-table-row-color);
+		}
+
+			.icon {
+				width: 16px;
+				height: 16px;
+				flex-shrink: 0;
+				color: var(--blue);
+			}
+
+			.infoValue {
+				line-height: 1.3;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				color: var(--establishment-table-row-color);
+				font-weight: 400;
+			}
+
+	.statusBadge {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-family: "Poppins", sans-serif;
+		font-size: 0.75rem;
+		font-weight: 600;
+		padding: 4px 10px;
+		border-radius: 20px;
+		width: fit-content;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+		.statusBadge.approved { background-color: var(--green-light); color: var(--green); }
+		.statusBadge.recused { background-color: var(--red-light); color: var(--red); }
+		.statusBadge.finished { background-color: #d4e6f7; color: var(--blue); }
+		.statusBadge.pending { background-color: #fff4cc; color: #9a7b00; }
+
+		.statusBadge::before {
+			content: "";
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background-color: currentColor;
+		}
+
+
+	.footer {
+		display: flex;
+		gap: 8px;
+		padding: 12px 16px;
+		border-top: 1px solid var(--establishment-table-header-border-color);
+		background-color: #fafafa;
+	}
+
+		.button {
+			flex: 1;
+			font-family: "Poppins", sans-serif;
+			font-size: 0.8125rem;
+			font-weight: 500;
+			padding: 8px 12px;
+			border-radius: 6px;
+			border: 1px solid transparent;
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+
+		.button-primary {
+			background-color: var(--solid-button-background);
+			color: var(--solid-button-foreground);
+			border-color: var(--solid-button-border-color);
+		}
+		.button-primary:hover:not(:disabled) {
+			background-color: var(--solid-button-hover-background);
+			border-color: var(--solid-button-border-hover-color);
+		}
+
+		.button-danger {
+			background-color: transparent;
+			color: var(--establishment-table-action-button-delete-color);
+			border-color: var(--establishment-table-action-button-delete-color);
+		}
+		.button-danger:hover:not(:disabled) {
+			background-color: var(--red-light);
+			color: var(--establishment-table-action-button-delete-hover-color);
+		}
+
+		.button-outline {
+			background-color: transparent;
+			color: var(--blue);
+			border-color: var(--blue);
+		}
+		.button-outline:hover:not(:disabled) {
+			background-color: rgba(19, 81, 132, 0.08);
+		}
+
+		.button-secondary {
+			background-color: var(--background-cards);
+			color: var(--establishment-table-row-color);
+			border-color: var(--establishment-table-header-border-color);
+		}
+		.button-secondary:hover:not(:disabled) {
+			background-color: var(--establishment-table-row-hover-background);
+		}
+
+		.button:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}

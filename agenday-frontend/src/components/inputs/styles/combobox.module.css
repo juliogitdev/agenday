@@ -1,9 +1,13 @@
 
 
-.comboBox {
+.comboBox, .comboBoxDisabled {
 	position: relative;
 	display:flex;
 	flex-direction:column;
+}
+.comboBoxDisabled {
+	opacity: .2;
+	pointer-events: none;
 }
 	.comboLabel {
 		font-family:"Poppins",sans-serif;

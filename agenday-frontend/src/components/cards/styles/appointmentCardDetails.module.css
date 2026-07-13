@@ -1,0 +1,306 @@
+
+.container {
+	position: relative;
+	width: 100%;
+	max-width: 35%;
+	height: 670px;
+}
+
+	.card {
+		background-color: var(--establishment-table-background);
+		border-radius: 5px;
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); 
+		border: 1px solid var(--establishment-table-header-border-color);
+		overflow: hidden;
+		display: flex;
+		height: 100%;
+		flex-direction: column;
+		transition: filter 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+	}
+
+		.card:hover {
+			box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+		}
+
+		.cardBlurred {
+			filter: blur(3px); 
+			pointer-events: none;
+			opacity: 0.8;
+		}
+
+
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 24px;
+			background-color: rgba(0, 0, 0, 0.015); 
+			border-bottom: 1px solid var(--establishment-table-header-border-color);
+		}
+
+			.title {
+				font-family: "Poppins", sans-serif;
+				font-size: .95rem;
+				font-weight: 400;
+				color: var(--establishment-table-header-color);
+				margin: 0;
+			}
+
+/* Service Header */
+.serviceHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: 24px 24px 16px 24px; /* Um pouco mais de respiro no topo */
+	gap: 16px;
+}
+
+.serviceTitle {
+	font-family: "Poppins", sans-serif;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--establishment-table-header-color);
+	margin: 0 0 6px 0;
+	line-height: 1.3;
+}
+
+.serviceDateTime {
+	font-family: "Poppins", sans-serif;
+	font-size: 0.875rem;
+	color: var(--text-secondary);
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+/* Status Badge */
+.statusBadge {
+	font-family: "Poppins", sans-serif;
+	font-size: 0.75rem;
+	font-weight: 600;
+	padding: 6px 12px;
+	border-radius: 4px; /* Ajustado de 6px para 4px */
+	text-transform: uppercase; /* Uppercase costuma ficar mais elegante em badges */
+	letter-spacing: 0.5px;
+	white-space: nowrap;
+}
+
+.statusApproved { background-color: var(--green); color: var(--white); }
+.statusRecused { background-color: var(--red); color: var(--white); }
+.statusFinished { background-color: var(--blue); color: var(--white); }
+.statusPending { background-color: var(--yellow); color: #333333; }
+
+/* Info Grid */
+.infoGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+	padding: 0 24px 24px 24px;
+}
+
+.infoCard,
+.infoCardFull {
+	background-color: var(--background-cards);
+	border-radius: 4px; /* Ajustado de 8px para 4px */
+	padding: 14px 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	border: 1px solid transparent;
+	transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.infoCard:hover, .infoCardFull:hover {
+	border-color: var(--establishment-table-header-border-color); /* Feedback visual no hover */
+	background-color: transparent;
+}
+
+.infoCardFull {
+	grid-column: 1 / -1;
+}
+
+.infoLabel {
+	font-family: "Poppins", sans-serif;
+	font-size: 0.6875rem;
+	font-weight: 600;
+	color: var(--text-secondary);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.infoValue {
+	font-family: "Poppins", sans-serif;
+	font-size: 0.9rem;
+	color: var(--establishment-table-row-color);
+	font-weight: 500;
+}
+
+/* Notes Section */
+.notesSection {
+	padding: 0 24px 24px 24px;
+	flex-grow: 1; /* Empurra o footer para baixo caso o card fique mais alto */
+}
+
+.sectionTitle {
+	font-family: "Poppins", sans-serif;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--text-secondary);
+	margin: 0 0 12px 0;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.notesContent {
+	background-color: var(--background-cards);
+	border: 1px solid var(--establishment-table-header-border-color);
+	border-radius: 5px; /* Ajustado de 8px para 5px */
+	padding: 16px;
+	font-family: "Poppins", sans-serif;
+	font-size: 0.875rem;
+	color: var(--establishment-table-row-color);
+	line-height: 1.6; /* Melhor legibilidade */
+	min-height: 80px;
+}
+
+/* Footer */
+.footer {
+	background-color: rgba(0, 0, 0, 0.015);
+	border-top: 1px solid var(--establishment-table-header-border-color);
+	padding: 20px 24px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 16px;
+	margin-top: auto; /* Garante que fique sempre na base */
+}
+
+.paymentInfo {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	flex: 1;
+}
+
+.paymentRow {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 16px;
+}
+
+.paymentLabel {
+	font-family: "Poppins", sans-serif;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--text-secondary);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.paymentValue {
+	font-family: "Poppins", sans-serif;
+	font-size: 0.875rem;
+	color: var(--establishment-table-row-color);
+	font-weight: 600;
+}
+
+.receiptButton {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	background-color: transparent;
+	border: 1px solid var(--establishment-table-header-border-color);
+	border-radius: 5px; /* Ajustado de 6px para 5px */
+	padding: 10px 16px;
+	font-family: "Poppins", sans-serif;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	color: var(--establishment-table-header-color);
+	cursor: pointer;
+	transition: all 0.2s ease;
+	white-space: nowrap;
+}
+
+.receiptButton:hover {
+	background-color: var(--establishment-table-header-color);
+	border-color: var(--establishment-table-header-color);
+	color: var(--white); /* Inverte as cores no hover para destacar a ação */
+}
+
+.receiptButton:hover svg {
+	stroke: var(--white);
+}
+
+/* Loading Overlay */
+.loadingOverlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255, 255, 255, 0.7);
+	backdrop-filter: blur(2px); /* Efeito de vidro super moderno no carregamento */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
+	border-radius: 5px; /* Ajustado de 12px para 5px */
+}
+
+.loadingContent {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	background: none;
+	padding: 16px 24px;
+}
+
+.loadingSpinner {
+	width: 28px;
+	height: 28px;
+	border: 3px solid var(--establishment-table-header-border-color);
+	border-top-color: var(--establishment-table-header-color);
+	border-radius: 50%;
+	animation: spin 0.8s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite; /* Curva de animação mais fluida */
+}
+
+@keyframes spin {
+	to { transform: rotate(360deg); }
+}
+
+.loadingText {
+	font-family: "Poppins", sans-serif;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--establishment-table-header-color);
+}
+
+/* Responsive */
+@media (max-width: 560px) {
+	.container {
+		max-width: 100%;
+	}
+
+	.serviceHeader {
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.infoGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.footer {
+		flex-direction: column;
+		align-items: stretch; /* Estica os itens para preencher a largura */
+	}
+
+	.receiptButton {
+		width: 100%;
+		justify-content: center;
+		margin-top: 8px;
+	}
+}
