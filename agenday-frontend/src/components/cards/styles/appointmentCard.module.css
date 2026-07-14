@@ -8,7 +8,7 @@
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	width: 32%;
+	height: 220px;
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
 	cursor: pointer;
 }
@@ -186,3 +186,21 @@
 			opacity: 0.5;
 			cursor: not-allowed;
 		}
+
+		.proximityBadge {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+			font-size: 0.75rem;
+			font-weight: 700;
+			padding: 4px 8px;
+			border-radius: 12px;
+		}
+			.urgent {
+				background-color: #fee2e2;
+				color: #b91c1c; 
+			}
+			.soon {
+				background-color: #fef3c7;
+				color: #b45309; 
+			}

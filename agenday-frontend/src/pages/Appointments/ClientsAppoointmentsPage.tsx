@@ -16,6 +16,7 @@ export function ClientsAppoointmentsPage() {
 	const {api, user} = useContext(AuthContext);
 	const [selectedAppointment, setSelectedAppointment] = useState<AppointmentCardType | null>(null);
 	const [loading, setLoading] = useState(false);
+	const [updateList, setUpdateList] = useState(false);
 
 	const blackWidow  = ModalHook();
 	const newAppointmentModal  = ModalHook();
@@ -44,7 +45,8 @@ export function ClientsAppoointmentsPage() {
 			</header>
 			<main className={styles.pageContent}>
 				<ClientAppointmentsList
-					onChose={(e:AppointmentCardType)=>{ 
+					updateList={updateList}
+					onChose={(e:AppointmentCardType)=> { 
 						setLoading(true);
 						setTimeout(()=> {setSelectedAppointment(e); setLoading(false)}, 290);
 					}}
@@ -59,6 +61,7 @@ export function ClientsAppoointmentsPage() {
 				<NewAppointmentModal
  					isVisible={newAppointmentModal.visible} 
 					onClose={function (): void {
+						setUpdateList(!updateList);
 						blackWidow.hidden()
 						newAppointmentModal.hidden();
 					}} 

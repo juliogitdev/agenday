@@ -44,8 +44,8 @@ function formatShortDateTime(isoString: string): string {
 
 function getStatusInfo(status: AppointmentCardType["status"]) {
 	switch (status) {
-		case "SCHEDULED": return { label: "aprovado", className: styles.statusApproved };
-		case "CANCELED" : return { label: "recusado", className: styles.statusRecused };
+		case "SCHEDULED": return { label: "Agendado", className: styles.statusApproved };
+		case "CANCELED" : return { label: "Cancelado", className: styles.statusRecused };
 		case "COMPLETED": return { label: "finalizado", className: styles.statusFinished };
 		case "NO_SHOW"  : return { label: "pendente", className: styles.statusPending };
 		default:          return { label: status, className: styles.statusPending };

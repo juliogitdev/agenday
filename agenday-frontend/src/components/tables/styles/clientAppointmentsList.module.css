@@ -1,4 +1,5 @@
-.cardsList {
+
+.appointmentsVoidTable {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
@@ -8,9 +9,39 @@
 	width: 80%;
 	padding-right: 10px;
 }
+.cardsList {
+	width: 100%;
+	gap: 10px;
+	display: grid;
+	height: 700px;
+	overflow: auto;
+	grid-template-columns: repeat(3, 1fr);
+
+}
 	.cardsList::-webkit-scrollbar {width: 4px; height: 4px;}
 	.cardsList::-webkit-scrollbar-track {background: transparent;}
 	.cardsList::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 999px;}
 	.cardsList::-webkit-scrollbar-thumb:hover { filter: brightness(0.9);}
 	.cardsList::-webkit-scrollbar { width: 4px; height: 4px;}
 	.cardsList::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 999px;}
+
+.appointmentsVoidTable {
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+	.appointmentsVoidTable img {
+		width: 126px;
+		opacity: .1;
+		user-select: none;
+	}
+
+	.appointmentsVoidTable p {
+		font-family: "Poppins", sans-serif;
+  		display: block;
+  		text-transform: uppercase;
+  		font-size: 0.75rem;
+  		font-weight: 400;
+  		color: var(--gray-text);
+  		letter-spacing: 0.05em;
+	}

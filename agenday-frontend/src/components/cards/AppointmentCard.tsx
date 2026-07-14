@@ -1,5 +1,5 @@
 
-// 98% vipe code
+import { Calendar, Scissors, User, Clock } from "lucide-react"; // Adicionei o Clock
 import type { AppointmentCardType } from "../../types/AppointmentTypes";
 import styles from "./styles/appointmentCard.module.css";
 
@@ -11,10 +11,10 @@ export type CardAction = {
 };
 
 export interface AppointmentCardProps {
-	onChose: (e: AppointmentCardType)=> void;
+	onChose: (e: AppointmentCardType) => void;
 	appointment: AppointmentCardType;
 	actions?: CardAction[];
-	showCustomer?: boolean; // quando true, mostra o cliente (visão do profissional)
+	showCustomer?: boolean;
 }
 
 function formatDateTime(isoString: string): string {
@@ -37,43 +37,80 @@ function formatDateTime(isoString: string): string {
 
 function getStatusInfo(status: AppointmentCardType["status"]) {
 	switch (status) {
-		case "SCHEDULED" : return { label: "Aprovado", className: "approved" };
-		case "CANCELED" : return { label: "Recusado", className: "recused" };
+		case "SCHEDULED": return { label: "Agendado", className: "approved" };
+		case "CANCELED": return { label: "Cancelado", className: "recused" };
 		case "COMPLETED": return { label: "Finalizado", className: "finished" };
-		case "NO_SHOW" : return { label: "Pendente", className: "pending" };
-		default:         return { label: status, className: "pending" };
+		case "NO_SHOW": return { label: "Pendente", className: "pending" };
+		default: return { label: status, className: "pending" };
 	}
 }
 
-export function AppointmentCard({appointment, actions = [], showCustomer = false,onChose}: AppointmentCardProps) {
+function getProximityAlert(isoString: string, status: string) {
+	if (status !== "SCHEDULED") return null;
+	const now = new Date();
+	const appDate = new Date(isoString);
+	const diffMs = appDate.getTime() - now.getTime();
+	const diffMinutes = Math.floor(diffMs / 60000);
+
+	if (diffMinutes < 0) return null;
+	if (diffMinutes <= 60) { return { text: `Em ${diffMinutes} min!`, isUrgent: true };}
+	if (
+		appDate.getDate() === now.getDate() &&
+		appDate.getMonth() === now.getMonth() &&
+		appDate.getFullYear() === now.getFullYear()
+	) {
+		const diffHours = Math.floor(diffMinutes / 60);
+		return { text: `Hoje (em ${diffHours}h)`, isUrgent: false };
+	}
+
+	const tomorrow = new Date(now);
+	tomorrow.setDate(tomorrow.getDate() + 1);
+	if (
+		appDate.getDate() === tomorrow.getDate() &&
+		appDate.getMonth() === tomorrow.getMonth() &&
+		appDate.getFullYear() === tomorrow.getFullYear()
+	) {
+		return { text: "Amanhã", isUrgent: false };
+	}
+
+	return null;
+}
+
+export function AppointmentCard({ appointment, actions = [], showCustomer = false, onChose }: AppointmentCardProps) {
 	const statusInfo = getStatusInfo(appointment.status);
 	const subtitle = showCustomer ? appointment.customerName || "Cliente" : appointment.professionalName || "Profissional";
+	const proximity = getProximityAlert(appointment.startTime, appointment.status);
 
 	return (
-		<article className={styles.card} onClick={()=> onChose(appointment)}>
+		<article className={styles.card} onClick={() => onChose(appointment)}>
 			<div className={`${styles.statusBar} ${styles[statusInfo.className]}`} />
 
 			<header className={styles.header}>
 				<h3 className={styles.serviceTitle}>
+					<Scissors size={16} color={"#135184"} />
 					{appointment.catalogItemName || "Serviço sem nome"}
 				</h3>
-				<span className={styles.subtitle}>{subtitle}</span>
+				<span className={styles.subtitle}> <User size={16} color="#135184" /> {subtitle}</span>
 			</header>
 
 			<div className={styles.body}>
 				<div className={styles.infoRow}>
-					<svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-						<rect x="3" y="4" width="18" height="18" rx="2" />
-						<line x1="16" y1="2" x2="16" y2="6" />
-						<line x1="8" y1="2" x2="8" y2="6" />
-						<line x1="3" y1="10" x2="21" y2="10" />
-					</svg>
+					<Calendar size={16} color="#135184" />
 					<span className={styles.infoValue}> {formatDateTime(appointment.startTime)}</span>
 				</div>
 
-				<span className={`${styles.statusBadge} ${styles[statusInfo.className]}`}>
-					{statusInfo.label}
-				</span>
+				<div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+					{proximity && (
+						<span className={`${styles.proximityBadge} ${proximity.isUrgent ? styles.urgent : styles.soon}`}>
+							<Clock size={14} />
+							{proximity.text}
+						</span>
+					)}
+
+					<span className={`${styles.statusBadge} ${styles[statusInfo.className]}`}>
+						{statusInfo.label}
+					</span>
+				</div>
 			</div>
 
 			{actions.length > 0 && (
@@ -83,7 +120,10 @@ export function AppointmentCard({appointment, actions = [], showCustomer = false
 							key={index}
 							className={`${styles.button} ${styles[`button-${action.variant}`]}`}
 							disabled={action.disabled}
-							onClick={action.onClick}
+							onClick={(e) => {
+								e.stopPropagation();
+								action.onClick();
+							}}
 						> {action.label} </button>
 					))}
 				</footer>

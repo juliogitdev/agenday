@@ -1,0 +1,35 @@
+.clockContainer {
+  	display: flex;
+  	align-items: center;
+  	gap: 16px;
+  	background: rgba(19, 81, 132, 0.05); 
+  	border: 1px solid rgba(19, 81, 132, 0.15);
+  	padding: 6px 14px;
+  	border-radius: 20px;
+  	font-family: inherit;
+}
+
+	.dateBlock, .timeBlock {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.dateBlock {
+		border-right: 1px solid rgba(19, 81, 132, 0.2);
+		padding-right: 12px;
+	}
+
+	.dateText {
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: #4b5563; 
+		text-transform: capitalize;
+	}
+
+	.timeText {
+		font-size: 0.9rem;
+		font-weight: 700;
+		color: #135184; 
+		font-variant-numeric: tabular-nums;
+	}

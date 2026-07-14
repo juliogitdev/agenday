@@ -6,27 +6,31 @@ import AuthContext from "../../context/AuthContext";
 import { AlertHook } from "../../hooks/AlertsHook";
 import { ComboBox } from "../../components/inputs/ComboBox";
 import { type EstablishmentSummary } from "../../types/Estableshment";
-import { NotificationButton } from "../../components/buttons/NotificationButton";
 import { ModalHook } from "../../hooks/ModalHook";
 import { BlackWindow } from "../../components/Ui/BlackWindow";
 import { NotificationModal } from "../../components/Modal/NotificationModal";
-import { AppointmentsTable } from "../../components/tables/AppointmentsTable";
-import { MOCK_APPOINTMENTS } from "../../mocks/appointmentsMocks";
-import { SolidButton } from "../../components/buttons/SolidButton";
 import { NewAppointmentModal } from "../../components/Modal/NewAppointmentModal";
+import type { AppointmentCardType } from "../../types/AppointmentTypes";
+import { ClientAppointmentsList } from "../../components/tables/ClientAppointmentsList";
+import { RealTimeClock } from "../../components/Ui/RealTimeClock";
+import { useQuery } from "@tanstack/react-query";
 
 export function ProfessionalsAppoointmentsPage() {
-	const {api} = useContext(AuthContext);
+	const {api, user} = useContext(AuthContext);
 	const errorAlert  = AlertHook();
 	const blackWidow  = ModalHook();
 	const newAppoint  = ModalHook();
 	const notifications  = ModalHook();
 
 	const image_url = import.meta.env.VITE_STORAGE_BASE_URL+/agenday-images/;
-	const [updateTable, setUpdateTable] = useState<boolean>(false);
+	// const [appointments, setAppointments] = useState<AppointmentCardType[]>([]);
+	// const [loadingAppointments, setLoadingAppointments] = useState<boolean>(false);
+
+
 	const [establishments, setEstablishments] = useState<EstablishmentSummary[]>([]);
 	const [selectedEstablishment, setSelectedEstablishment] = useState<EstablishmentSummary | null>(null);
 	const NO_ESTABLISHMENTS = [{ label: "Nenhum estabelecimento encontrado", value: '' }];
+
 	const [comboBoxState, setComboBoxState] = useState({
 		value: {
 			selectedValue: '',
@@ -37,14 +41,13 @@ export function ProfessionalsAppoointmentsPage() {
 		isValid: true
 	});
 
-	 useEffect(()=>{
+	 useEffect(()=> {
 		let active:boolean = true;
 		const getEstablishements = async (): Promise<EstablishmentSummary[] | null > => {
 			try {
 				const r = await api.get('establishment/my-units/summary');
 				if (r.status === 200 && active) {  
 					setEstablishments(r.data); 
-					setUpdateTable(!updateTable);
 					return r.data
 				}
 				return null;
@@ -76,31 +79,60 @@ export function ProfessionalsAppoointmentsPage() {
 		updateComboBox();
 		return ()=>{active=false}
 	},[api]);
+
+
+const {data: appointments = [], isLoading: loadingAppointments, error: appointmentsError } = useQuery({
+	queryKey: ["professional-schedule", selectedEstablishment?.id, user?.userInformations?.uuid],
+	queryFn: async () => {
+		if (!selectedEstablishment || !user?.userInformations) return [];
+		const responseEst = await api.get(`professional-establishments/establishment/${selectedEstablishment.id}`);
+		const links = responseEst.data;
+		const myLink = links.find((link: any) => link.professionalName === user.userInformations?.fullName);
+		if (!myLink) return [];
+
+		const start = new Date();
+		start.setHours(0, 0, 0, 0);
+		const end = new Date();
+		end.setDate(end.getDate() + 7);
+		end.setHours(23, 59, 59, 999);
+
+		const responseAppointments = await api.get(`appointments/professional/${myLink.id}`,
+			{params: {start: start.toISOString(),end: end.toISOString()}
+		});
+		return responseAppointments.data;
+	},
+
+	enabled: !!selectedEstablishment && !!user?.userInformations,
+	refetchInterval: 10000, 
+	refetchIntervalInBackground: true,
+});
+
 	return (
 		<section className={styles.appointmentsPage}>
 			<div className={styles.servicesHeader}>
 				<div className={styles.servicesHeaderInfoContainer}>
-					<img 
-						src={selectedEstablishment?.imageUrl ? (image_url + selectedEstablishment.imageUrl) : ''} 
-						alt={selectedEstablishment?.name || "Estabelecimento"}
-						className={styles.servicesHeaderImg}/>
+					<div  className={styles.establismentInfoContainer}>
+						<img 
+							src={selectedEstablishment?.imageUrl ? (image_url + selectedEstablishment.imageUrl) : ''} 
+							alt={selectedEstablishment?.name || "Estabelecimento"}
+							className={styles.servicesHeaderImg}/>
 
-					<h1 className={styles.serviceHeaderTitle}>
-						{selectedEstablishment?.name || 'Nenhúm estabelecimento Encontrado'}
-						<span  className={styles.serviceHeaderSubtitle}>{selectedEstablishment?.slogan || '... ..'}</span> 
-					</h1>
-				</div>
-				<div className={styles.servicesHeaderComboboxContainer}>
+						<h1 className={styles.serviceHeaderTitle}>
+							{selectedEstablishment?.name || 'Nenhúm estabelecimento Encontrado'}
+							<span  className={styles.serviceHeaderSubtitle}>{selectedEstablishment?.slogan || '... ..'}</span> 
+						</h1>
+					</div>
 					<ComboBox 
 						label="" 
 						initialValue={comboBoxState}
 						onChangeField={(d)=>{
 							const found = establishments.find(est => est.id === d.value.selectedValue);
-							setUpdateTable(!updateTable);
 							setSelectedEstablishment(found || null);
 						}}
 					/>
-					<SolidButton 
+				</div>
+				<div className={styles.servicesHeaderComboboxContainer}>
+					{/* <SolidButton 
 						text={"Novo Agendamento"} 
 						isActive={true} 
 						onClick={function (): void {
@@ -108,23 +140,27 @@ export function ProfessionalsAppoointmentsPage() {
 							newAppoint.show();
 						}} 
 						isLoading={false} 
-					/>
-					<NotificationButton 
+					/> */}
+					<RealTimeClock/>
+					{/* <NotificationButton 
 						onClick={(asModified) => {
 							notifications.show(asModified);
 							blackWidow.show();
 						}}
-					 />
+					 /> */}
 				</div>
 			</div> 
 			<div className={styles.appointmentsContent}>
-				<AppointmentsTable
-					startTime="08:00"
-					endTime="20:00"
-					appointments={MOCK_APPOINTMENTS}
-					userView="client"
-					onClick={() => {}}
+				<ClientAppointmentsList 
+					isProfessional={true}
+					appointmentList={appointments}
+					onChose={function (e: AppointmentCardType): void {
+						alert("aki")
+					}} 
+					updateList={false} 
 				/>
+
+
 				<AppointmentsDetailsCard
 					appointmentId="h6asdasd"
 					serviceName = "Corte de Cabelo"
