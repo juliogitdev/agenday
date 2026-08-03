@@ -45,7 +45,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 						password: userData.password
 					})
 				});
-			} catch {return 0}
+			} catch{ return 0}
 
 			if (response.ok && response.status === 200 ) {
 				const loginData = await response.json();  // get acesso informations
