@@ -14,6 +14,7 @@ import type { AppointmentCardType } from "../../types/AppointmentTypes";
 import { ClientAppointmentsList } from "../../components/tables/ClientAppointmentsList";
 import { RealTimeClock } from "../../components/Ui/RealTimeClock";
 import { useQuery } from "@tanstack/react-query";
+import { BallName } from "../../components/Ui/BallName";
 
 export function ProfessionalsAppoointmentsPage() {
 	const {api, user} = useContext(AuthContext);
@@ -22,7 +23,6 @@ export function ProfessionalsAppoointmentsPage() {
 	const newAppoint  = ModalHook();
 	const notifications  = ModalHook();
 
-	const image_url = import.meta.env.VITE_STORAGE_BASE_URL+/agenday-images/;
 	// const [appointments, setAppointments] = useState<AppointmentCardType[]>([]);
 	// const [loadingAppointments, setLoadingAppointments] = useState<boolean>(false);
 
@@ -110,46 +110,48 @@ const {data: appointments = [], isLoading: loadingAppointments, error: appointme
 	return (
 		<section className={styles.appointmentsPage}>
 			<div className={styles.servicesHeader}>
-				<div className={styles.servicesHeaderInfoContainer}>
-					<div  className={styles.establismentInfoContainer}>
-						<img 
-							src={selectedEstablishment?.imageUrl ? (image_url + selectedEstablishment.imageUrl) : ''} 
-							alt={selectedEstablishment?.name || "Estabelecimento"}
-							className={styles.servicesHeaderImg}/>
+				<div className={styles.servicesHeaderTop}>
+					<div className={styles.establishmentInfoContainer}>
+						{selectedEstablishment?.imageUrl ? (
+							<img
+								src={selectedEstablishment.imageUrl}
+								alt={selectedEstablishment.name || "Estabelecimento"}
+								className={styles.servicesHeaderImg}
+							/>
+						) : (
+							<BallName name="ND" size={54} />
+						)}
 
-						<h1 className={styles.serviceHeaderTitle}>
-							{selectedEstablishment?.name || 'Nenhúm estabelecimento Encontrado'}
-							<span  className={styles.serviceHeaderSubtitle}>{selectedEstablishment?.slogan || '... ..'}</span> 
-						</h1>
+						<div className={styles.establishmentText}>
+							<h1 className={styles.serviceHeaderTitle}>
+								{selectedEstablishment?.name || "Sem estabelecimentos"}
+							</h1>
+
+							<span className={styles.serviceHeaderSubtitle}>
+								{selectedEstablishment?.slogan || "Selecione um estabelecimento"}
+							</span>
+						</div>
 					</div>
-					<ComboBox 
-						label="" 
+
+					<div className={styles.servicesHeaderRight}>
+						<RealTimeClock />
+					</div>
+				</div>
+
+				<div className={styles.servicesHeaderBottom}>
+					<ComboBox
+						label=""
 						initialValue={comboBoxState}
-						onChangeField={(d)=>{
-							const found = establishments.find(est => est.id === d.value.selectedValue);
+						onChangeField={(d) => {
+							const found = establishments.find(
+								(est) => est.id === d.value.selectedValue
+							);
 							setSelectedEstablishment(found || null);
 						}}
 					/>
 				</div>
-				<div className={styles.servicesHeaderComboboxContainer}>
-					{/* <SolidButton 
-						text={"Novo Agendamento"} 
-						isActive={true} 
-						onClick={function (): void {
-							blackWidow.show();
-							newAppoint.show();
-						}} 
-						isLoading={false} 
-					/> */}
-					<RealTimeClock/>
-					{/* <NotificationButton 
-						onClick={(asModified) => {
-							notifications.show(asModified);
-							blackWidow.show();
-						}}
-					 /> */}
-				</div>
-			</div> 
+			</div>
+
 			<div className={styles.appointmentsContent}>
 				<ClientAppointmentsList 
 					isProfessional={true}
@@ -160,23 +162,24 @@ const {data: appointments = [], isLoading: loadingAppointments, error: appointme
 					updateList={false} 
 				/>
 
-
-				<AppointmentsDetailsCard
-					appointmentId="h6asdasd"
-					serviceName = "Corte de Cabelo"
-					serviceCreatedAt = " 20/10/2023 as 14:30"
-					serviceDeadline = "20/10/2023 as 15:30"
-					profissinalName = "João Silva"
-					observations = "Cliente prefere um corte mais curto nas laterais e um pouco mais longo no topo. Ele também mencionou que gostaria de manter a barba aparada, mas não muito curta. Além disso, ele pediu para usar um pouco de pomada para dar um acabamento mais estilizado ao corte."		
-					disabled = {false}
-					clientAppointmentsCaount = {3}
-					firstClientAppointmentDate = "20/10/2023"
-					loading = {false}
-					clienteName = "Maria Oliveira"
-					clientPicture = "https://randomuser.me/api/portraits/women/44.jpg"
-					showCloseBtn = {false}
-					onClose = {() => console.log("Fechar detalhes do agendamento")}
-				/>
+				<div className={styles.appointmentDetails}>
+					<AppointmentsDetailsCard
+						appointmentId="h6asdasd"
+						serviceName = "Corte de Cabelo"
+						serviceCreatedAt = " 20/10/2023 as 14:30"
+						serviceDeadline = "20/10/2023 as 15:30"
+						profissinalName = "João Silva"
+						observations = "Cliente prefere um corte mais curto nas laterais e um pouco mais longo no topo. Ele também mencionou que gostaria de manter a barba aparada, mas não muito curta. Além disso, ele pediu para usar um pouco de pomada para dar um acabamento mais estilizado ao corte."		
+						disabled = {false}
+						clientAppointmentsCaount = {3}
+						firstClientAppointmentDate = "20/10/2023"
+						loading = {false}
+						clienteName = "Maria Oliveira"
+						clientPicture = "https://randomuser.me/api/portraits/women/44.jpg"
+						showCloseBtn = {false}
+						onClose = {() => console.log("Fechar detalhes do agendamento")}
+					/>
+				</div>
 			</div>
 			<BlackWindow isVisible={blackWidow.visible}>
 				<NotificationModal 

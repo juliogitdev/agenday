@@ -17,7 +17,9 @@
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		align-items: center;
         font-family: "Poppins", sans-serif;
+		gap: 24px;
 	}
+		
         .servicesHeaderInfoContainer {
             display: flex;
             align-items: center;
@@ -52,15 +54,63 @@
                     color: var(--service-page-header-subtitle);
                     font-weight: 400;
                 }
-        .servicesHeaderComboboxContainer {
-			display: grid;
-			grid-template-columns: 1fr auto auto;
-			align-items: center;
-			gap: 10px;
-		}
+
+			.servicesHeaderComboboxContainer {
+				display: grid;
+				grid-template-columns: 1fr auto auto;
+				align-items: center;
+				gap: 10px;
+			}
+
+			.establishmentInfoContainer {
+				display: flex;
+				align-items: center;
+				gap: 16px;
+			}
+
+			.establishmentText {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.servicesHeaderBottom { width: 260px;}
+			.servicesHeaderRight {margin-top: 10px;}
 
 	.appointmentsContent {
         display: grid;
         grid-template-columns: 70% 28%;
 		gap: 2%;
     } 
+
+
+@media(max-width:768px) { 
+	.appointmentsPage { width: 100%;}
+		.servicesHeader {
+        	flex-direction: column;
+        	align-items: stretch;
+        	gap: 16px;
+    	}
+
+		.servicesHeaderTop {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 16px;
+		}
+
+		.establishmentInfoContainer { align-items: center;}
+		.servicesHeaderRight {
+			display: flex;
+			justify-content: center;
+		}
+
+		.servicesHeaderBottom { width: 100%;}
+		.servicesHeaderBottom > * { width: 100%;}
+	
+	.appointmentsContent { display: block;}
+	.appointmentDetails {display: none;}
+}
+
+@media (max-width: 768px) {
+
+    
+}
