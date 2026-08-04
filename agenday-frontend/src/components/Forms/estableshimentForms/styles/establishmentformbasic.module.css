@@ -31,3 +31,10 @@
 		gap: 1rem;
 		padding: 10px 0;
 	}
+
+@media(max-width:768px) {
+	.establishmentBasicFormTwoColumns {
+		display: flex;
+		flex-direction: column;
+	}
+}

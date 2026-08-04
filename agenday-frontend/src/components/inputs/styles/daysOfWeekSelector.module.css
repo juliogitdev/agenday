@@ -60,3 +60,5 @@
 					opacity: 0.95;
 					transform: translateY(0);
 				}
+
+@media (max-width: 768px) {.grid {overflow: auto;}}

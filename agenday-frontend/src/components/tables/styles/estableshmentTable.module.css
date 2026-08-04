@@ -141,3 +141,44 @@
 			cursor: pointer;
 			background-color: var(--establishment-table-row-hover-background);
 		}
+
+@media (max-width: 768px) {
+
+    .establishmentTable {
+        height: 79dvh;
+    }
+
+    .establishmentTableHeader {display: none;}
+    .establishmentTableBody {
+        gap: 12px;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .establishmentTableRow {
+        display: flex;
+        flex-direction: column;
+        border: none;
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--establishment-table-background);
+        box-shadow: var(--establishment-table-shadow);
+    }
+
+    .establishmentTableCell {
+        width: 100%;
+        border: none;
+        padding: 12px 16px;
+        justify-content: space-between;
+    }
+
+    .establishmentTableCell:not(:last-child) { border-bottom: 1px solid var(--establishment-table-header-border-color);}
+    .establishmentName {
+        grid-template-columns: 48px 1fr;
+        padding: 14px 16px;
+    }
+    .actions {
+        justify-content: flex-end;
+        padding: 12px 16px;
+    }
+}

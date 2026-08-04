@@ -220,7 +220,7 @@ export function Establishments() {
 				<h1 className={style.estableshmentHeaderTitle}>
 					Estabelecimentos 
 					<span className={style.estableshmentHeaderSubtitle}>
-						Controle o branding e a performance das sua unidades
+						Controle o branding e a performance das suas unidades
 					</span>
 				</h1>
 				<button 
@@ -231,7 +231,7 @@ export function Establishments() {
 						blackWindow.show();
 						formModal.show();
 					}}> 
-					Adicionar estabelecimento
+					Criar Novo
 				</button>
 			</header>
 

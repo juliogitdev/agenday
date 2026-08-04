@@ -168,3 +168,53 @@
 			border-color: var(--multistep-form-button-disabled-background);
 			cursor: not-allowed;
 		}
+
+
+
+@media (max-width:768px) {
+    .containerBox {
+        width: calc(100vw - 24px);
+        max-width: 420px;
+        height: auto;
+        max-height: 90vh;
+        padding: 20px;
+    }
+
+		.brandingHeader { align-items: flex-start;}
+		.brandingHeader h2 { flex: 1;}
+		.dynamicFieldsSection { padding: 14px;}
+		.sectionHeaderRow {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 10px;
+		}
+
+		.replicateBtn { width: 100%;}
+		.scheduleListGrid {
+			height: auto;
+			max-height: 300px;
+		}
+
+		.scheduleRowItem {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 12px;
+			padding: 14px 0;
+		}
+		.scheduleDayName { font-size: .9rem;}
+		.scheduleInputsGroup {
+			margin-left: 0;
+			width: 100%;
+			justify-content: space-between;
+			gap: 8px;
+		}
+
+		.scheduleInputsGroup input {
+			flex: 1;
+			min-width: 0;
+		}
+
+		.separatorText { flex-shrink: 0;}
+		.actions { margin-top: 20px;}
+		.submitBtn { width: 100%;}
+}

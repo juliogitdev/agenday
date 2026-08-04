@@ -22,6 +22,7 @@ export function ProfessionalsAppoointmentsPage() {
 	const blackWidow  = ModalHook();
 	const newAppoint  = ModalHook();
 	const notifications  = ModalHook();
+	const image_url = import.meta.env.VITE_STORAGE_BASE_URL+/agenday-images/;
 
 	// const [appointments, setAppointments] = useState<AppointmentCardType[]>([]);
 	// const [loadingAppointments, setLoadingAppointments] = useState<boolean>(false);
@@ -114,7 +115,7 @@ const {data: appointments = [], isLoading: loadingAppointments, error: appointme
 					<div className={styles.establishmentInfoContainer}>
 						{selectedEstablishment?.imageUrl ? (
 							<img
-								src={selectedEstablishment.imageUrl}
+								src={`${image_url}/${selectedEstablishment.imageUrl}`}
 								alt={selectedEstablishment.name || "Estabelecimento"}
 								className={styles.servicesHeaderImg}
 							/>

@@ -73,3 +73,8 @@
 	.bestServices {
 		height: 300px;
 	}
+
+
+@media(max-width:768px) { 
+	.establishmentDashboardCard, .establishmentDashboardCardVoid {display: none;}
+}

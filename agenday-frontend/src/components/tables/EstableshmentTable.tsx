@@ -37,7 +37,7 @@ export function EstablishmentTable({updateTable, onClick }: { updateTable: numbe
 					<li className={styles.establishmentTableRow}  onClick={() => onClick?.(item, 'view')} key={item.id}>
 						<div className={styles.establishmentName}>
 							<div className={styles.establishmentIcon}>
-								{ item.imageUrl ? ( <img src={`${image_url}/${item.imageUrl}`}/>) : ( <BallName name={item.name} /> )}
+								{ item.imageUrl ? ( <img src={`${image_url}/${item.imageUrl}`}/>) : ( <BallName name={item.name} size={54} /> )}
 							</div>
 							<div className={styles.establishmentInfo}>
 								{item.name}
