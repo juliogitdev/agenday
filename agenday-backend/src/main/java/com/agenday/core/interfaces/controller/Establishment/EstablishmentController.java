@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/establishment")
-@CrossOrigin(origins = "http://localhost:5173")
 @PreAuthorize("hasRole('ROLE_PROFESSIONAL')")
 public class EstablishmentController {
     private final EstablishmentService establishmentService;
