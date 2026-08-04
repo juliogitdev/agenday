@@ -313,3 +313,199 @@
 				background-color: var(--red);
 				color: var(--white);
 			}
+
+@media (max-width: 768px) {
+
+	.configurations {
+		width: 100%;
+		margin-bottom: 40px;
+		padding: 0 10px;
+		box-sizing: border-box;
+	}
+
+	.configurationsHeader {
+		padding: 16px;
+		align-items: flex-start;
+		gap: 14px;
+	}
+
+	.configurationsHeaderImage {
+		width: 48px;
+		height: 48px;
+	}
+
+	.configurationsHeaderText { margin-left: 0; }
+
+	.configurationsHeaderText h1 {
+		font-size: .75rem;
+		line-height: 1.2;
+	}
+
+	.configurationsHeaderText p {
+		font-size: .76rem;
+		line-height: 1.5;
+	}
+
+	.accountInfo {
+		padding: 16px;
+	}
+
+	.accountInfoTitle {
+		font-size: .75rem;
+	}
+
+	.fourColumns {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 10px;
+		padding-bottom: 16px;
+		margin-top: 16px;
+	}
+
+	.fourColumnsInputs {
+		margin: 0;
+		font-size: .68rem;
+		letter-spacing: .04em;
+	}
+
+	.fourColumnsInputs span {
+		padding: 8px 10px;
+		margin-top: 6px;
+		font-size: .82rem;
+		line-height: 1.4;
+	}
+
+	.editIcon {
+		width: 14px;
+		height: 14px;
+	}
+
+	.twoColumns {
+		grid-template-columns: 1fr;
+		gap: 16px;
+		padding-top: 16px;
+	}
+
+	.infoText {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+		border-right: none;
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: 16px;
+		font-size: .68rem;
+		line-height: 1.4;
+	}
+
+	.infoValueLabel {
+		font-size: .8rem;
+		line-height: 1.5;
+	}
+
+	.infoValue {
+		margin-left: 4px;
+		font-size: .8rem;
+	}
+
+	.plansInfo,
+	.plansInfoUser {
+		padding: 16px;
+		margin: 16px 0;
+	}
+
+	.plansInfoHeader {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 10px;
+	}
+
+	.plansInfoHeaderTitle {
+		font-size: .95rem;
+	}
+
+	.plansInfoHeaderStatusOk {
+		font-size: .65rem;
+	}
+
+	.plansInfoContent {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+
+	.planInfo {
+		padding: 14px;
+	}
+
+	.planInfoLabel {
+		font-size: .68rem;
+	}
+
+	.planInfoDate {
+		font-size: 1rem;
+		padding: 6px 0;
+	}
+
+	.planInfoValue {
+		font-size: .82rem;
+	}
+
+	.planDetails {
+		padding: 16px;
+	}
+
+	.planDetailsText {
+		font-size: .8rem;
+		line-height: 1.6;
+	}
+
+	.planDetailsButtons {
+		flex-direction: column;
+		gap: 10px;
+		margin-top: 16px;
+	}
+
+	.planDetailsButtons button {
+		width: 100%;
+		padding: 10px;
+		margin: 0;
+		font-size: .8rem;
+		font-weight: 600;
+	}
+
+	.dangerZone {
+		padding: 16px;
+	}
+
+	.dangerZone h1 {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-size: .95rem;
+	}
+
+	.dangerZoneContent {
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.dangerZoneContentText {
+		width: 100%;
+	}
+
+	.dangerZoneContentText h2 {
+		font-size: .9rem;
+	}
+
+	.dangerZoneContentText p {
+		font-size: .8rem;
+		line-height: 1.6;
+	}
+
+	.dangerZoneContentButton {
+		width: 100%;
+		padding: 10px;
+		margin: 0;
+		font-size: .8rem;
+		font-weight: 600;
+	}
+}
