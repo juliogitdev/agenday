@@ -36,7 +36,7 @@ export function LandingPage() {
 					/>
 				</div>
 				<nav className={styles.navActions}>
-					<Link to="/login">
+					<Link to="/login" style={{textDecoration: "none"}}>
 						<motion.button
 							whileHover={{ scale:1.05}}
 							whileTap={{ scale:.95}}
@@ -44,7 +44,7 @@ export function LandingPage() {
 							>Entrar
 						</motion.button>
 					</Link>
-					<Link to="/signup">
+					<Link to="/signup" style={{textDecoration: "none"}}>
 						<motion.button
 							whileHover={{ scale:1.05}}
 							whileTap={{ scale:.95}}
@@ -187,47 +187,47 @@ export function LandingPage() {
 				transition={{duration:.5}}
 			>
 				<section className={styles.plansContainer} ref={plansRef}>
-					<PlanCard
-						planTitle="Free"
-						planPrice={0.00}
-						planBeneficts={[
-							"Até 50 Agendamentos / Més",
-							"Cadastro básico",
-						]}
-						buttonType="outline"
-						isRecommended={false}
-						width="290px"
-						height="340px"
-						onClick={onChosePlan}
-					/>
-					<PlanCard
-						planTitle="Pro"
-						planPrice={40.90}
-						planBeneficts={[
-							"Agendamentos ilimitados",
-							"Dashboard financeiro",
-							"Relatórios em PDF",
-						]}
-						buttonType="solid"
-						isRecommended={true}
-						width="290px"
-						height="340px"
-						onClick={onChosePlan}
-					/>
-					<PlanCard
-						planTitle="Business"
-						planPrice={99.99}
-						planBeneficts={[
-							"Benefícios pro",
-							"Multiplos profissionais",
-							"Multiplos estabelecimentos",
-						]}
-						buttonType="outline"
-						isRecommended={false}
-						width="290px"
-						height="340px"
-						onClick={onChosePlan}
-					/>
+						<PlanCard
+							planTitle="Free"
+							planPrice={0.00}
+							planBeneficts={[
+								"Até 50 Agendamentos / Més",
+								"Cadastro básico",
+							]}
+							buttonType="outline"
+							isRecommended={false}
+							width="290px"
+							height="340px"
+							onClick={onChosePlan}
+						/>
+						<PlanCard
+							planTitle="Pro"
+							planPrice={40.90}
+							planBeneficts={[
+								"Agendamentos ilimitados",
+								"Dashboard financeiro",
+								"Relatórios em PDF",
+							]}
+							buttonType="solid"
+							isRecommended={true}
+							width="290px"
+							height="340px"
+							onClick={onChosePlan}
+						/>
+						<PlanCard
+							planTitle="Business"
+							planPrice={99.99}
+							planBeneficts={[
+								"Benefícios pro",
+								"Multiplos profissionais",
+								"Multiplos estabelecimentos",
+							]}
+							buttonType="outline"
+							isRecommended={false}
+							width="290px"
+							height="340px"
+							onClick={onChosePlan}
+						/>
 				</section>
 			</motion.div>
 
