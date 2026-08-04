@@ -33,4 +33,13 @@ public interface EstablishmentRepository extends JpaRepository<Establishment, UU
     Page<Establishment> findByIsActiveTrue(Pageable pageable);
 
     Page<Establishment> findByIsActiveTrueAndNameContainingIgnoreCase(String name, Pageable pageable);
+
+    @Query("""
+    SELECT DISTINCT pe.establishment FROM ProfessionalEstablishment pe
+    WHERE pe.professional.user.email = :email
+      AND pe.status = com.agenday.core.domain.enums.LinkStatus.ACTIVE
+      AND pe.isActive = true
+      AND pe.establishment.isActive = true
+    """)
+    List<Establishment> findActiveLinkedByProfessionalEmail(@Param("email") String email);
 }

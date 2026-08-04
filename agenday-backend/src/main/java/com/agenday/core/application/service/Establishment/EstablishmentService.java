@@ -198,18 +198,13 @@ public class EstablishmentService {
 
     @Transactional
     public List<EstablishmentResponse> getEstablishmentsByProfessional(String emailUser) {
-        return establishmentRepository.findByOwnerEmailAndIsActiveTrue(emailUser)
-                .stream()
-                .map(EstablishmentMapper::toDTO)
-                .collect(Collectors.toList());
+        return establishmentRepository.findActiveLinkedByProfessionalEmail(emailUser)
+                .stream().map(EstablishmentMapper::toDTO).collect(Collectors.toList());
     }
 
-
     public List<EstablishmentSummaryResponse> getEstablishmentsByProfessionalSummary(String emailUser) {
-        return establishmentRepository.findByOwnerEmailAndIsActiveTrue(emailUser)
-                .stream()
-                .map(EstablishmentSummaryMapper::toDTO)
-                .collect(Collectors.toList());
+        return establishmentRepository.findActiveLinkedByProfessionalEmail(emailUser)
+                .stream().map(EstablishmentSummaryMapper::toDTO).collect(Collectors.toList());
     }
 
 

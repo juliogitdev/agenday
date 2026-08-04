@@ -124,28 +124,30 @@ public class ProfessionalEstablishmentService {
 
     @Transactional(readOnly = true)
     public List<ProfessionalEstablishmentResponse> getProfessionalsByEstablishment(UUID establishmentId, Authentication authentication) {
-        // Verificar se o estabelecimento existe
         Establishment establishment = establishmentRepository.findById(establishmentId)
                 .orElseThrow(() -> new BusinessException(
-                        "ESTABLISHMENT_NOT_FOUND",
-                        "Estabelecimento não encontrado.",
-                        HttpStatus.NOT_FOUND
-                ));
+                        "ESTABLISHMENT_NOT_FOUND", "Estabelecimento não encontrado.", HttpStatus.NOT_FOUND));
 
         String loggedUserEmail = authentication.getName();
+        boolean isOwner = loggedUserEmail.equals(establishment.getOwner().getEmail());
 
-        // Verifica se o e-mail de quem está logado é idêntico ao e-mail do dono do salão no banco
-        String establishmentOwnerEmail = establishment.getOwner().getEmail();
-        if (!loggedUserEmail.equals(establishmentOwnerEmail)) {
-            throw new BusinessException(
-                    "FORBIDDEN_ACTION",
-                    "Ação inválida. Você não é o proprietário deste estabelecimento.",
-                    HttpStatus.FORBIDDEN
-            );
+        // Dono: enxerga todos os profissionais vinculados
+        if (isOwner) {
+            return linkRepository.findByEstablishmentIdAndIsActiveTrueWithDetails(establishmentId)
+                    .stream().map(ProfessionalEstablishmentMapper::toDTO).collect(Collectors.toList());
         }
 
-        return linkRepository.findByEstablishmentIdAndIsActiveTrue(establishmentId)
+        // Não-dono: precisa ter vínculo ativo e só enxerga o próprio
+        boolean isLinked = linkRepository
+                .existsByEstablishmentIdAndProfessionalUserEmailAndIsActiveTrue(establishmentId, loggedUserEmail);
+        if (!isLinked) {
+            throw new BusinessException(
+                    "FORBIDDEN_ACTION", "Você não tem vínculo com este estabelecimento.", HttpStatus.FORBIDDEN);
+        }
+
+        return linkRepository.findByEstablishmentIdAndIsActiveTrueWithDetails(establishmentId)
                 .stream()
+                .filter(link -> link.getProfessional().getUser().getEmail().equals(loggedUserEmail))
                 .map(ProfessionalEstablishmentMapper::toDTO)
                 .collect(Collectors.toList());
     }
