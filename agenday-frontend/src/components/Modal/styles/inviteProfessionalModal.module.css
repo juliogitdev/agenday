@@ -170,3 +170,13 @@
 	border-color: var(--multistep-form-button-disabled-background);
 	cursor: not-allowed;
 }
+
+@media(max-width:768px) {
+	.modalBox {
+		width: 390px;
+		padding: 20px;
+		position: relative;
+		box-sizing: border-box;
+	}
+	.moneyInput { width: 96px;}
+}

@@ -138,8 +138,9 @@ export function InviteProfessionalModal({ establishmentId, isVisible, onClose}: 
 								/>
 							</div>
 							<div className={styles.inputWrapper}>
-								<label>Salário Base (R$)</label>
+								<label>Valor R$</label>
 								<input
+									className={styles.moneyInput}
 									type="text"
 									placeholder="0.00"
 									value={cltSalary}
@@ -159,8 +160,9 @@ export function InviteProfessionalModal({ establishmentId, isVisible, onClose}: 
 								/>
 							</div>
 							<div className={styles.inputWrapper}>
-								<label>Valor por Prestação/Hora (R$)</label>
+								<label>Valor R$</label>
 								<input
+									className={styles.moneyInput}
 									type="text"
 									placeholder="0.00"
 									value={freeValue}
