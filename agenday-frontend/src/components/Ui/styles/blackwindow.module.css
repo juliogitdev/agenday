@@ -39,3 +39,12 @@
 	backdrop-filter: blur(0px) !important;
 	background-color: transparent !important;
 }
+
+
+@media (max-width: 768px) { 
+	.blackWindow {
+		align-items: inherit;
+		padding-top: 50px;
+		justify-content: center;
+	}
+}

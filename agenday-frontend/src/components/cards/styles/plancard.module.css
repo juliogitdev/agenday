@@ -1,120 +1,177 @@
-
-
 .card {
-	position:relative;
-	background:var(--plan-card-background);
-	border:1px solid var(--plan-card-border);
+	position: relative;
+	background: var(--plan-card-background);
+	border: 1px solid var(--plan-card-border);
 	border-radius: 14px;
 	padding: 32px;
-	box-shadow:0 8px 20px var(--plan-card-shadow);
+	height: 40px;
+	box-shadow: 0 8px 20px var(--plan-card-shadow);
 }
 
 	.content {
-		display:flex;
-		flex-direction:column;
-		height:100%;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
 	}
 
-	.recommended{ border:2px solid var(--plan-card-highlight-border);}
+	.recommended { border: 2px solid var(--plan-card-highlight-border); }
+
 		.badge {
 			font-family: "Poppins", sans-serif;
-			position:absolute;
-			top:-14px;
-			left:50%;
-			transform:translateX(-50%);
-			padding:6px 18px;
-			font-size:.7rem;
-			font-weight:600;
-			border-radius:8px;
-			color:var(--plan-card-badge-text);
-			background:var(--plan-card-badge-background);
-			box-shadow:0 4px 10px var(--plan-card-shadow);
+			position: absolute;
+			top: -14px;
+			left: 50%;
+			transform: translateX(-50%);
+			padding: 6px 18px;
+			font-size: .7rem;
+			font-weight: 600;
+			border-radius: 8px;
+			color: var(--plan-card-badge-text);
+			background: var(--plan-card-badge-background);
+			box-shadow: 0 4px 10px var(--plan-card-shadow);
 		}
+
+	.header {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 40px;
+	}
 
 		.planTitle {
 			font-family: "Poppins", sans-serif;
-			color:var(--plan-card-title);
-			font-size:1rem;
-			font-weight:700;
+			color: var(--plan-card-title);
+			font-size: 1rem;
+			font-weight: 700;
 		}
 
-	.planPrice {
-		font-family: "Poppins", sans-serif;
-		margin-bottom:40px;
-		font-size:2rem;
-		font-weight:800;
-		color:var(--plan-card-price);
-	}
+		.priceContainer {
+			display: flex;
+			flex-direction: column;
+		}
 
+			.planPrice {
+				font-family: "Poppins", sans-serif;
+				margin: 8px 0 0;
+				font-size: 2rem;
+				font-weight: 800;
+				color: var(--plan-card-price);
+			}
+
+			.pricePeriod {
+				font-family: "Poppins", sans-serif;
+				font-size: .72rem;
+				color: var(--plan-card-benefict);
+			}
 
 	.benefictsContainer {
-		display:flex;
-		flex-direction:column;
-		margin-bottom:auto;
+		display: flex;
+		flex-direction: column;
+		margin-bottom: auto;
 	}
 
 		.benefict {
 			font-family: "Poppins", sans-serif;
-			display:flex;
+			display: flex;
+			align-items: center;
 			font-size: .8rem;
-			align-items:center;
-			color:var(--plan-card-benefict);
+			color: var(--plan-card-benefict);
 		}
 
 		.check {
-			font-size:1.2rem;
-			font-weight:bold;
-			color:var(--plan-card-check);
+			font-size: 1.2rem;
+			font-weight: bold;
+			color: var(--plan-card-check);
 		}
 
 	.solidButton,
 	.outlineButton {
 		font-family: "Poppins", sans-serif;
-		width:100%;
-		margin-top:35px;
-		padding:10px;
-		border-radius:12px;
-		font-size:.8rem;
-		font-weight:600;
-		cursor:pointer;
-		transition:.2s;
-	}	
+		width: 100%;
+		margin-top: 35px;
+		padding: 10px;
+		border-radius: 12px;
+		font-size: .8rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition: .2s;
+	}
 
 	.solidButton {
-		border:none;
-		background:var(--solid-button-background);
-		color:var(--solid-button-foreground);
+		border: none;
+		background: var(--solid-button-background);
+		color: var(--solid-button-foreground);
 	}
 
-	.solidButton:hover { background:var(--solid-button-hover-background);}
+	.solidButton:hover { background: var(--solid-button-hover-background); }
+
 	.outlineButton {
-		background:transparent;
-		border:1px solid var(--plan-card-button-border);
-		color:var(--plan-card-button-text);
+		background: transparent;
+		border: 1px solid var(--plan-card-button-border);
+		color: var(--plan-card-button-text);
 	}
 
-	.outlineButton:hover{ background:var(--plan-card-button-hover);}
+	.outlineButton:hover { background: var(--plan-card-button-hover); }
 
+@media (max-width: 768px) {
 
-@media(max-width:768px){
 	.card {
-		width:320px !important;
-		min-width:320px;
-		padding:22px;
+		width: 100% !important;
+		min-width: 0;
+		padding: 18px;
+		border-radius: 16px;
+		height: 300px !important;
 	}
-		.planPrice{
-			font-size:1.7rem;
-			margin-bottom:25px;
-		}
 
-		.benefictsContainer{ gap:12px;}
-			.benefict{
-				font-size:.75rem;
-				line-height:1.4;
-			}
-	.solidButton, .outlineButton{
-		margin-top:25px;
-		padding:12px;
-		font-size:.75rem;
+	.badge {
+		position: static;
+		transform: none;
+		display: inline-flex;
+		align-self: flex-start;
+		margin-bottom: 16px;
+	}
+
+	.header {
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: space-between;
+		margin-bottom: 20px;
+		gap: 12px;
+	}
+
+	.planTitle {
+		font-size: 1.15rem;
+		max-width: 45%;
+	}
+
+	.priceContainer {
+		align-items: flex-end;
+	}
+
+	.planPrice {
+		margin: 0;
+		font-size: 1.7rem;
+		line-height: 1;
+	}
+
+	.pricePeriod {
+		margin-top: 4px;
+		font-size: .7rem;
+	}
+
+	.benefictsContainer {gap: 12px; }
+	.benefict {
+		font-size: .8rem;
+		line-height: 1.45;
+	}
+
+	.check {
+		font-size: 1rem;
+		margin-right: 8px;
+	}
+	.solidButton,
+	.outlineButton {
+		margin-top: 22px;
+		padding: 14px;
+		font-size: .82rem;
 	}
 }

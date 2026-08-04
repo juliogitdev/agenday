@@ -6,7 +6,6 @@
 	gap: 16px;
 	height: 700px;
 	overflow: auto;
-	width: 80%;
 	padding-right: 10px;
 }
 .cardsList {
@@ -15,6 +14,7 @@
 	display: grid;
 	height: 700px;
 	overflow: auto;
+	padding-bottom: 50px;
 	grid-template-columns: repeat(3, 1fr);
 
 }
@@ -45,3 +45,10 @@
   		color: var(--gray-text);
   		letter-spacing: 0.05em;
 	}
+
+
+@media (max-width: 768px) { 
+	.cardsList {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}

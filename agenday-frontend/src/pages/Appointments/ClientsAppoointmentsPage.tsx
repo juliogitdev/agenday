@@ -44,18 +44,21 @@ export function ClientsAppoointmentsPage() {
 				</div>
 			</header>
 			<main className={styles.pageContent}>
-				<ClientAppointmentsList
-					updateList={updateList}
-					onChose={(e:AppointmentCardType)=> { 
-						setLoading(true);
-						setTimeout(()=> {setSelectedAppointment(e); setLoading(false)}, 290);
-					}}
-				/>
-
-				<AppointmentCardDetails
-					appointment={selectedAppointment}
-					loading={loading}
-				/>
+				<div className={styles.appointmentsTable}>
+					<ClientAppointmentsList
+						updateList={updateList}
+						onChose={(e:AppointmentCardType)=> { 
+							setLoading(true);
+							setTimeout(()=> {setSelectedAppointment(e); setLoading(false)}, 290);
+						}}
+					/>
+				</div>
+				<div className={styles.appointmentsDetails}>
+					<AppointmentCardDetails
+						appointment={selectedAppointment}
+						loading={loading}
+					/>
+				</div>
 			</main>
 			<BlackWindow isVisible={blackWidow.visible}>
 				<NewAppointmentModal
@@ -70,3 +73,4 @@ export function ClientsAppoointmentsPage() {
 		</section>
 	);
 }
+

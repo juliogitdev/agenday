@@ -6,6 +6,7 @@
 	flex-direction: column;
 	width: 50px;
 	border-radius: 4px;
+	margin-left: 10px;
 	border: 1px solid var(--panel-border-color);
 	background-color: var(--panel-background);
 }
@@ -33,9 +34,14 @@
 
 @media (max-width: 768px) { 
 	.panelBox {
+		border-radius: 0;
 		width: 100%;
 		padding: 10px;
 		order: 1;
+		position: fixed;
+		z-index: 999999999;
+		bottom: 0;
+		margin-left: 0;
 	}
 		.panelLogo{display: none;}
 		.panelButtonsMiddle {

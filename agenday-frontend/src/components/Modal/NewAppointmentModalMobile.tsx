@@ -1,10 +1,10 @@
-import { CircleCheck, Search, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, Search, X } from "lucide-react";
 import { ComboBox } from "../inputs/ComboBox";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import type { ComboBoxOptionItem } from "../../types/ComboBox";
 import { TextInput } from "../inputs/TextInput";
-import styles from "./styles/newAppointmentModal.module.css"
+import styles from "./styles/newAppointmentModalMobile.module.css"
 import { SolidButton } from "../buttons/SolidButton";
 import { BallName } from "../Ui/BallName";
 import { buildIsoZ } from "../../utils/Date";
@@ -21,7 +21,7 @@ type props = {
 	onClose: () => void;
 }
 
-export function NewAppointmentModal({isVisible, establishmentId, onClose}: props) {
+export function NewAppointmentModalMobile({isVisible, establishmentId, onClose}: props) {
 	if (!isVisible) return null;
 
 	const {api} = useContext(AuthContext);
@@ -38,6 +38,7 @@ export function NewAppointmentModal({isVisible, establishmentId, onClose}: props
 	const [selectedTime, setSelectedTime] = useState<string>();
 	const [description, setDescription] = useState<string>();
 	const [availableTimes, setAvailableTimes] = useState<ComboBoxOptionItem[]>([]);
+	const [showEstablishmentList, setShowEstablishmentList] = useState<boolean>(true);
 
 	const blackWindow = ModalHook();
 	const isLoadingMd = ModalHook();
@@ -193,65 +194,88 @@ export function NewAppointmentModal({isVisible, establishmentId, onClose}: props
 
 	function formatAddress(address:any) {
 		const full = `${address.street}, ${address.number} • ${address.neighborhood} • ${address.city}/${address.state} • CEP ${address.cep}`;
-		return full.length > 70 ? `${full.slice(0, 70)}...` : full;
+		return full.length > 60 ? `${full.slice(0, 60)}...` : full;
 	}
+
+	const selectedEstablishmentData = establishmentsList.find((e) => e.establishmentId === selectedEstablishment);
 
 	return (
 		<div className={styles.modalContainer}>
-			<header>
+			<header className={styles.modalHeader}>
 				<h1>Novo Agendamento</h1>
-				<button onClick={onClose}><X size={16}/></button>
+				<button onClick={onClose}><X size={20}/></button>
 			</header>
 			<div className={styles.modalContent}>
-				<div className={`${styles.modalLeft} ${selectedEstablishment ? styles.modalLeftHidden : ""}`}>
-					<p className={styles.modalLeftTitle} >Selecione um estabelecimento</p>
-					<div className={styles.modalInputBox}> 
-						<Search size="18" color="gray"/>
-						<input className={styles.modalInput} type="text" placeholder="Buscar estabelecimentos"/>
-					</div>
-					<div className={styles.modalTableBox}>
-						<p className={styles.modalTableBoxTitle} >ESTABELECIMENTOS</p>
-						<ul className={styles.modalTableList}> {establishmentsList.length ? (
-							establishmentsList.map((e) => {
-								const formattedAddress = formatAddress(e.address);
-								const isSelected = e.establishmentId === selectedEstablishment;
-								const itemClass = isSelected ? styles.modalTableListItemsSelected : styles.modalTableListItems;
-								return (
-									<li
-										key={e.establishmentId}
-										className={itemClass}
-										onClick={() => {
-											setSelectedCatalog(undefined)
-											setSelectedProfessional(undefined)
-											setSelectedTime(undefined)	
-											setSelectedDate("")
-											setSelectedEstablishment(e.establishmentId)
-										}}
-									>
-										{e.imageUrl ? (
-											<img
-												className={styles.modalTableListImg}
-												src={`${image_url}/${e.imageUrl}`}
-												alt={e.name}
-											/>
-										) : ( <BallName name={e.name} />)}
-										<div className={styles.modalTableListDetails}>
-											<span className={styles.modalTableListDatailsName}>{e.name}</span>
-											<span className={styles.modalTableListDatailsAdrs}>
-											{formattedAddress}
-											</span>
-										</div>
-										<CircleCheck size={15} className={styles.modalTableListDatailsIcon} />
-									</li>
-								);
-							})
+				<div className={styles.step}>
+					<button
+						type="button"
+						className={styles.stepToggle}
+						onClick={() => setShowEstablishmentList(!showEstablishmentList)}
+					>
+						<div className={styles.stepToggleInfo}>
+							<span className={styles.stepToggleLabel}>Estabelecimento</span>
+							{selectedEstablishmentData ? (
+								<span className={styles.stepToggleValue}>{selectedEstablishmentData.name}</span>
+							) : (
+								<span className={styles.stepToggleValuePlaceholder}>Selecione um estabelecimento</span>
+							)}
+						</div>
+						{selectedEstablishmentData && !showEstablishmentList ? (
+							<ChevronDown size={18} className={styles.stepToggleIcon} />
 						) : (
-							<p>Nenhum estabelecimento encontrado para seu endereço!</p>
+							<ChevronLeft size={18} className={styles.stepToggleIconOpen} />
 						)}
-						</ul>	
-					</div>
+					</button>
+
+					{showEstablishmentList && (
+						<div className={styles.establishmentPanel}>
+							<div className={styles.modalInputBox}>
+								<Search size="18" color="gray"/>
+								<input className={styles.modalInput} type="text" placeholder="Buscar estabelecimentos"/>
+							</div>
+							<ul className={styles.modalTableList}> {establishmentsList.length ? (
+								establishmentsList.map((e) => {
+									const formattedAddress = formatAddress(e.address);
+									const isSelected = e.establishmentId === selectedEstablishment;
+									const itemClass = isSelected ? styles.modalTableListItemsSelected : styles.modalTableListItems;
+									return (
+										<li
+											key={e.establishmentId}
+											className={itemClass}
+											onClick={() => {
+												setSelectedCatalog(undefined)
+												setSelectedProfessional(undefined)
+												setSelectedTime(undefined)	
+												setSelectedDate("")
+												setSelectedEstablishment(e.establishmentId)
+												setShowEstablishmentList(false)
+											}}
+										>
+											{e.imageUrl ? (
+												<img
+													className={styles.modalTableListImg}
+													src={`${image_url}/${e.imageUrl}`}
+													alt={e.name}
+												/>
+											) : ( <BallName name={e.name} />)}
+											<div className={styles.modalTableListDetails}>
+												<span className={styles.modalTableListDatailsName}>{e.name}</span>
+												<span className={styles.modalTableListDatailsAdrs}>
+												{formattedAddress}
+												</span>
+											</div>
+										</li>
+									);
+								})
+							) : (
+								<p>Nenhum estabelecimento encontrado para seu endereço!</p>
+							)}
+							</ul>
+						</div>
+					)}
 				</div>
-				<div className={selectedEstablishment ? styles.modalMiddle : styles.modalMiddleBlocked}>
+
+				<div className={ selectedEstablishment ? styles.modalFields : styles.modalFieldsBlocked}>
 					<ComboBox 
 						label="Selecione um serviço"
 						initialValue={catalogList}
@@ -264,51 +288,49 @@ export function NewAppointmentModal({isVisible, establishmentId, onClose}: props
 							setSelectedProfessional(e.value.selectedValue);
 						}}
 					/>
-					<div className={styles.modalMiddle2collumns}>
-						<div className={ selectedCatalog && selectedProfessional ? styles.formGroup : styles.formGroupDisabled}>
-							<span  className={styles.formGroupSpan}>Selecione uma data</span>
-							<input 
-								className={styles.formGroupInput}
-								id="appointment-date"
-								value={selectedDate}
-								onChange={(e) => setSelectedDate(e.target.value)}
-								required
-								type="date" 
-							/>
-						</div>
-						
-						<ComboBox 
-							disabled={availableTimes.length <= 0}
-							label={"Horários (" + availableTimes.length + " Disponiveis )" }
-							initialValue={timesList}
-							onChangeField={(e:any)=> {
-								setSelectedTime(e.value.selectedValue);
-							}}
+					<div className={ selectedCatalog && selectedProfessional ? styles.formGroup : styles.formGroupDisabled}>
+						<span className={styles.formGroupSpan}>Selecione uma data</span>
+						<input 
+							className={styles.formGroupInput}
+							id="appointment-date-mobile"
+							value={selectedDate}
+							onChange={(e) => setSelectedDate(e.target.value)}
+							required
+							type="date" 
 						/>
 					</div>
+
+					<ComboBox 
+						disabled={availableTimes.length <= 0}
+						label={"Horários (" + availableTimes.length + " Disponiveis )" }
+						initialValue={timesList}
+						onChangeField={(e:any)=> {
+							setSelectedTime(e.value.selectedValue);
+						}}
+					/>
+
 					<TextInput 
 						initialValue={''}
 						label="Observações (opcional)" 
 						placeholder="Digite aqui alguma observação para o profissional" 
-						_height={140}
+						_height={100}
 						onChangeField={(d)=>{setDescription(d.value)}} 
 					/>
-					<div className={styles.modalMiddleFooter}>
-						<SolidButton 
-							
-							text={"Agendar"} 
-							isActive={ 
-								(selectedCatalog && selectedDate && selectedTime && selectedProfessional) ? true : false
-							} 
-							onClick={function (): void { createAppointment();}} 
-							isLoading={false} 
-						/>
-						<div className={styles.modalMiddleFooterStatus}>
-							<p>valor do serviço: <span>{selectedCatalog?.data?.price || 0.00 } R$</span></p>
-							<p>tempo estimado: <span>{selectedCatalog?.data?.time || 0} m</span></p>
-						</div>
-					</div>
 				</div>
+			</div>
+			<div className={styles.modalFooter}>
+				<div className={styles.modalFooterStatus}>
+					<p>valor: <span>{selectedCatalog?.data?.price || 0.00 } R$</span></p>
+					<p>tempo: <span>{selectedCatalog?.data?.time || 0} m</span></p>
+				</div>
+				<SolidButton 
+					text={"Agendar"} 
+					isActive={ 
+						(selectedCatalog && selectedDate && selectedTime && selectedProfessional) ? true : false
+					} 
+					onClick={function (): void { createAppointment();}} 
+					isLoading={false} 
+				/>
 			</div>
 			<BlackWindow isVisible={blackWindow.visible}>
 				<LoadingClock 

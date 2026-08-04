@@ -2,10 +2,9 @@
 .modalContainer {
 	background-color: var(--white);
 	border-radius: 4px;
-	width: 900px;
+	width: 550px;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-	padding: 24px;
-	gap: 24px;
+	padding: 20px 30px;
 	box-sizing: border-box;
 	font-family: sans-serif;
 	position: relative;
@@ -43,14 +42,17 @@
 		}
 
 	.modalContent {
-		display: grid;
-		grid-template-columns: 50% 50%;
-		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 0;
 	}
 
 		.modalLeft {
+			display: block;
 			width: 97%;
 		}
+			.modalLeftHidden { display: none; }
 			.modalLeftTitle {
 				font-family: "Poppins", sans-serif;
 				font-weight: 500;
@@ -144,11 +146,13 @@
 
 
 		.modalMiddle, .modalMiddleBlocked {
+			width: 100%;
 			display: flex;
 			flex-direction: column;
 			gap: 16px;
 		}
 		.modalMiddleBlocked {
+			display: none;
 			opacity: .2;
 			pointer-events: none;
 		}
@@ -184,7 +188,6 @@
 					height: 42px;
 					padding: 0 12px;
 					border-radius: 6px;
-					border: 1.5px solid var(--blue);
 					background-color: var(--white);
 					color: var(--foreground);
 					font-size: 14px;
@@ -213,3 +216,23 @@
 							font-weight: 700;
 							color: var(--blue);
 						}
+
+@media (max-width: 768px) { 
+	.modalContainer {
+		width: 400px;
+		margin: auto;
+		padding: 20px 20px;
+	}
+		.modalInputBox {display: none;}
+		.modalTableBoxTitle {font-size: 0.75rem;}
+
+	.modalMiddle {
+		width: 100%;
+		flex-direction: column;
+	}
+		.modalMiddle2collumns {
+			margin: 20px 0;
+		}
+}
+
+input {outline: none;}

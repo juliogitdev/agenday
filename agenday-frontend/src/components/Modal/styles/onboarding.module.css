@@ -165,3 +165,72 @@
 		.checkboxLabel:hover .checkboxText { 
 			color: var(--onboarding-checkbox-label-hover-color);
 		}
+
+@media (max-width: 768px) {
+	.onboardingCard {
+		width: calc(100% - 24px);
+		max-width: 460px;
+		margin: 12px;
+		border-radius: 16px;
+	}
+
+	.onboardingBanner { padding: 20px; }
+	.onboardingTitle {
+		font-size: .74rem;
+		line-height: 1.4;
+	}
+
+	.closeButton {
+		width: 26px;
+		height: 26px;
+		font-size: 1.35rem;
+	}
+
+	.onboardingContent {
+		padding: 24px 20px;
+		gap: 20px;
+	}
+
+	.contentTitle {
+		font-size: .96rem;
+		padding-bottom: 6px;
+	}
+
+	.contentText {
+		font-size: .75rem;
+		line-height: 1.7;
+		text-align: justify;
+		margin: 20px 0;
+	}
+
+	.onboardingActions {
+		grid-template-columns: 1fr;
+		gap: 14px;
+		margin-top: 4px;
+	}
+
+	.btnClient,
+	.btnProfessional {
+		width: 100%;
+		min-height: 48px;
+		font-size: .75rem;
+		border-radius: 10px;
+	}
+
+	.onboardingFooter { padding-top: 18px; }
+
+	.checkboxLabel {
+		align-items: flex-start;
+		gap: 10px;
+	}
+
+	.checkboxInput {
+		margin-top: 2px;
+		flex-shrink: 0;
+	}
+
+	.checkboxText {
+		font-size: .67rem;
+		line-height: 1.5;
+	}
+}

@@ -116,3 +116,8 @@
 		color: var(--establishment-table-header-color);
 	}
 @keyframes spin { to { transform: rotate(360deg); }}
+
+
+@media (max-width: 768px) { 
+	.CancelAppointmentModal {width: 390px;}
+}
