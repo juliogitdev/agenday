@@ -51,6 +51,5 @@
 
 
 @media (max-width: 768px) { 
-	/* .panelButtonToastHoverText {display: none;}
-	.panelButtonToastHoverText:hover {display: none;} */
+	.panelButtonToastHoverText {display: none !important}
 }

@@ -1,6 +1,5 @@
 
 import { useContext, useEffect } from "react";
-import { Breadcrumb } from "../components/navigation/Breadcrumb";
 import styles from "./styles/home.module.css";
 import AuthContext from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
@@ -87,7 +86,6 @@ export const Home = function () {
 
     return (
 		<main className={styles.homePage}> 
-			<Breadcrumb/>
 			<SuccessAlert isVisible={successAlert.isVisible} title="Parabéns" message="Agora você é um usuário profissional"/>
 			<ErrorAlert   isVisible={errorAlert.isVisible} title={errorAlert.title} message={errorAlert.message}/>
 

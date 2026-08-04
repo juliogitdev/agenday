@@ -119,6 +119,7 @@
 		min-width: 0;
 		padding: 18px;
 		border-radius: 16px;
+		height: 300px !important;
 	}
 
 	.badge {
@@ -157,7 +158,7 @@
 		font-size: .7rem;
 	}
 
-	.benefictsContainer {gap: 12px;}
+	.benefictsContainer {gap: 12px; }
 	.benefict {
 		font-size: .8rem;
 		line-height: 1.45;
