@@ -158,4 +158,80 @@
                 cursor: pointer;
             }
 
+@media (max-width:768px) {
 
+    .serviceTable {
+        height: 78dvh;
+    }
+
+    .serviceTableHeader {
+        display: none;
+    }
+
+    .serviceTableBody {
+        background: transparent;
+        box-shadow: none;
+        gap: 12px;
+        overflow: visible;
+    }
+
+    .serviceTableRow {
+        display: flex;
+        flex-direction: column;
+        border: none;
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--establishment-table-background);
+        box-shadow: var(--establishment-table-shadow);
+    }
+
+    .serviceTableRowCollumn {
+        width: 100%;
+        border: none;
+        padding: 14px;
+        justify-content: flex-start;
+        box-sizing: border-box;
+    }
+
+    .serviceTableRowCollumn:first-child {
+        border-bottom: 1px solid var(--establishment-table-header-border-color);
+    }
+
+    .serviceTableRowCollumnTitle {
+        width: 100%;
+        padding: 0;
+    }
+
+    .serviceTableRowCollumnInfoContainer {
+        width: auto;
+        margin-left: auto;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+    }
+
+    .serviceTableRowCollumnPrice {
+        margin: 0;
+        font-size: 1rem;
+        text-align: right;
+    }
+
+    .serviceTableRowCollumnTimeProm {
+        width: auto;
+        gap: 6px;
+    }
+
+    .serviceTableRowCollumnActions {
+        justify-content: flex-end;
+        padding: 12px 14px;
+    }
+
+    .serviceTableRowCollumnActions button {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+}

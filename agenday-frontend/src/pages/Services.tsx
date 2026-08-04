@@ -17,6 +17,7 @@ import { BlackWindow } from "../components/Ui/BlackWindow";
 import { SuccessAlert } from "../components/Alerts/SuccessAlert";
 import { DeleteConfirmationModal } from "../components/Modal/DeleteConfirmationModal";
 import { LinkProfessionalsOnServiceModal, type LinkS2pProfessionals } from "../components/Modal/LinkProfessionalsOnServiceModal";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 type Employers = {
 	professionalEstablishmentId: string,
@@ -35,6 +36,10 @@ export function Services() {
     const blackWidow  = ModalHook();
     const deletModal  = ModalHook();
     const editModal   = ModalHook();
+	
+	const isMobile = useIsMobile();
+	const mobileForm = ModalHook();
+
 
     const image_url = import.meta.env.VITE_STORAGE_BASE_URL+/agenday-images/;
     const form = ServiceUseFormStore();
@@ -307,16 +312,26 @@ export function Services() {
                     isLoading={false}
                     serviceList={services} 
                     onCLick={(d:TableClickCallback)=> actionsHandler(d)}/> 
-                 
-                <ServiceForm 
-                    showCloseBnt={false}
-                    isLoading={false}
-                    loadingText="Adicionando novo Serviço, por favor aguarde.."
-                    isVisible={true}
-                    buttonLabel="Adicionar Novo Serviço"
-                    onClose={()=>{}}
-                    onClick={()=>create()}
-                 /> 
+                 {!isMobile && (
+    				<ServiceForm
+						showCloseBnt={false}
+						isLoading={false}
+						loadingText="Adicionando novo Serviço, por favor aguarde.."
+						isVisible={true}
+						buttonLabel="Adicionar Novo Serviço"
+						onClose={() => {}}
+						onClick={() => create()}
+					/>
+				)}
+
+				{isMobile && (
+					<button
+						className={styles.floatingButton}
+						onClick={() => {
+							blackWidow.show();
+							mobileForm.show();
+					}}> + </button>
+				)}
             </div>
             
             <BlackWindow isVisible={blackWidow.visible}>
@@ -339,6 +354,19 @@ export function Services() {
                     }}
                     onClick={()=>edit()}
                 />
+
+				<ServiceForm
+					showCloseBnt={true}
+					isLoading={false}
+					isVisible={mobileForm.visible}
+					loadingText="Adicionando novo Serviço, por favor aguarde.."
+					buttonLabel="Adicionar Novo Serviço"
+					onClose={() => {
+						blackWidow.hidden();
+						mobileForm.hidden();
+					}}
+					onClick={() => create()}
+				/>
 
 				<LinkProfessionalsOnServiceModal
 					isVisible={linkProfessionalModal.visible}

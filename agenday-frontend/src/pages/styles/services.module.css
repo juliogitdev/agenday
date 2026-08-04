@@ -49,3 +49,69 @@
         display: grid;
         grid-template-columns: 60% 40%;
     } 
+
+
+@media(max-width:768px) { 
+	.servicesPage { width: 100%; padding: 10px;}
+}
+
+
+
+@media (max-width:768px){
+
+    .servicesHeader{
+        display:flex;
+        flex-direction:column;
+        gap:20px;
+        padding:20px;
+        border-radius:12px;
+    }
+
+		.servicesHeaderInfoContainer {
+			display:flex;
+			flex-direction:column;
+			align-items:center;
+			text-align:center;
+			gap:12px;
+		}
+
+		.servicesHeaderImg{
+			width:72px;
+			height:72px;
+			border-radius:50%;
+			object-fit:cover;
+		}
+
+		.serviceHeaderTitle{
+			font-size:1.2rem;
+			line-height:1.3;
+		}
+
+		.serviceHeaderSubtitle{
+			display:block;
+			margin-top:6px;
+			font-size:.85rem;
+		}
+
+		.servicesHeaderComboboxContainer{ width:100%;}
+		.servicesHeaderComboboxContainer>*{ width:100%;}
+
+	.servicesContent { display: block;} 
+
+	.floatingButton{
+		position:fixed;
+		right:20px;
+		bottom:100px;
+		width:60px;
+		height:60px;
+		border:none;
+		border-radius:50%;
+		font-size:2rem;
+		cursor:pointer;
+		background:var(--solid-button-background);
+		color:var(--solid-button-foreground);
+		box-shadow:0 10px 30px rgba(0,0,0,.25);
+		z-index:100;
+	}
+}
+

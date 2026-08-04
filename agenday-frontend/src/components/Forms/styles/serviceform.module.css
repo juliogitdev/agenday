@@ -71,6 +71,11 @@
             outline: none;
        }
 
+
+@media(max-width:768px) { 
+	.serviceFormContainer { width: 390px;}
+}
+
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
