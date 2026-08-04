@@ -38,30 +38,69 @@ export default function PlanCard({
 		width, height
 	};
 
+	// return (
+	// 	<div className={`${styles.card} ${isRecommended ? styles.recommended : ""}`} style={{ width, height }}>
+	// 		{isRecommended && (
+	// 			<div className={styles.badge}> Recomendado </div>
+	// 		)}
+
+	// 		<div className={styles.content}>
+	// 			{icon && <div className={styles.icon}> {icon} </div>}
+	// 			<span className={styles.planTitle}> {planTitle} </span>
+	// 			<h2 className={styles.planPrice}> R$ {planPrice.toFixed(2).replace(".", ",")} </h2>
+				
+	// 			<div className={styles.benefictsContainer}>
+	// 				{planBeneficts.map((benefict, index) => (
+	// 					<div key={index} className={styles.benefict} >
+	// 						<span className={styles.check}> ✓ </span>
+	// 						<span> {benefict} </span>
+	// 					</div>
+	// 				))}
+	// 			</div>
+				
+	// 			<button
+	// 				className={ buttonType === "solid" ? styles.solidButton : styles.outlineButton}
+	// 				onClick={() => onClick(planData)}>
+	// 				{ buttonType === "solid" ? `Assinar ${planTitle}` : "Começar agora"}
+	// 			</button>
+	// 		</div>
+	// 	</div>
+	// ); 
+
+
 	return (
 		<div className={`${styles.card} ${isRecommended ? styles.recommended : ""}`} style={{ width, height }}>
 			{isRecommended && (
-				<div className={styles.badge}> Recomendado </div>
+				<div className={styles.badge}>Recomendado</div>
 			)}
 
 			<div className={styles.content}>
-				{icon && <div className={styles.icon}> {icon} </div>}
-				<span className={styles.planTitle}> {planTitle} </span>
-				<h2 className={styles.planPrice}> R$ {planPrice.toFixed(2).replace(".", ",")} </h2>
-				
+				{icon && <div className={styles.icon}>{icon}</div>}
+
+				<div className={styles.header}>
+					<span className={styles.planTitle}>{planTitle}</span>
+
+					<div className={styles.priceContainer}>
+						<h2 className={styles.planPrice}>
+							R$ {planPrice.toFixed(2).replace(".", ",")}
+						</h2>
+						<span className={styles.pricePeriod}>/mês</span>
+					</div>
+				</div>
+
 				<div className={styles.benefictsContainer}>
 					{planBeneficts.map((benefict, index) => (
-						<div key={index} className={styles.benefict} >
-							<span className={styles.check}> ✓ </span>
-							<span> {benefict} </span>
+						<div key={index} className={styles.benefict}>
+							<span className={styles.check}>✓</span>
+							<span>{benefict}</span>
 						</div>
 					))}
 				</div>
-				
+
 				<button
-					className={ buttonType === "solid" ? styles.solidButton : styles.outlineButton}
+					className={buttonType === "solid" ? styles.solidButton : styles.outlineButton}
 					onClick={() => onClick(planData)}>
-					{ buttonType === "solid" ? `Assinar ${planTitle}` : "Começar agora"}
+					{buttonType === "solid" ? `Assinar ${planTitle}` : "Começar agora"}
 				</button>
 			</div>
 		</div>

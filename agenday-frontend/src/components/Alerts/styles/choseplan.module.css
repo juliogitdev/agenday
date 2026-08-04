@@ -86,14 +86,13 @@
 	.closeButton {
 		position: absolute;
 		top: 10px;
-		right: 20px;
+		right: 10px;
 		background: none;
 		border: none;
 		cursor: pointer;
 		font-family: "Poppins", sans-serif;
-		font-size: 1.1rem;
+		font-size: 1rem;
 		color: var(--chose-plan-close-button-color);
-		width: 32px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -247,6 +246,67 @@
 		width: 16px !important;
 		border-radius: 4px !important;
 	}
+
+
+@media (max-width: 768px) {
+	.chosePlanContainer {
+		width: calc(100% - 16px);
+		margin: 8px;
+		padding: 26px;
+		border-radius: 14px;
+		overflow-y: auto;
+	}
+
+	.splitLayout {gap: 10px;}
+	.featuresColumnAgendayLogo {
+		width: 80px;
+		margin-bottom: 16px;
+	}
+
+	.featuresTitle {
+		font-size: 1rem;
+		margin-bottom: 8px;
+	}
+
+	.featuresDescription {
+		font-size: .8rem;
+		line-height: 1.78;
+		margin-bottom: 16px;
+		text-align: justify;
+	}
+
+	.featuresSubtitle {display: none;}
+	.featuresList {
+		padding: 14px;
+		gap: 10px;
+	}
+
+	.featuresList li {
+		font-size: .75rem;
+		line-height: 1.35;
+	}
+
+	.featureIcon {
+		width: 14px;
+		height: 14px;
+	}
+
+	.featuresCta { display: none;}
+	.carouselColumn {
+		width: 100%;
+		padding: 0;
+	}
+	.mySwiper { max-width: 460px;}
+	.closeButton {width: 1.4rem; top: 20px}
+}
+
+
+
+
+
+
+
+
 
 @media (min-width: 768px) {
 	.splitLayout {

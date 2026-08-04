@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import styles from './styles/choseplan.module.css';
 import type { PlanData } from '../cards/PlanCard';
-import { CheckCircle2, Loader, TriangleAlert } from 'lucide-react'; 
+import { CheckCircle2, Loader, TriangleAlert, X } from 'lucide-react'; 
 import PlanCard from '../cards/PlanCard';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -82,7 +82,7 @@ export function ChosePlan({onChose, isVisible}: {onChose: (planId: string | null
 					</div>
 				)}
 
-				<button className={styles.closeButton} onClick={() => onChose(null)}>x</button>
+				<button className={styles.closeButton} onClick={() => onChose(null)}><X/></button>
 				
 				
 
