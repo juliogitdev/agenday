@@ -2,6 +2,7 @@
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Home } from '../pages/Home'
+import { Dashboard } from '../pages/Dashboard';
 import { SignUp } from '../pages/SignUp';
 import { SignIn } from '../pages/SignIn';
 import { Appointments } from '../pages/Appointments';
@@ -20,7 +21,7 @@ export function AppRoutes() {
 				{/* rotas privadas */}
 				 <Route element={<PrivateLayout />}>
 					<Route path="/home"      element={ <Home />} />
-					<Route path="/dashboard" element={ <Home />} />
+					<Route path="/dashboard" element={ <Dashboard />} />
 					<Route path="/appointments"    element={ <Appointments />} />
 					<Route path="/establishments" element={ <Establishments />} />
 					<Route path="/employees" element={ <Employees />} />

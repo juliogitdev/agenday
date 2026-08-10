@@ -1,0 +1,200 @@
+import type { DashboardData } from '../types/DashboardTypes';
+
+export const mockDashboardData: DashboardData = {
+	summary: {
+		attendancesThisMonth: 248,
+		attendancesGrowth: 12.4,
+		todayAppointments: 18,
+		todayAppointmentsGrowth: 5.8,
+		monthlyRevenue: 34850,
+		revenueGrowth: 15.2,
+		todayRevenue: 2530,
+		averageTicket: 140.5,
+		averageTicketGrowth: 2.5,
+		newClientsThisMonth: 42,
+		newClientsGrowth: 18.0,
+		occupancyPercentage: 81.5,
+		occupancyGrowth: 4.2,
+	},
+	statusBreakdown: [
+		{ name: 'Agendados', value: 140, color: '#135184', percentage: 56.5 },
+		{ name: 'Concluídos', value: 85, color: '#2f9e44', percentage: 34.3 },
+		{ name: 'Em espera', value: 15, color: '#f1c40f', percentage: 6.0 },
+		{ name: 'Cancelados', value: 8, color: '#e74c3c', percentage: 3.2 },
+	],
+	dailyAttendance: [
+		{ day: '01 Jul', fullDate: '2026-07-01', attendances: 14, revenue: 1960 },
+		{ day: '02 Jul', fullDate: '2026-07-02', attendances: 16, revenue: 2240 },
+		{ day: '03 Jul', fullDate: '2026-07-03', attendances: 18, revenue: 2530 },
+		{ day: '04 Jul', fullDate: '2026-07-04', attendances: 22, revenue: 3090 },
+		{ day: '05 Jul', fullDate: '2026-07-05', attendances: 25, revenue: 3510 },
+		{ day: '06 Jul', fullDate: '2026-07-06', attendances: 20, revenue: 2810 },
+		{ day: '07 Jul', fullDate: '2026-07-07', attendances: 15, revenue: 2110 },
+		{ day: '08 Jul', fullDate: '2026-07-08', attendances: 17, revenue: 2390 },
+		{ day: '09 Jul', fullDate: '2026-07-09', attendances: 19, revenue: 2670 },
+		{ day: '10 Jul', fullDate: '2026-07-10', attendances: 21, revenue: 2950 },
+		{ day: '11 Jul', fullDate: '2026-07-11', attendances: 24, revenue: 3370 },
+		{ day: '12 Jul', fullDate: '2026-07-12', attendances: 18, revenue: 2530 },
+		{ day: '13 Jul', fullDate: '2026-07-13', attendances: 10, revenue: 1400 },
+		{ day: '14 Jul', fullDate: '2026-07-14', attendances: 9, revenue: 1290 },
+	],
+	mostBookedServices: [
+		{ id: '1', name: 'Corte + Barba', category: 'Combo', bookings: 78, revenue: 10920, sharePercentage: 31.4 },
+		{ id: '2', name: 'Corte Masculino', category: 'Cabelo', bookings: 65, revenue: 5850, sharePercentage: 26.2 },
+		{ id: '3', name: 'Barba Completa', category: 'Barba', bookings: 48, revenue: 4320, sharePercentage: 19.3 },
+		{ id: '4', name: 'Pigmentação', category: 'Tratamento', bookings: 32, revenue: 6400, sharePercentage: 12.9 },
+		{ id: '5', name: 'Escova Profunda', category: 'Cabelo', bookings: 25, revenue: 7360, sharePercentage: 10.1 },
+	],
+	topRevenueServices: [
+		{ id: '1', name: 'Corte + Barba', category: 'Combo', bookings: 78, revenue: 10920, sharePercentage: 31.4 },
+		{ id: '5', name: 'Escova Profunda', category: 'Cabelo', bookings: 25, revenue: 7360, sharePercentage: 21.1 },
+		{ id: '4', name: 'Pigmentação', category: 'Tratamento', bookings: 32, revenue: 6400, sharePercentage: 18.3 },
+		{ id: '2', name: 'Corte Masculino', category: 'Cabelo', bookings: 65, revenue: 5850, sharePercentage: 16.8 },
+		{ id: '3', name: 'Barba Completa', category: 'Barba', bookings: 48, revenue: 4320, sharePercentage: 12.4 },
+	],
+	nextAppointments: [
+		{
+			id: 'apt-1',
+			clientName: 'Beatriz Nogueira',
+			clientPicture: 'https://i.pravatar.cc/150?img=47',
+			serviceName: 'Corte Feminino',
+			professionalName: 'Carla Lima',
+			time: '09:00 - 10:00',
+			status: 'Agendado',
+			price: 120.0,
+		},
+		{
+			id: 'apt-2',
+			clientName: 'Lucas Albuquerque',
+			clientPicture: 'https://i.pravatar.cc/150?img=12',
+			serviceName: 'Barba Completa',
+			professionalName: 'Carlos Bruno',
+			time: '10:15 - 11:00',
+			status: 'Em andamento',
+			price: 90.0,
+		},
+		{
+			id: 'apt-3',
+			clientName: 'Fernanda Moraes',
+			clientPicture: 'https://i.pravatar.cc/150?img=32',
+			serviceName: 'Hidratação',
+			professionalName: 'Sofia Santos',
+			time: '11:15 - 12:15',
+			status: 'Agendado',
+			price: 150.0,
+		},
+		{
+			id: 'apt-4',
+			clientName: 'Rafael Monteiro',
+			clientPicture: 'https://i.pravatar.cc/150?img=60',
+			serviceName: 'Pigmentação',
+			professionalName: 'Mariana Castro',
+			time: '14:00 - 15:00',
+			status: 'Agendado',
+			price: 200.0,
+		},
+		{
+			id: 'apt-5',
+			clientName: 'Carlos Henrique',
+			clientPicture: 'https://i.pravatar.cc/150?img=11',
+			serviceName: 'Corte + Barba',
+			professionalName: 'Daniela Alves',
+			time: '15:30 - 16:30',
+			status: 'Concluído',
+			price: 140.0,
+		},
+		{
+			id: 'apt-6',
+			clientName: 'Ana Elis',
+			clientPicture: 'https://i.pravatar.cc/150?img=26',
+			serviceName: 'Corte Feminino + Penteado',
+			professionalName: 'Carla Lima',
+			time: '17:00 - 18:00',
+			status: 'Agendado',
+			price: 180.0,
+		},
+	],
+	peakHours: [
+		{ label: '08h00', count: 4, capacityPercentage: 50 },
+		{ label: '09h00', count: 8, capacityPercentage: 100 },
+		{ label: '10h00', count: 7, capacityPercentage: 87.5 },
+		{ label: '11h00', count: 6, capacityPercentage: 75 },
+		{ label: '14h00', count: 6, capacityPercentage: 75 },
+		{ label: '15h00', count: 7, capacityPercentage: 87.5 },
+		{ label: '16h00', count: 8, capacityPercentage: 100 },
+		{ label: '17h00', count: 5, capacityPercentage: 62.5 },
+	],
+	occupancy: {
+		occupiedSlots: 44,
+		totalSlots: 54,
+		percentage: 81.5,
+		peakHoursText: 'Horário de maior pico: 09h00 e 16h00',
+		freeSlots: ['08:00 - 09:00', '12:30 - 13:30', '17:30 - 18:30'],
+	},
+	topClients: [
+		{
+			id: 'cli-1',
+			name: 'Carlos Henrique',
+			profilePicture: 'https://i.pravatar.cc/150?img=11',
+			appointmentsCount: 18,
+			totalSpent: 2520,
+			firstVisit: '12 Jan 2025',
+			lastVisit: '14 Jul 2026',
+		},
+		{
+			id: 'cli-2',
+			name: 'Ana Beatriz',
+			profilePicture: 'https://i.pravatar.cc/150?img=25',
+			appointmentsCount: 14,
+			totalSpent: 1960,
+			firstVisit: '08 Feb 2025',
+			lastVisit: '11 Jul 2026',
+		},
+		{
+			id: 'cli-3',
+			name: 'Pedro Lucas',
+			profilePicture: 'https://i.pravatar.cc/150?img=31',
+			appointmentsCount: 12,
+			totalSpent: 1680,
+			firstVisit: '21 Mar 2025',
+			lastVisit: '10 Jul 2026',
+		},
+		{
+			id: 'cli-4',
+			name: 'Fernanda Souza',
+			profilePicture: 'https://i.pravatar.cc/150?img=44',
+			appointmentsCount: 10,
+			totalSpent: 1400,
+			firstVisit: '03 Apr 2025',
+			lastVisit: '08 Jul 2026',
+		},
+	],
+	planUsage: {
+		planName: 'Agenday Pro',
+		used: 248,
+		limit: 300,
+		percentage: 82.6,
+		renewalDate: '01/09/2026',
+	},
+};
+
+// Also retain backwards compatibility for old dashboardMock exports just in case
+export const dashboardSummary = {
+	attendancesThisMonth: mockDashboardData.summary.attendancesThisMonth,
+	todayAppointments: mockDashboardData.summary.todayAppointments,
+	monthlyRevenue: mockDashboardData.summary.monthlyRevenue,
+	todayRevenue: mockDashboardData.summary.todayRevenue,
+	averageTicket: mockDashboardData.summary.averageTicket,
+	newClientsThisMonth: mockDashboardData.summary.newClientsThisMonth,
+};
+
+export const dashboardStatusBreakdown = mockDashboardData.statusBreakdown;
+export const dashboardDailyAttendance = mockDashboardData.dailyAttendance;
+export const dashboardMostBookedServices = mockDashboardData.mostBookedServices;
+export const dashboardTopRevenueServices = mockDashboardData.topRevenueServices;
+export const dashboardNextAppointments = mockDashboardData.nextAppointments;
+export const dashboardPeakHours = mockDashboardData.peakHours;
+export const dashboardOccupancy = mockDashboardData.occupancy;
+export const dashboardFreeTimeSlots = mockDashboardData.occupancy.freeSlots;
+export const dashboardPlanUsage = mockDashboardData.planUsage;
+export const dashboardTopClients = mockDashboardData.topClients;

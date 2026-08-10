@@ -1,0 +1,220 @@
+.filterContainer {
+	background: #ffffff;
+	border: 1px solid var(--border-color, #d4d4d4);
+	border-radius: 16px;
+	padding: 16px 20px;
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.filterHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.filterTitleGroup {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 700;
+	font-size: 0.98rem;
+	color: var(--solid-button-background, #135184);
+}
+
+.resetButton {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	border: none;
+	background: transparent;
+	color: #64748b;
+	font-size: 0.82rem;
+	font-weight: 600;
+	cursor: pointer;
+	padding: 4px 8px;
+	border-radius: 6px;
+	transition: all 0.2s ease;
+}
+
+.resetButton:hover {
+	color: var(--solid-button-background, #135184);
+	background: #f1f5f9;
+}
+
+.filterRow {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.filterGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.filterGroupLabel {
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #64748b;
+}
+
+.periodPills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.pillButton {
+	border: 1px solid var(--border-color, #d4d4d4);
+	background: #f8fafc;
+	color: #475569;
+	padding: 7px 14px;
+	border-radius: 10px;
+	font-size: 0.84rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.pillButton:hover {
+	background: #e2e8f0;
+	color: var(--solid-button-background, #135184);
+}
+
+.pillButtonActive {
+	background: var(--solid-button-background, #135184);
+	color: #ffffff;
+	border-color: var(--solid-button-background, #135184);
+	box-shadow: 0 2px 4px rgba(19, 81, 132, 0.2);
+}
+
+.pillButtonActive:hover {
+	background: var(--solid-button-hover-background, #3979ad);
+	color: #ffffff;
+}
+
+.customDateContainer {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+	padding: 12px 14px;
+	border-radius: 12px;
+	background: #f1f5f9;
+	border: 1px solid #e2e8f0;
+	margin-top: 4px;
+}
+
+.dateInputGroup {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 0.84rem;
+	font-weight: 600;
+	color: #334155;
+}
+
+.dateInput {
+	border: 1px solid var(--border-color, #cccccc);
+	border-radius: 8px;
+	padding: 6px 10px;
+	font-size: 0.84rem;
+	font-family: "Poppins", sans-serif;
+	background: #ffffff;
+	color: #333333;
+	outline: none;
+	transition: border-color 0.2s ease;
+}
+
+.dateInput:focus {
+	border-color: var(--solid-button-background, #135184);
+}
+
+.statusPills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.statusPill {
+	border: 1px solid var(--border-color, #d4d4d4);
+	background: #ffffff;
+	color: #475569;
+	padding: 6px 12px;
+	border-radius: 999px;
+	font-size: 0.8rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.statusPill:hover {
+	border-color: var(--solid-button-background, #135184);
+	color: var(--solid-button-background, #135184);
+}
+
+.statusPillActive {
+	background: #135184;
+	color: #ffffff;
+	border-color: #135184;
+}
+
+.statusPillScheduledActive {
+	background: #0369a1;
+	color: #ffffff;
+	border-color: #0369a1;
+}
+
+.statusPillCompletedActive {
+	background: #2f9e44;
+	color: #ffffff;
+	border-color: #2f9e44;
+}
+
+.statusPillCanceledActive {
+	background: #e74c3c;
+	color: #ffffff;
+	border-color: #e74c3c;
+}
+
+.statusPillNoShowActive {
+	background: #f1c40f;
+	color: #111111;
+	border-color: #f1c40f;
+}
+
+.resultsSummary {
+	font-size: 0.8rem;
+	color: #64748b;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+@media (max-width: 640px) {
+	.filterContainer {
+		padding: 12px;
+	}
+
+	.customDateContainer {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.dateInputGroup {
+		justify-content: space-between;
+	}
+}

@@ -1,0 +1,816 @@
+.dashboardPage {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	padding: 24px 28px;
+	max-width: 1600px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+/* Header Section */
+.headerSection {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	background: #ffffff;
+	border: 1px solid var(--border-color, #d4d4d4);
+	border-radius: 18px;
+	padding: 20px 24px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.headerTopRow {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.headerTitleGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.headerTitleGroup h1 {
+	font-size: 1.65rem;
+	font-weight: 700;
+	color: var(--solid-button-background, #135184);
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.headerTitleIcon {
+	color: var(--solid-button-background, #135184);
+}
+
+.headerTitleGroup p {
+	font-size: 0.92rem;
+	color: var(--text-secondary, #666666);
+	margin: 0;
+}
+
+.headerActions {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.headerBottomRow {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding-top: 12px;
+	border-top: 1px dashed var(--border-color, #e2e8f0);
+}
+
+.establishmentSelectorWrapper {
+	min-width: 280px;
+	max-width: 380px;
+}
+
+.periodFilterGroup {
+	display: flex;
+	align-items: center;
+	background: #f1f5f9;
+	padding: 4px;
+	border-radius: 12px;
+	gap: 4px;
+}
+
+.periodButton {
+	border: none;
+	background: transparent;
+	padding: 6px 14px;
+	border-radius: 8px;
+	font-size: 0.82rem;
+	font-weight: 600;
+	color: #64748b;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.periodButton:hover {
+	color: var(--solid-button-background, #135184);
+}
+
+.periodButtonActive {
+	background: #ffffff;
+	color: var(--solid-button-background, #135184);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.refreshButton {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background: #ffffff;
+	border: 1px solid var(--border-color, #d4d4d4);
+	color: var(--solid-button-background, #135184);
+	padding: 8px 14px;
+	border-radius: 10px;
+	font-size: 0.85rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.refreshButton:hover {
+	background: #f8fafc;
+	border-color: var(--solid-button-background, #135184);
+}
+
+.spinningIcon {
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* KPI Summary Grid */
+.summaryGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+	gap: 18px;
+}
+
+.summaryCard {
+	background: #ffffff;
+	border: 1px solid var(--border-color, #d4d4d4);
+	border-radius: 18px;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summaryCard:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.cardTopRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.cardIconBox {
+	width: 44px;
+	height: 44px;
+	border-radius: 12px;
+	background: #eef6ff;
+	color: var(--solid-button-background, #135184);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.cardTrendBadgePositive {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 8px;
+	border-radius: 999px;
+	background: #d4edda;
+	color: #155724;
+	font-size: 0.75rem;
+	font-weight: 700;
+}
+
+.cardTrendBadgeNegative {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 8px;
+	border-radius: 999px;
+	background: #f8d7da;
+	color: #721c24;
+	font-size: 0.75rem;
+	font-weight: 700;
+}
+
+.cardMainValue {
+	margin-top: 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.cardLabel {
+	font-size: 0.82rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #71717a;
+}
+
+.cardValue {
+	font-size: 1.8rem;
+	font-weight: 700;
+	color: #0f172a;
+	line-height: 1.2;
+}
+
+.cardFooterText {
+	font-size: 0.8rem;
+	color: var(--text-secondary, #666666);
+	margin-top: 10px;
+}
+
+/* Charts Grid */
+.chartsRow {
+	display: grid;
+	grid-template-columns: 1.6fr 1fr;
+	gap: 20px;
+}
+
+.chartCard {
+	background: #ffffff;
+	border: 1px solid var(--border-color, #d4d4d4);
+	border-radius: 18px;
+	padding: 22px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+	display: flex;
+	flex-direction: column;
+}
+
+.cardHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.cardHeaderTitle {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.cardHeaderTitle h2 {
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #0f172a;
+	margin: 0;
+}
+
+.cardHeaderSub {
+	font-size: 0.82rem;
+	color: var(--text-secondary, #666666);
+	margin-top: 2px;
+}
+
+.chartToggleGroup {
+	display: flex;
+	align-items: center;
+	background: #f1f5f9;
+	padding: 3px;
+	border-radius: 8px;
+	gap: 4px;
+}
+
+.chartToggleButton {
+	border: none;
+	background: transparent;
+	padding: 4px 10px;
+	border-radius: 6px;
+	font-size: 0.78rem;
+	font-weight: 600;
+	color: #64748b;
+	cursor: pointer;
+}
+
+.chartToggleButtonActive {
+	background: #ffffff;
+	color: var(--solid-button-background, #135184);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.chartContainer {
+	width: 100%;
+	height: 310px;
+}
+
+/* Donut Chart Legend & Details */
+.pieChartWrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+}
+
+.pieLegendGrid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 10px;
+	width: 100%;
+}
+
+.pieLegendItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+	border-radius: 10px;
+	background: #f8fafc;
+	font-size: 0.82rem;
+}
+
+.pieLegendLeft {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 600;
+	color: #334155;
+}
+
+.pieDot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+}
+
+.pieLegendValue {
+	font-weight: 700;
+	color: #0f172a;
+}
+
+/* Content Grid (Lists & Tables) */
+.contentGrid {
+	display: grid;
+	grid-template-columns: 1.2fr 1fr;
+	gap: 20px;
+}
+
+.wideCard,
+.sideCard {
+	background: #ffffff;
+	border: 1px solid var(--border-color, #d4d4d4);
+	border-radius: 18px;
+	padding: 22px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+	display: flex;
+	flex-direction: column;
+}
+
+/* List Items */
+.appointmentList {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.appointmentItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px;
+	padding: 14px 16px;
+	border-radius: 14px;
+	background: #f8fafc;
+	border: 1px solid #f1f5f9;
+	transition: background 0.2s ease;
+}
+
+.appointmentItem:hover {
+	background: #f1f5f9;
+}
+
+.clientInfoGroup {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.clientAvatar {
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid #ffffff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.clientDetails {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.clientName {
+	font-size: 0.92rem;
+	font-weight: 700;
+	color: #0f172a;
+}
+
+.serviceName {
+	font-size: 0.82rem;
+	color: var(--text-secondary, #666666);
+}
+
+.appointmentRightGroup {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 4px;
+}
+
+.appointmentTime {
+	font-size: 0.82rem;
+	font-weight: 600;
+	color: #334155;
+}
+
+.professionalName {
+	font-size: 0.76rem;
+	color: #64748b;
+}
+
+.statusBadgeScheduled {
+	padding: 3px 10px;
+	border-radius: 999px;
+	background: #e0f2fe;
+	color: #0369a1;
+	font-size: 0.74rem;
+	font-weight: 700;
+}
+
+.statusBadgeCompleted {
+	padding: 3px 10px;
+	border-radius: 999px;
+	background: #d4edda;
+	color: #155724;
+	font-size: 0.74rem;
+	font-weight: 700;
+}
+
+.statusBadgeInProgress {
+	padding: 3px 10px;
+	border-radius: 999px;
+	background: #fef3c7;
+	color: #92400e;
+	font-size: 0.74rem;
+	font-weight: 700;
+}
+
+.statusBadgeCanceled {
+	padding: 3px 10px;
+	border-radius: 999px;
+	background: #fee2e2;
+	color: #991b1b;
+	font-size: 0.74rem;
+	font-weight: 700;
+}
+
+/* Service Metric List */
+.serviceMetricList {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.serviceMetricItem {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 14px;
+	border-radius: 12px;
+	background: #f8fafc;
+	border: 1px solid #f1f5f9;
+}
+
+.serviceItemTop {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.serviceItemTitle {
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #0f172a;
+}
+
+.serviceCategoryBadge {
+	font-size: 0.72rem;
+	font-weight: 600;
+	padding: 2px 8px;
+	border-radius: 6px;
+	background: #e2e8f0;
+	color: #475569;
+}
+
+.serviceItemStats {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 0.82rem;
+	color: #475569;
+}
+
+.serviceRevenue {
+	font-weight: 700;
+	color: var(--solid-button-background, #135184);
+}
+
+.progressBarContainer {
+	width: 100%;
+	height: 8px;
+	background: #e2e8f0;
+	border-radius: 999px;
+	overflow: hidden;
+}
+
+.progressBarFill {
+	height: 100%;
+	background: var(--solid-button-background, #135184);
+	border-radius: 999px;
+	transition: width 0.4s ease;
+}
+
+/* Top Clients List */
+.clientsList {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.clientCardItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 14px;
+	border-radius: 12px;
+	background: #f8fafc;
+	border: 1px solid #f1f5f9;
+}
+
+.clientSpent {
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: var(--solid-button-background, #135184);
+}
+
+/* Occupancy & Plan Card */
+.occupancyCardContent {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.occupancyBigValue {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+}
+
+.occupancyBigValue strong {
+	font-size: 2.4rem;
+	font-weight: 800;
+	color: #0f172a;
+}
+
+.occupancyBigValue span {
+	font-size: 0.88rem;
+	color: #64748b;
+}
+
+.freeSlotsBadgeGroup {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 6px;
+}
+
+.freeSlotBadge {
+	padding: 4px 10px;
+	border-radius: 8px;
+	background: #e2e8f0;
+	font-size: 0.78rem;
+	font-weight: 600;
+	color: #334155;
+}
+
+/* Plan Usage Box */
+.planUsageBox {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 16px;
+	border-radius: 14px;
+	background: linear-gradient(135deg, #135184 0%, #0f3d65 100%);
+	color: #ffffff;
+}
+
+.planHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.planTitle {
+	font-size: 1.05rem;
+	font-weight: 700;
+}
+
+.planTag {
+	padding: 2px 8px;
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.2);
+	font-size: 0.72rem;
+	font-weight: 700;
+}
+
+.planStats {
+	font-size: 0.88rem;
+	opacity: 0.9;
+}
+
+.planProgressBar {
+	height: 10px;
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 999px;
+	overflow: hidden;
+}
+
+.planProgressFill {
+	height: 100%;
+	background: #20c997;
+	border-radius: 999px;
+}
+
+/* Skeleton Loading State */
+.skeleton {
+	animation: skeletonPulse 1.4s ease-in-out infinite;
+	background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+	background-size: 200% 100%;
+	border-radius: 8px;
+}
+
+@keyframes skeletonPulse {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+.skeletonText {
+	height: 14px;
+	width: 60%;
+}
+
+.skeletonTitle {
+	height: 24px;
+	width: 40%;
+}
+
+.skeletonCard {
+	min-height: 120px;
+	border-radius: 18px;
+}
+
+.skeletonChart {
+	height: 300px;
+	border-radius: 18px;
+}
+
+/* Error State */
+.errorCard {
+	background: #ffffff;
+	border: 1px solid #fecaca;
+	border-radius: 18px;
+	padding: 40px 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+	text-align: center;
+	box-shadow: 0 4px 12px rgba(239, 68, 68, 0.05);
+}
+
+.errorIcon {
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	background: #fee2e2;
+	color: #ef4444;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.errorTitle {
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: #991b1b;
+}
+
+.errorMessage {
+	font-size: 0.9rem;
+	color: #64748b;
+	max-width: 480px;
+}
+
+.retryButton {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background: var(--solid-button-background, #135184);
+	color: #ffffff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 10px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.retryButton:hover {
+	background: var(--solid-button-hover-background, #3979ad);
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+	.chartsRow {
+		grid-template-columns: 1fr;
+	}
+
+	.contentGrid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 768px) {
+	.dashboardPage {
+		padding: 16px;
+		gap: 16px;
+	}
+
+	.headerTopRow,
+	.headerBottomRow {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.establishmentSelectorWrapper {
+		min-width: 100%;
+		max-width: 100%;
+	}
+
+	.periodFilterGroup {
+		width: 100%;
+		justify-content: space-around;
+	}
+
+	.summaryGrid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 520px) {
+	.summaryGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.pieLegendGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.appointmentItem {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.appointmentRightGroup {
+		align-items: flex-start;
+		width: 100%;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+}

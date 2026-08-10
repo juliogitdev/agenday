@@ -1,5 +1,5 @@
 
-import { Contact, IdCardLanyard, LayoutDashboard, NotebookPen, Scissors, Store, UserRoundCog } from "lucide-react"
+import { LayoutDashboard, NotebookPen, Scissors, Store, UserRoundCog } from "lucide-react"
 import styles from "./styles/panel.module.css"
 import { PanelButton } from "../components/buttons/PanelButton"
 
@@ -8,12 +8,12 @@ export function Panel() {
 		<nav className={styles.panelBox}>
 			<img src="/resource/icons/versao_sem_texto_v1.svg" className={styles.panelLogo}/>
 			<div className={styles.panelButtonsMiddle}>
-				{/* <PanelButton 
+				<PanelButton 
 					to="/dashboard"
 					icon={<LayoutDashboard />}
 					toastHoverText="Dashboard"
-					notificationsCount={10}
-				/> */}
+					notificationsCount={0}
+				/>
 				<PanelButton 
 					to="/appointments"
 					icon={<NotebookPen />}

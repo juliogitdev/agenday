@@ -1,5 +1,6 @@
 
 import { useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styles from "./styles/home.module.css";
 import AuthContext from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
@@ -23,6 +24,7 @@ export const Home = function () {
 	const errorAlert   = AlertHook();
 	const successAlert = AlertHook();
 	const userData: AgendaJwt = jwtDecode(user?.accessToken || "");
+	const canSeeDashboard = userData.roles.includes('ROLE_ADMIN') || userData.roles.includes('ROLE_PROFESSIONAL');
 	
 	useEffect(()=> {
 		const userIsClient =  !userData.roles.includes('ROLE_PROFESSIONAL');
@@ -88,6 +90,13 @@ export const Home = function () {
 		<main className={styles.homePage}> 
 			<SuccessAlert isVisible={successAlert.isVisible} title="Parabéns" message="Agora você é um usuário profissional"/>
 			<ErrorAlert   isVisible={errorAlert.isVisible} title={errorAlert.title} message={errorAlert.message}/>
+
+			{canSeeDashboard ? (
+				<div className={styles.dashboardShortcut}>
+					<p>O dashboard administrativo está disponível.</p>
+					<Link to="/dashboard">Ir para Dashboard</Link>
+				</div>
+			) : null}
 
 			<BlackWindow isVisible={blackWindw.visible}>
 				<Onboarding 
